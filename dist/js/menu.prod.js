@@ -1,0 +1,1 @@
+"use strict";$(document).ready(function(){$("#searchBtnSubmit").click(function(){""!=$("#searchBtnInput").val()?window.location.href="./menu.php?searchButton="+$("#searchBtnInput").val():$("#searchBtnInput").attr("placeholder","Search Input cannot be blank")})});
