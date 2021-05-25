@@ -1,6 +1,6 @@
 <?php
 
-$mysqli = new mysqli("localhost","root","","user_maintanance");
+$mysqli = new mysqli("mysql","root","root","admin_page");
 
 // Check connection
 if ($mysqli -> connect_errno) {
