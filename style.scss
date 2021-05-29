@@ -68,6 +68,16 @@ body.modal-open .fixed-bottom {
     }
 }
 
+.pageInput::-webkit-outer-spin-button,
+.pageInput::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.pageInput{
+    -moz-appearance: textfield;
+}
+
 
 #search-input-wrapper{
     display:none;
