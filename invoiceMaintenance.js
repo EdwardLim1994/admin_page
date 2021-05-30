@@ -42,7 +42,7 @@ $(document).ready(function () {
         customerSearchResults(1);
     });
 
-    $("#search-item").on("keyup", function(){
+    $("#search-item").on("keyup", function () {
         itemSearchResults(1);
     })
 
@@ -62,7 +62,7 @@ $(document).ready(function () {
         var timer;
         var isSpinnerOn;
         var searchResult;
-        
+
         if ($("#search-customer_name").val() != "" || $("#search-customer_id").val() != "") {
 
             clearTimeout(timer);
@@ -73,7 +73,7 @@ $(document).ready(function () {
                 </div>
             </div>
             `);
-           
+
             isSpinnerOn = true;
             timer = setTimeout(function () {
                 $.ajax({
@@ -92,7 +92,7 @@ $(document).ready(function () {
                                 isSpinnerOn = false;
                             }
 
-                        }else if(results == ""){
+                        } else if (results == "") {
                             $("#customer-search").empty().removeClass("border");
                             isSpinnerOn = false;
                         } else {
@@ -116,14 +116,14 @@ $(document).ready(function () {
                             `;
                             $.each(JSON.parse(results), function (i, value) {
                                 searchResult += `
-                                <a>
+                                <a class="customer-search-results">
                                     <div class="view overlay">
                                         <div class="row px-3 py-2">
                                             <div class="col-6">
-                                                <h5 class="my-auto">${value.name}</h5>
+                                                <h5 class="my-auto customerName">${value.name}</h5>
                                             </div>
                                             <div class="col-6 text-right">
-                                                <p class="my-auto">${value.customer_account}</p>
+                                                <p class="my-auto customerID">${value.customer_account}</p>
                                             </div>
                                             <div class="mask flex-center rgba-grey-slight"> </div>
                                         </div>
@@ -136,6 +136,7 @@ $(document).ready(function () {
                             $("#customer-search").empty().html(searchResult);
                             isSpinnerOn = false;
                             customerSearchResultsCountRow();
+                            customerSearchResultsSelect();
                         }
                     }
                 });
@@ -146,14 +147,22 @@ $(document).ready(function () {
         }
     }
 
+    function customerSearchResultsSelect() {
+        $(".customer-search-results").click(function () {
+            $("#search-customer_name").val($(this).find(".customerName").text());
+            $("#search-customer_id").val($(this).find(".customerID").text());
+            $("#customer-search").empty().removeClass("border");
+        });
+    }
+
     function customerSearchResultsPagination(total) {
         var rowperpage = 10;
         var totalPage = Math.ceil(total / rowperpage);
         $("#customerSearchPageTotal").empty().text(totalPage);
         $("#customerSearchCurrentPageNum").attr("max", totalPage);
 
-        $("#customerSearchCurrentPageNum").on('focusout',function(){
-            if($("#customerSearchCurrentPageNum").val() < totalPage)
+        $("#customerSearchCurrentPageNum").on('focusout', function () {
+            if ($("#customerSearchCurrentPageNum").val() < totalPage)
                 customerSearchResults($("#customerSearchCurrentPageNum").val());
             else
                 customerSearchResults(totalPage);
@@ -169,7 +178,7 @@ $(document).ready(function () {
                 searchCustomerName: $("#search-customer_name").val(),
                 searchCustomerID: $("#search-customer_id").val()
             },
-            success:function(results){
+            success: function (results) {
                 $("#customerSearchRowTotal").empty().html(results);
                 customerSearchResultsPagination(results);
             }
@@ -187,7 +196,7 @@ $(document).ready(function () {
         var isSpinnerOn;
         var searchResult;
 
-        if($("#search-item").val() != ""){
+        if ($("#search-item").val() != "") {
             clearTimeout(timer);
             $("#item-search").empty().addClass("border").html(`
             <div class="d-flex justify-content-center">
@@ -196,7 +205,7 @@ $(document).ready(function () {
                 </div>
             </div>
             `);
-           
+
             isSpinnerOn = true;
 
             timer = setTimeout(function () {
@@ -215,7 +224,7 @@ $(document).ready(function () {
                                 isSpinnerOn = false;
                             }
 
-                        }else if(results == ""){
+                        } else if (results == "") {
                             $("#item-search").empty().removeClass("border");
                             isSpinnerOn = false;
                         } else {
@@ -238,9 +247,15 @@ $(document).ready(function () {
                             <div class="overflow-auto" style="max-height:200px;">
                             `;
                             $.each(JSON.parse(results), function (i, value) {
+                                var isItemSoldOut = false;
+                                if (value.qty_available == 0) {
+                                    isItemSoldOut = true
+                                } else {
+                                    isItemSoldOut = false;
+                                }
                                 searchResult += `
-                                <a>
-                                    <div class="view overlay">
+                                <a class="item-search-results" data-id="${value.item_id}">
+                                    <div class="view overlay  ${value.qty_available == 0 ? "red lighten-4" : ""}">
                                         <div class="row px-3 py-2">
                                             <div class="col-8 d-flex flex-row">
                                                 <h5 class="my-auto">${value['description']}</h5>
@@ -250,7 +265,7 @@ $(document).ready(function () {
                                                 <strong class="my-auto">Qty: </strong>
                                                 <p class="my-auto px-1 ${value['qty_available'] == 0 ? 'text-danger' : ''}">${value['qty_available']}</p>
                                             </div>
-                                            <div class="mask flex-center rgba-grey-slight"></div>
+                                            <div class="mask flex-center ${value.qty_available == 0 ? "rgba-red-strong" : "rgba-grey-slight"}"></div>
                                         </div>
                                     </div>
                                 </a>
@@ -261,17 +276,128 @@ $(document).ready(function () {
                             $("#item-search").empty().html(searchResult);
                             isSpinnerOn = false;
                             itemSearchResultsCountRow();
+                            itemSearchResultsSelect();
+
                         }
                     }
                 });
             }, 1000);
 
-        }else{
+        } else {
             $("#item-search").empty().removeClass("border");
             isSpinnerOn = false;
         }
+    }
+
+    function itemBucketTotalPrice(itemID) {
+        var itemQuantity = $("[data-id='" + itemID + "']").find(".itemQuantity").val();
+        var itemPrice = $("[data-id='" + itemID + "']").find(".selling_price").text();
+        $("[data-id='" + itemID + "']").find(".total_price").text((itemQuantity * itemPrice).toFixed(2));
+
 
     }
+
+    function itemBucketTotalCost() {
+        var totalCost = 0.0;
+
+        $.each($(".item-row"), function (i, value) {
+
+            var totalPrice = $(".item-row:nth-child(" + (i + 1) + ")").find(".total_price").text();
+            totalCost += parseFloat(totalPrice);
+
+        })
+        $("#total_cost").empty().html(totalCost.toFixed(2));
+    }
+
+    function itemSearchResultsSelect() {
+        $(".item-search-results").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "./backend/invoice/viewCustmrItem.php",
+                data: {
+                    postType: "searchRowItemAdd",
+                    itemID: $(this).data("id")
+                },
+                success: function (results) {
+                    var item_results;
+                    var isItemSoldOut = false;
+                    var itemID;
+                    $.each(JSON.parse(results), function (i, value) {
+                        itemID = value.item_id;
+                        if (value.qty_available > 0) {
+                            isItemSoldOut = false;
+                            if (value.item_id == $(".item-row").data("id")) {
+                                var itemQty = $('[data-id=' + value.item_id + ']').find(".itemQuantity").val();
+                                $('[data-id=' + value.item_id + ']').find(".itemQuantity").val((parseInt(itemQty) + 1));
+                            } else {
+                                item_results += `
+                                <tr class="item-row" data-id="${value.item_id}">
+                                    <td>
+                                        <button class="btn btn-danger deleteItemBtn py-md-3 px-md-4 p-sm-3">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </td>
+                                    <td class="item_no">${value.item_no}</td>
+                                    <td class="description">${value.description}</td>
+                                    <td class="selling_price">${value.selling_price1}</td>
+                                    <td>
+                                        <input type="number" class="form-control itemQuantity" min="1" max="${value.qty_available}" value="1">
+                                    </td>
+                                    <td class="total_price"></td>
+                                </tr>
+                                `;
+                            }
+                        } else {
+                            isItemSoldOut = true;
+                        }
+                    })
+                    if (isItemSoldOut == false) {
+                        if ($("#item-bucket").find(".noResultText").length > 0) {
+                            $("#item-bucket").empty();
+                        }
+                        if (item_results != "") {
+                            $("#item-bucket").append(item_results);
+                        }
+                        $("#item-search").empty().removeClass("border");
+                        $("#search-item").val("");
+                        itemBucketTotalPrice(itemID);
+                        itemBucketTotalCost();
+
+                        $(".itemQuantity").change(function () {
+                            if ($(this).val() > $(this).attr("max")) {
+                                $(this).val($(this).attr("max"));
+                            }
+
+                            itemBucketTotalPrice($(this).closest("tr").data("id"));
+                            itemBucketTotalCost();
+
+                        })
+                    }
+                    itemBucketRemoveItem();
+                }
+            });
+        })
+    }
+
+    function itemBucketRemoveItem() {
+
+        $(".deleteItemBtn").click(function () {
+            $(this).closest("tr").remove();
+
+            if ($.trim($("#item-bucket").html()).length == 0) {
+                $("#item-bucket").html(`
+                    <tr class="noResultText">
+                        <td colspan="7" class="text-center">
+                            <h5>No item added yet</h5>
+                        </td>
+                    </tr>
+                `);
+            }
+        });
+
+    }
+
+    //console.log($("#item-search").html().length());
 
     function itemSearchResultsPagination(total) {
         var rowperpage = 10;
@@ -279,8 +405,8 @@ $(document).ready(function () {
         $("#itemSearchPageTotal").empty().text(totalPage);
         $("#itemSearchCurrentPageNum").attr("max", totalPage);
 
-        $("#itemSearchCurrentPageNum").on('focusout',function(){
-            if($("#itemSearchCurrentPageNum").val() < totalPage)
+        $("#itemSearchCurrentPageNum").on('focusout', function () {
+            if ($("#itemSearchCurrentPageNum").val() < totalPage)
                 itemSearchResults($("#itemSearchCurrentPageNum").val());
             else
                 itemSearchResults(totalPage);
@@ -295,7 +421,7 @@ $(document).ready(function () {
                 postType: "searchRowCountItem",
                 search: $("#search-item").val()
             },
-            success:function(results){
+            success: function (results) {
                 $("#itemSearchRowTotal").empty().html(results);
                 itemSearchResultsPagination(results);
             }

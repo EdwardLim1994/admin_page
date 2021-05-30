@@ -38,11 +38,10 @@ switch ($postType) {
 					echo "No result";
 				}
 				$stmt->close();
-	
 			} elseif ($_POST['searchCustomerID'] != "" && $_POST["searchCustomerName"] == "") {
 				$stmt = $mysqli->prepare("SELECT customer_id, customer_account, name FROM customers WHERE name REGEXP ? limit $recordsPerPage OFFSET $offsetValue");
 				$stmt->bind_param("s", $_POST["searchCustomerID"]);
-								$stmt->execute();
+				$stmt->execute();
 				$result = $stmt->get_result();
 				// Check number of rows in the result set
 				if ($result->num_rows > 0) {
@@ -55,8 +54,7 @@ switch ($postType) {
 					echo "No result";
 				}
 				$stmt->close();
-	
-			} elseif($_POST["searchCustomerName"] != "" && $_POST['searchCustomerID'] != "") {
+			} elseif ($_POST["searchCustomerName"] != "" && $_POST['searchCustomerID'] != "") {
 				$stmt = $mysqli->prepare("SELECT customer_id, customer_account, name FROM customers WHERE customer_account REGEXP ? AND name REGEXP ? limit $recordsPerPage OFFSET $offsetValue");
 				$stmt->bind_param("ss", $_POST["searchCustomerID"], $_POST["searchCustomerName"]);
 				$stmt->execute();
@@ -72,7 +70,6 @@ switch ($postType) {
 					echo "No result";
 				}
 				$stmt->close();
-	
 			}
 
 			//$stmt = $mysqli->prepare("SELECT customer_id, customer_account, name, reg_num, outstanding, points, status, address, postcode, state, salutation, email, website, biz_nature, salesperson, category, city, country, attention, introducer, reg_date, expiry_date, telephone1, telephone2, fax, handphone, skype, nric, religion, control_ac, accounting_account FROM customers WHERE customer_account REGEXP ? OR name REGEXP ?");
@@ -120,7 +117,6 @@ switch ($postType) {
 				$rowTotal = $row[0];
 				echo json_encode($rowTotal);
 				$stmt->close();
-	
 			} elseif ($_POST['searchCustomerID'] != "" && $_POST["searchCustomerName"] == "") {
 				$stmt = $mysqli->prepare("SELECT COUNT(customer_id)   FROM customers WHERE  name REGEXP ?");
 				$stmt->bind_param("s", $_POST["searchCustomerID"]);
@@ -129,8 +125,7 @@ switch ($postType) {
 				$rowTotal = $row[0];
 				echo json_encode($rowTotal);
 				$stmt->close();
-	
-			} elseif($_POST["searchCustomerName"] != "" && $_POST['searchCustomerID'] != "") {
+			} elseif ($_POST["searchCustomerName"] != "" && $_POST['searchCustomerID'] != "") {
 				$stmt = $mysqli->prepare("SELECT COUNT(customer_id)   FROM customers WHERE customer_account REGEXP ? AND name REGEXP ?");
 				$stmt->bind_param("ss", $_POST["searchCustomerID"], $_POST["searchCustomerName"]);
 				$stmt->execute();
@@ -138,7 +133,6 @@ switch ($postType) {
 				$rowTotal = $row[0];
 				echo json_encode($rowTotal);
 				$stmt->close();
-	
 			}
 
 			//$stmt = $mysqli->prepare("SELECT customer_id, customer_account, name, reg_num, outstanding, points, status, address, postcode, state, salutation, email, website, biz_nature, salesperson, category, city, country, attention, introducer, reg_date, expiry_date, telephone1, telephone2, fax, handphone, skype, nric, religion, control_ac, accounting_account FROM customers WHERE customer_account REGEXP ? OR name REGEXP ?");
@@ -168,6 +162,25 @@ switch ($postType) {
 			echo json_encode($jsonArray);
 		} else {
 			echo "No Result";
+		}
+		$stmt->close();
+		break;
+
+	case ("searchRowItemAdd"):
+		$stmt = $mysqli->prepare("SELECT item_id, item_no, description, selling_price1, qty_available FROM items WHERE item_id = ?;");
+		$stmt->bind_param("s", $_POST["itemID"]);
+		$stmt->execute();
+		$stmt->execute();
+		$result = $stmt->get_result();
+		// Check number of rows in the result set
+		if ($result->num_rows > 0) {
+			// Fetch result rows as an associative array
+			while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
+				$jsonArray[] = $row;
+			}
+			echo json_encode($jsonArray);
+		} else {
+			echo "No result";
 		}
 		$stmt->close();
 		break;

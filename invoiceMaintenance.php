@@ -248,42 +248,6 @@ else
                                         
                                          <!-- Item search result -->
                                         <div id="item-search" class="w-100 m-0 bg-white position-absolute" style="z-index:5;">
-<!--                                             
-                                            <div class="row px-3 py-2">
-                                                <div class=" col-6 py-2 py-md-0">
-                                                    <p class="my-auto">Search Result: <span class="font-weight-bold" id="itemSearchRowTotal"></span></p>
-                                                </div>
-                                                <div class=" col-6 py-2 py-md-0">
-                                                    <div class="d-flex flex-row justify-content-end">
-                                                        <p class="my-auto">Page : </p>
-                                                        <input type="number" id="itemSearchCurrentPageNum" class="form-control w-25 mx-2 my-auto" min="1" value="1">
-                                                        <p class="my-auto"> of <span id="itemSearchPageTotal"></span></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr class="p-0 m-0">
-                                            <a>
-                                                <div class="view overlay">
-                                                    <div class="row px-3 py-2">
-                                                        <div class="col-6 d-flex flex-row">
-                                                            <h5 class="my-auto">Test Text</h5>
-                                                            <small class="my-auto px-2 text-muted">1237895823</small>
-                                                        </div>
-                                                        <div class="col-6 d-flex flex-row justify-content-end">
-                                                            <strong>Qty: </strong>
-                                                            <p class="my-auto px-1">2</p>
-                                                        </div>
-                                                        <div class="mask flex-center rgba-grey-slight"> </div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <hr class="p-0 m-0">
-                                            <div class="d-flex justify-content-center">
-                                                <div class="spinner-border" role="status">
-                                                    <span class="sr-only">Loading...</span>
-                                                </div>
-                                            </div>
-                                             -->
                                         </div>
                                     </div>
                                 </div>
@@ -292,38 +256,32 @@ else
                                 <table class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead class="grey white-text">
                                         <tr>
-                                            <th class="th-sm">Barcode
+                                            <th class="th-sm text-center">Action</th>
+                                            <th class="th-sm text-center">Barcode
                                             </th>
-                                            <th class="th-sm">Description
+                                            <th class="th-sm text-center">Description
                                             </th>
-                                            <th class="th-sm">Sales Price(RM)
+                                            <th class="th-sm text-center">Sales Price(RM)
                                             </th>
-                                            <th class="th-sm">Qty
+                                            <th class="th-sm text-center">Qty
                                             </th>
-                                            <th class="th-sm">Total Cost(RM)
+                                            <th class="th-sm text-center">Total Cost(RM)
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>812789462</td>
-                                            <td>Test Item 1</td>
-                                            <td>45.00</td>
-                                            <td>2</td>
-                                            <td>90.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>812789462</td>
-                                            <td>Test Item 1</td>
-                                            <td>45.00</td>
-                                            <td>2</td>
-                                            <td>90.00</td>
+                                    <tbody id="item-bucket">
+                                        
+                                        
+                                    <tr class="noResultText">
+                                        <td colspan="7" class="text-center">
+                                        <h5>No item added yet</h5>
+                                        </td>
                                         </tr>
                                     </tbody>
                                     <tfoot class="grey white-text">
                                         <tr>
-                                            <th colspan="4" class="text-right"><strong>Total Cost : </strong></th>
-                                            <th>90.00</th>
+                                            <th colspan="5" class="text-right"><strong>Total Cost : </strong></th>
+                                            <th id="total_cost"></th>
                                         </tr>
                                     </tfoot>
 
