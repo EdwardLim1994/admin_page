@@ -49,8 +49,10 @@ $(document).ready(function () {
 
 
     $("#addInvoiceSubmitBtn").click(function () {
-
+        addInvoice();
     })
+
+    
 
     //customer name or customer id on input
     //show dropdown result
@@ -289,25 +291,7 @@ $(document).ready(function () {
         }
     }
 
-    function itemBucketTotalPrice(itemID) {
-        var itemQuantity = $("[data-id='" + itemID + "']").find(".itemQuantity").val();
-        var itemPrice = $("[data-id='" + itemID + "']").find(".selling_price").text();
-        $("[data-id='" + itemID + "']").find(".total_price").text((itemQuantity * itemPrice).toFixed(2));
 
-
-    }
-
-    function itemBucketTotalCost() {
-        var totalCost = 0.0;
-
-        $.each($(".item-row"), function (i, value) {
-
-            var totalPrice = $(".item-row:nth-child(" + (i + 1) + ")").find(".total_price").text();
-            totalCost += parseFloat(totalPrice);
-
-        })
-        $("#total_cost").empty().html(totalCost.toFixed(2));
-    }
 
     function itemSearchResultsSelect() {
         $(".item-search-results").click(function () {
@@ -339,9 +323,16 @@ $(document).ready(function () {
                                     </td>
                                     <td class="item_no">${value.item_no}</td>
                                     <td class="description">${value.description}</td>
-                                    <td class="selling_price">${value.selling_price1}</td>
                                     <td>
                                         <input type="number" class="form-control itemQuantity" min="1" max="${value.qty_available}" value="1">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control itemUnit" placeholder="unit">
+                                    </td>
+                                    <td class="selling_price">${value.selling_price1}</td>
+                                    <td class="unit_cost">${value.unit_cost}</td>
+                                    <td>
+                                        <input type="number" class="form-control itemDiscount" value="0" min="0" max="100" step="1">
                                     </td>
                                     <td class="total_price"></td>
                                 </tr>
@@ -361,22 +352,84 @@ $(document).ready(function () {
                         $("#item-search").empty().removeClass("border");
                         $("#search-item").val("");
                         itemBucketTotalPrice(itemID);
+                        itemBucketTotalDiscount();
                         itemBucketTotalCost();
+                        
 
                         $(".itemQuantity").change(function () {
-                            if ($(this).val() > $(this).attr("max")) {
+                            if ($(this).val() > parseInt($(this).attr("max"))) {
                                 $(this).val($(this).attr("max"));
                             }
 
+                            if ($(this).val() < parseInt($(this).attr("min"))) {
+                                $(this).val($(this).attr("min"));
+                            }
                             itemBucketTotalPrice($(this).closest("tr").data("id"));
+                            itemBucketTotalDiscount()
                             itemBucketTotalCost();
-
+                           
                         })
+
+                        $(".itemDiscount").change(function(){
+                            if ($(this).val() > parseInt($(this).attr("max"))) {
+                                $(this).val($(this).attr("max"));
+                            }
+
+                            if ($(this).val() < parseInt($(this).attr("min"))) {
+                                $(this).val($(this).attr("min"));
+                            }
+
+                            itemBucketTotalPrice($(this).closest("tr").data("id"));
+                            itemBucketTotalDiscount()
+                            itemBucketTotalCost();
+                           
+                        });
                     }
                     itemBucketRemoveItem();
                 }
             });
         })
+    }
+
+    function itemBucketTotalPrice(itemID) {
+        var itemQuantity = $("[data-id='" + itemID + "']").find(".itemQuantity").val();
+        var discountAmount =$("[data-id='" + itemID + "']").find(".itemDoscount").val();
+        var itemPrice = $("[data-id='" + itemID + "']").find(".selling_price").text();
+        if(discountAmount > 0){
+            itemPrice = itemPrice - (itemPrice * (discountAmount / 100));
+        }
+        $("[data-id='" + itemID + "']").find(".total_price").text((itemQuantity * itemPrice).toFixed(2));
+    }
+
+    function itemBucketTotalCost() {
+        var totalCost = 0.0;
+
+        $.each($(".item-row"), function (i, value) {
+            var totalPrice = $(".item-row:nth-child(" + (i + 1) + ")").find(".total_price").text();
+            totalCost += parseFloat(totalPrice);
+        })
+
+        if(parseFloat($("#total_discount").text()) > 0){
+            totalCost = totalCost -  parseFloat($("#total_discount").text());
+        }
+
+        $("#total_cost").empty().html(totalCost.toFixed(2));
+        
+    }
+
+    function itemBucketTotalDiscount(){
+        var totalDiscount = 0.0;
+
+        $.each($(".item-row"), function (i, value) {
+            var unit_price = $(".item-row:nth-child(" + (i + 1) + ")").find(".selling_price").text();
+            var quantity = $(".item-row:nth-child(" + (i + 1) + ")").find(".itemQuantity").val();
+            var discount = $(".item-row:nth-child(" + (i + 1) + ")").find(".itemDiscount").val();
+
+            if(discount > 0){
+                totalDiscount += (unit_price * (discount / 100)) * quantity;
+            }
+        })
+        $("#total_discount").empty().html(totalDiscount.toFixed(2));
     }
 
     function itemBucketRemoveItem() {
@@ -394,7 +447,6 @@ $(document).ready(function () {
                 `);
             }
         });
-
     }
 
     //console.log($("#item-search").html().length());
@@ -428,7 +480,70 @@ $(document).ready(function () {
         });
     }
 
+    function addInvoice(){
+        var item_no = [];
+        var description = [];
+        var selling_price = [];
+        var itemQuantity = [];
+        var uom = [];
+        var base_cost = [];
+        var discount = [];
+        var total_price = [];
+        var customer_name;
+        var account_num;
+        var invoice_no;
+        var doc_no;
+        var invoice_date;
+        var due_date;
+        var remark;
+        var total_cost;
 
+        if($("#item-bucket").find(".noResultText").length > 0){
+            console.log("true");
+        }else{
+
+            customer_name = $("#search-customer_name").val();
+            account_num = $("#search-customer_id").val();
+            invoice_no = $("#invoice_number").val();
+            doc_no = $("#doc_no").val();
+            invoice_date = $("#invoice_date").val();
+            due_date = $("#due_date").val();
+            remark = $("#invoice_remark").val();
+            total_cost = $("#total_cost").text();
+
+            $.each($(".item-row"), function (i, value) {
+                item_no.push($(".item-row:nth-child(" + (i + 1) + ")").find(".item_no").text());
+                description.push($(".item-row:nth-child(" + (i + 1) + ")").find(".description").text());
+                selling_price.push($(".item-row:nth-child(" + (i + 1) + ")").find(".selling_price").text());
+                itemQuantity.push($(".item-row:nth-child(" + (i + 1) + ")").find(".itemQuantity").val());
+                total_price.push($(".item-row:nth-child(" + (i + 1) + ")").find(".total_price").text());
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "./backend/invoice/invoice.php",
+                data: {
+                    postType: "add",
+                    in_name : customer_name,
+                    in_account : account_num,
+                    doc_no : doc_no,
+                    invoice_num : invoice_no,
+                    invoice_date : invoice_date,
+                    due_date : due_date,
+                    invoice_remark: remark,
+                    total_amount : total_cost,
+                    item_no : item_no,
+                    description : description,
+                    price : selling_price,
+                    quantity : itemQuantity,
+                    base_cost : total_price
+                },
+                success: function(results){
+                    console.log(results);
+                }
+            })
+        }
+    }
 
     function failedMessage(headline, body) {
         $("#failedToModal").modal("show");
