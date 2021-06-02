@@ -187,7 +187,7 @@ else
 
                         <!--Footer-->
                         <div class="modal-footer justify-content-end">
-                            <button id="addInvoiceSubmitBtn" class="btn btn-info">Print</button>
+                            <button id="addInvoiceSubmitBtn" class="btn btn-info">Add Invoice</button>
                             <!-- <a type="button" class="btn btn-outline-info waves-effect nevermind" data-dismiss="modal">Nevermind</a> -->
                         </div>
 
@@ -223,8 +223,21 @@ else
                                 </div>
 
                                 <div class="col-6">
+                                    <label for="edit-customer_account">Doc No:</label>
+                                    <input type="text" class="form-control" name="customer_account" id="doc_no" placeholder="">
+
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-6">
                                     <label for="edit-customer_account">Invoice Date:</label>
-                                    <input type="date" class="form-control" name="customer_account" id="invoice_date placeholder="">
+                                    <input type="date" class="form-control" name="customer_account" id="invoice_date" placeholder="">
+
+                                </div>
+                                <div class="col-6">
+                                    <label for="edit-customer_account">Due Date:</label>
+                                    <input type="date" class="form-control" name="customer_account" id="due_date" placeholder="">
 
                                 </div>
                             </div>
@@ -261,26 +274,34 @@ else
                                             </th>
                                             <th class="th-sm text-center">Description
                                             </th>
-                                            <th class="th-sm text-center">Sales Price(RM)
-                                            </th>
                                             <th class="th-sm text-center">Qty
                                             </th>
-                                            <th class="th-sm text-center">Total Cost(RM)
+                                            <th class="th-sm text-center">UOM
+                                            </th>
+                                            <th class="th-sm text-center">Selling Price(RM)
+                                            </th>
+                                            <th class="th-sm text-center">Base Cost(RM)
+                                            </th>
+                                            <th class="th-sm text-center">Discount(%)
+                                            </th>
+                                            <th class="th-sm text-center">Amount(RM)
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody id="item-bucket">
-                                        
-                                        
                                     <tr class="noResultText">
-                                        <td colspan="7" class="text-center">
+                                        <td colspan="9" class="text-center">
                                         <h5>No item added yet</h5>
                                         </td>
                                         </tr>
                                     </tbody>
                                     <tfoot class="grey white-text">
                                         <tr>
-                                            <th colspan="5" class="text-right"><strong>Total Cost : </strong></th>
+                                            <th colspan="8" class="text-right"><strong>Discount : </strong></th>
+                                            <th id="total_discount"></th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="8" class="text-right"><strong>Total Amount : </strong></th>
                                             <th id="total_cost"></th>
                                         </tr>
                                     </tfoot>

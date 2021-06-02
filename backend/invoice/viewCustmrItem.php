@@ -167,7 +167,7 @@ switch ($postType) {
 		break;
 
 	case ("searchRowItemAdd"):
-		$stmt = $mysqli->prepare("SELECT item_id, item_no, description, selling_price1, qty_available FROM items WHERE item_id = ?;");
+		$stmt = $mysqli->prepare("SELECT item_id, item_no, description, selling_price1, qty_available, unit_cost FROM items WHERE item_id = ?;");
 		$stmt->bind_param("s", $_POST["itemID"]);
 		$stmt->execute();
 		$stmt->execute();
@@ -195,7 +195,7 @@ switch ($postType) {
 			$recordsPerPage = 10;
 			$offsetValue = ($_POST['pageNum'] - 1) * $recordsPerPage;
 			//$stmt = $mysqli->prepare("SELECT item_id, item_no, doc_key, description, description2, description3, master_vendor, vendor_item, item_type, category, item_group, unit_cost, selling_price1, qty_hand, qty_hold, qty_available, qty_reorder_available, qty_max, vendor, vendor_company, item_picture, plu FROM items WHERE item_no REGEXP ? OR description REGEXP ? limit $recordsPerPage OFFSET $offsetValue");
-			$stmt = $mysqli->prepare("SELECT item_id, item_no, description, selling_price1, qty_available  FROM items WHERE item_no REGEXP ? OR description REGEXP ? limit $recordsPerPage OFFSET $offsetValue");
+			$stmt = $mysqli->prepare("SELECT item_id, item_no, description, selling_price1, qty_available, unit_cost  FROM items WHERE item_no REGEXP ? OR description REGEXP ? limit $recordsPerPage OFFSET $offsetValue");
 			// Bind variables to the prepared statement as parameters
 			$stmt->bind_param("ss", $_POST["search"], $_POST["search"]);
 			$stmt->execute();
