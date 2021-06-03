@@ -344,6 +344,12 @@ switch ($postType) {
 				$stmt->execute();
 				$stmt->close();
 
+				// query to delete data from invoice_header table - because cannot use foreign key feature
+				$stmt = $mysqli->prepare("DELETE FROM invoice_detail WHERE invoice_id_header = ?");
+				$stmt->bind_param("s", $_POST["invoice_id"]);
+				$stmt->execute();
+				$stmt->close();
+
 				echo "success delete";
 				//header("location: ../../invoiceMaintenance.php?success=item deleted");
 			} else {
