@@ -25,8 +25,8 @@
     <input type="date"  placeholder="due_date" id="due_date" >
     <input type="number"  placeholder="subtotal_ex" id="subtotal_ex" >
     <input type="number"  placeholder="discount_header" id="discount_header" >
-    <input type="number"  placeholder="purchase_tax" id="purchase_tax" >
-    <input type="number"  placeholder="tax_percent" id="tax_percent" >
+   <!-- <input type="number"  placeholder="purchase_tax" id="purchase_tax" >
+    <input type="number"  placeholder="tax_percent" id="tax_percent" > -->
     <input type="number"  placeholder="total_amount" id="total_amount" ><br><br><br>
 
     <label><b>first item</b></label>
@@ -36,16 +36,18 @@
     <input type="text"  placeholder="uom[]" class="uom" name="uom[]">
     <input type="number"  placeholder="price[]" class="price" name="price[]">
     <input type="number"  placeholder="discount[]" class="discount" name="discount[]">
-    <input type="number"  placeholder="gr_price[]" class="gr_price" name="gr_price[]">
-    <input type="number"  placeholder="gr_price_ex[]" class="gr_price_ex" name="gr_price_ex[]">
+   <!-- <input type="number"  placeholder="gr_price[]" class="gr_price" name="gr_price[]">
+    <input type="number"  placeholder="gr_price_ex[]" class="gr_price_ex" name="gr_price_ex[]"> -->
     <input type="number"  placeholder="amount[]" class="amount" name="amount[]">
     <input type="number"  placeholder="base_cost[]" class="base_cost" name="base_cost[]">
-    <input type="number"  placeholder="new_base_cost[]" class="new_base_cost" name="new_base_cost[]">
+   <!-- <input type="number"  placeholder="new_base_cost[]" class="new_base_cost" name="new_base_cost[]">
     <input type="text"  placeholder="remark[]" class="remark" name="remark[]">
     <input type="text"  placeholder="po[]" class="po" name="po[]">
     <input type="number"  placeholder="min_price[]" class="min_price" name="min_price[]">
     <input type="number"  placeholder="amount_tax[]" class="amount_tax" name="amount_tax[]">
-    <input type="number"  placeholder="taxable_amount[]" class="taxable_amount" name="taxable_amount[]"><br><br><br>
+    <input type="number"  placeholder="taxable_amount[]" class="taxable_amount" name="taxable_amount[]"> -->
+    
+    <br><br><br>
 
     <label><b>second item</b></label>
     <input type="text"  placeholder="item_no[]" class="item_no" name="item_no[]">
@@ -54,16 +56,18 @@
     <input type="text"  placeholder="uom[]" class="uom" name="uom[]">
     <input type="number"  placeholder="price[]" class="price" name="price[]">
     <input type="number"  placeholder="discount[]" class="discount" name="discount[]">
-    <input type="number"  placeholder="gr_price[]" class="gr_price" name="gr_price[]">
-    <input type="number"  placeholder="gr_price_ex[]" class="gr_price_ex" name="gr_price_ex[]">
+   <!-- <input type="number"  placeholder="gr_price[]" class="gr_price" name="gr_price[]">
+    <input type="number"  placeholder="gr_price_ex[]" class="gr_price_ex" name="gr_price_ex[]"> -->
     <input type="number"  placeholder="amount[]" class="amount" name="amount[]">
     <input type="number"  placeholder="base_cost[]" class="base_cost" name="base_cost[]">
-    <input type="number"  placeholder="new_base_cost[]" class="new_base_cost" name="new_base_cost[]">
+   <!-- <input type="number"  placeholder="new_base_cost[]" class="new_base_cost" name="new_base_cost[]">
     <input type="text"  placeholder="remark[]" class="remark" name="remark[]">
     <input type="text"  placeholder="po[]" class="po" name="po[]">
     <input type="number"  placeholder="min_price[]" class="min_price" name="min_price[]">
     <input type="number"  placeholder="amount_tax[]" class="amount_tax" name="amount_tax[]">
-    <input type="number"  placeholder="taxable_amount[]" class="taxable_amount" name="taxable_amount[]"><br><br><br>
+    <input type="number"  placeholder="taxable_amount[]" class="taxable_amount" name="taxable_amount[]"> -->
+    
+    <br><br><br>
 
 
 
@@ -96,14 +100,14 @@
 
         var fd = new FormData();
         fd.append('search', inputVal );
-        //fd.append('postType', 'searchRow');
+        fd.append('postType', 'searchRow');
         //fd.append('postType', 'searchRowCustomer');
-        fd.append('postType', 'searchRowItem');
+        //fd.append('postType', 'searchRowItem');
 
         if(inputVal.length){
         $.ajax({
-            //url: 'invoice.php',  
-            url: 'viewCustmrItem.php',  
+            url: 'invoice.php',  
+            //url: 'viewCustmrItem.php',  
             type: 'POST',
             data: fd,
             dataType : 'json',
@@ -143,8 +147,8 @@
         fd.append('due_date', $('#due_date').val() );
         fd.append('subtotal_ex', $('#subtotal_ex').val() );
         fd.append('discount_header', $('#discount_header').val() );
-        fd.append('purchase_tax', $('#purchase_tax').val() );
-        fd.append('tax_percent', $('#tax_percent').val() );
+        /*fd.append('purchase_tax', $('#purchase_tax').val() );
+        fd.append('tax_percent', $('#tax_percent').val() );*/
         fd.append('total_amount', $('#total_amount').val() );
 
         a_item_no = document.getElementsByName("item_no[]");
@@ -159,15 +163,15 @@
         for (let price of a_price) { fd.append('price[]', price.value); }
         a_discount = document.getElementsByName("discount[]");
         for (let discount of a_discount) { fd.append('discount[]', discount.value); }
-        a_gr_price = document.getElementsByName("gr_price[]");
+       /* a_gr_price = document.getElementsByName("gr_price[]");
         for (let gr_price of a_gr_price) { fd.append('gr_price[]', gr_price.value); }
         a_gr_price_ex = document.getElementsByName("gr_price_ex[]");
-        for (let gr_price_ex of a_gr_price_ex) { fd.append('gr_price_ex[]', gr_price_ex.value); }
+        for (let gr_price_ex of a_gr_price_ex) { fd.append('gr_price_ex[]', gr_price_ex.value); }*/
         a_amount = document.getElementsByName("amount[]");
         for (let amount of a_amount) { fd.append('amount[]', amount.value); }
         a_base_cost = document.getElementsByName("base_cost[]");
         for (let base_cost of a_base_cost) { fd.append('base_cost[]', base_cost.value); }
-        a_new_base_cost = document.getElementsByName("new_base_cost[]");
+        /*a_new_base_cost = document.getElementsByName("new_base_cost[]");
         for (let new_base_cost of a_new_base_cost) { fd.append('new_base_cost[]', new_base_cost.value); }
         a_remark = document.getElementsByName("remark[]");
         for (let remark of a_remark) { fd.append('remark[]', remark.value); }
@@ -178,42 +182,7 @@
         a_amount_tax = document.getElementsByName("amount_tax[]");
         for (let amount_tax of a_amount_tax) { fd.append('amount_tax[]', amount_tax.value); }
         a_taxable_amount = document.getElementsByName("taxable_amount[]");
-        for (let taxable_amount of a_taxable_amount) { fd.append('taxable_amount[]', taxable_amount.value); }
-        
-        //serialize input array
-        /*fd.append('item_no', $('.item_no').serialize());
-        fd.append('description', $('.description').serialize());
-        fd.append('quantity', $('.quantity').serialize());
-        fd.append('uom', $('.uom').serialize());
-        fd.append('price', $('.price').serialize());
-        fd.append('discount', $('.discount').serialize());
-        fd.append('gr_price', $('.gr_price').serialize());
-        fd.append('gr_price_ex', $('.gr_price_ex').serialize());
-        fd.append('amount', $('.amount').serialize());
-        fd.append('base_cost', $('.base_cost').serialize());
-        fd.append('new_base_cost', $('.new_base_cost').serialize());
-        fd.append('remark', $('.remark').serialize());
-        fd.append('po', $('.po').serialize());
-        fd.append('min_price', $('.min_price').serialize());
-        fd.append('amount_tax', $('.amount_tax').serialize());
-        fd.append('taxable_amount', $('.taxable_amount').serialize());*/
-
-        /*fd.append('item_no', $('.item_no'));
-        fd.append('description', $('.description'));
-        fd.append('quantity', $('.quantity'));
-        fd.append('uom', $('.uom'));
-        fd.append('price', $('.price'));
-        fd.append('discount', $('.discount'));
-        fd.append('gr_price', $('.gr_price'));
-        fd.append('gr_price_ex', $('.gr_price_ex'));
-        fd.append('amount', $('.amount'));
-        fd.append('base_cost', $('.base_cost'));
-        fd.append('new_base_cost', $('.new_base_cost'));
-        fd.append('remark', $('.remark'));
-        fd.append('po', $('.po'));
-        fd.append('min_price', $('.min_price'));
-        fd.append('amount_tax', $('.amount_tax'));
-        fd.append('taxable_amount', $('.taxable_amount'));*/
+        for (let taxable_amount of a_taxable_amount) { fd.append('taxable_amount[]', taxable_amount.value); }*/
         
         fd.append('postType', 'add');
 
@@ -235,13 +204,13 @@
     $('#countBtn').on('click', function(){
 
         var fd = new FormData();
-        //fd.append('postType', 'countRow');
+        fd.append('postType', 'countRow');
         //fd.append('postType', 'countRowCustomer');
-        fd.append('postType', 'countRowItem');
+        //fd.append('postType', 'countRowItem');
 
         $.ajax({
-            //url: 'customer.php',  
-            url: 'viewCustmrItem.php',  
+            url: 'invoice.php',  
+            //url: 'viewCustmrItem.php',  
             type: 'POST',
             data: fd,
             dataType : 'json',
@@ -263,13 +232,13 @@
     $('#viewBtn').on('click', function(){
 
 		var fd = new FormData();
-		//fd.append('postType', 'viewHeader');
+		fd.append('postType', 'viewHeader');
         //fd.append('postType', 'viewCustomer');
-        fd.append('postType', 'viewItem');
+        //fd.append('postType', 'viewItem');
 
     	$.ajax({
-            //url: 'invoice.php',
-            url: 'viewCustmrItem.php',   
+            url: 'invoice.php',
+            //url: 'viewCustmrItem.php',   
             type: 'POST',
             data: fd,
             dataType : 'json',
@@ -330,8 +299,8 @@
         fd.append('due_date', $('#due_date').val() );
         fd.append('subtotal_ex', $('#subtotal_ex').val() );
         fd.append('discount_header', $('#discount_header').val() );
-        fd.append('purchase_tax', $('#purchase_tax').val() );
-        fd.append('tax_percent', $('#tax_percent').val() );
+        /*fd.append('purchase_tax', $('#purchase_tax').val() );
+        fd.append('tax_percent', $('#tax_percent').val() );*/
         fd.append('total_amount', $('#total_amount').val() );
 
         a_item_no = document.getElementsByName("item_no[]");
@@ -346,15 +315,15 @@
         for (let price of a_price) { fd.append('price[]', price.value); }
         a_discount = document.getElementsByName("discount[]");
         for (let discount of a_discount) { fd.append('discount[]', discount.value); }
-        a_gr_price = document.getElementsByName("gr_price[]");
+       /* a_gr_price = document.getElementsByName("gr_price[]");
         for (let gr_price of a_gr_price) { fd.append('gr_price[]', gr_price.value); }
         a_gr_price_ex = document.getElementsByName("gr_price_ex[]");
-        for (let gr_price_ex of a_gr_price_ex) { fd.append('gr_price_ex[]', gr_price_ex.value); }
+        for (let gr_price_ex of a_gr_price_ex) { fd.append('gr_price_ex[]', gr_price_ex.value); }*/
         a_amount = document.getElementsByName("amount[]");
         for (let amount of a_amount) { fd.append('amount[]', amount.value); }
         a_base_cost = document.getElementsByName("base_cost[]");
         for (let base_cost of a_base_cost) { fd.append('base_cost[]', base_cost.value); }
-        a_new_base_cost = document.getElementsByName("new_base_cost[]");
+        /*a_new_base_cost = document.getElementsByName("new_base_cost[]");
         for (let new_base_cost of a_new_base_cost) { fd.append('new_base_cost[]', new_base_cost.value); }
         a_remark = document.getElementsByName("remark[]");
         for (let remark of a_remark) { fd.append('remark[]', remark.value); }
@@ -365,7 +334,7 @@
         a_amount_tax = document.getElementsByName("amount_tax[]");
         for (let amount_tax of a_amount_tax) { fd.append('amount_tax[]', amount_tax.value); }
         a_taxable_amount = document.getElementsByName("taxable_amount[]");
-        for (let taxable_amount of a_taxable_amount) { fd.append('taxable_amount[]', taxable_amount.value); }
+        for (let taxable_amount of a_taxable_amount) { fd.append('taxable_amount[]', taxable_amount.value); }*/
         
         fd.append('postType', 'update');
         fd.append('invoice_id', $('#invoice_id').val() );

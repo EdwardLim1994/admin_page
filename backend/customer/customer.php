@@ -185,7 +185,7 @@ switch ($postType) {
 			$stmt->execute();
 			$stmt->close();
 
-			//query to fetch selected data from items table
+			//query to fetch selected data from customer table
 
 			$stmt = $mysqli->prepare("SELECT creation_date, creation_time, creation_user FROM customers WHERE customer_id = ?");
 			$stmt->bind_param("i", $_POST["customer_id"]);
