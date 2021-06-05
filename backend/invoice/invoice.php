@@ -91,7 +91,7 @@ switch ($postType) {
 
 	case ("viewDetail"):
 		
-		$stmt = $mysqli->prepare("SELECT invoice_detail_id, invoice_id_header, item_no, description, quantity, uom, price, discount, amount, base_cost FROM invoice_detail WHERE invoice_id_header = ? ");
+		$stmt = $mysqli->prepare("SELECT invoice_detail_id, invoice_id_header, item_id, item_no, description, quantity, uom, price, discount, amount, base_cost FROM invoice_detail WHERE invoice_id_header = ? ");
 	 	$stmt->bind_param("s", $_POST["invoice_id"]);
 		$stmt->execute();
 		$result = $stmt->get_result();
@@ -113,7 +113,7 @@ switch ($postType) {
 		// check isset for all post variable
 		$countSetAdd = 0;
 		$postVariable = array('in_account','in_name','invoice_num','invoice_date','invoice_remark','doc_no','due_date','subtotal_ex','discount_header','total_amount',
-        'item_no','description','quantity','uom','price','discount','amount','base_cost');
+        'item_id','item_no','description','quantity','uom','price','discount','amount','base_cost');
 
 		foreach ($postVariable as $variable_name) {
 			if(isset($_POST[$variable_name])){
@@ -128,6 +128,7 @@ switch ($postType) {
 		if($countSetAdd == count($postVariable)){
 
 			// assign array data into variable
+			$item_id = $_POST['item_id'];
 			$item_no = $_POST['item_no'];
 			$description = $_POST['description'];
 			$quantity = $_POST['quantity'];
@@ -157,10 +158,10 @@ switch ($postType) {
 			$stmt->execute();
 			$stmt->close();
 
-			// query to store item data into invoice_detail table - 12 field
-			$stmtlog = $mysqli->prepare("INSERT INTO invoice_detail (invoice_id_header, item_no, description, quantity, uom, price, discount, amount, base_cost, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			// query to store item data into invoice_detail table - 13 field
+			$stmtlog = $mysqli->prepare("INSERT INTO invoice_detail (invoice_id_header, item_id, item_no, description, quantity, uom, price, discount, amount, base_cost, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			for($i = 0; $i < $itemCount; $i++){
-                $stmtlog->bind_param("sssisiiiisss", $invoice_id, $item_no[$i], $description[$i], $quantity[$i], $uom[$i], $price[$i], $discount[$i], $amount[$i], $base_cost[$i], $creation_date, $creation_time, $creation_user);
+                $stmtlog->bind_param("sissisiiiisss", $invoice_id, $item_id[$i], $item_no[$i], $description[$i], $quantity[$i], $uom[$i], $price[$i], $discount[$i], $amount[$i], $base_cost[$i], $creation_date, $creation_time, $creation_user);
 			    $stmtlog->execute();
             }
 			$stmtlog->close();
@@ -171,10 +172,10 @@ switch ($postType) {
 			$stmt->execute();
 			$stmt->close();
 
-            // query to store item data into invoice_detail_log table - 13 field
-			$stmtlog = $mysqli->prepare("INSERT INTO invoice_detail_log (mode, invoice_id_header_log, item_no, description, quantity, uom, price, discount, amount, base_cost, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            // query to store item data into invoice_detail_log table - 14 field
+			$stmtlog = $mysqli->prepare("INSERT INTO invoice_detail_log (mode, invoice_id_header_log, item_id, item_no, description, quantity, uom, price, discount, amount, base_cost, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			for($i = 0; $i < $itemCount; $i++){
-                $stmtlog->bind_param("ssssisiiiisss", $mode, $invoice_id, $item_no[$i], $description[$i], $quantity[$i], $uom[$i], $price[$i], $discount[$i], $amount[$i], $base_cost[$i], $creation_date, $creation_time, $creation_user);
+                $stmtlog->bind_param("ssissisiiiisss", $mode, $invoice_id, $item_id[$i], $item_no[$i], $description[$i], $quantity[$i], $uom[$i], $price[$i], $discount[$i], $amount[$i], $base_cost[$i], $creation_date, $creation_time, $creation_user);
 			    $stmtlog->execute();
             }
 			$stmtlog->close();
@@ -192,7 +193,7 @@ switch ($postType) {
 		// check isset for all post variable
 		$countSetUpdate = 0;
 		$postVariable = array('in_account','in_name','invoice_num','invoice_date','invoice_remark','doc_no','due_date','subtotal_ex','discount_header','total_amount',
-        'item_no','description','quantity','uom','price','discount','amount','base_cost');
+        'item_id','item_no','description','quantity','uom','price','discount','amount','base_cost');
 
 		foreach ($postVariable as $variable_name) {
 			if(isset($_POST[$variable_name])){
@@ -206,6 +207,7 @@ switch ($postType) {
 		if($countSetUpdate == count($postVariable)){
 
 			// assign array data into variable
+			$item_id = $_POST['item_id'];
 			$item_no = $_POST['item_no'];
 			$description = $_POST['description'];
 			$quantity = $_POST['quantity'];
@@ -241,10 +243,10 @@ switch ($postType) {
 			$stmt->execute();
 			$stmt->close();
 
-			// query to store item data into invoice_detail table - 15 field
-			$stmtlog = $mysqli->prepare("INSERT INTO invoice_detail (invoice_id_header, item_no, description, quantity, uom, price, discount, amount, base_cost, creation_date, creation_time, creation_user, modified_date, modified_time, modified_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			// query to store item data into invoice_detail table - 16 field
+			$stmtlog = $mysqli->prepare("INSERT INTO invoice_detail (invoice_id_header, item_id, item_no, description, quantity, uom, price, discount, amount, base_cost, creation_date, creation_time, creation_user, modified_date, modified_time, modified_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			for($i = 0; $i < $itemCount; $i++){
-                $stmtlog->bind_param("sssisiiiissssss", $_POST['invoice_id'], $item_no[$i], $description[$i], $quantity[$i], $uom[$i], $price[$i], $discount[$i], $amount[$i], $base_cost[$i], $creation_date, $creation_time, $creation_user, $modify_date, $modify_time, $modify_user);
+                $stmtlog->bind_param("sissisiiiissssss", $_POST['invoice_id'], $item_id[$i], $item_no[$i], $description[$i], $quantity[$i], $uom[$i], $price[$i], $discount[$i], $amount[$i], $base_cost[$i], $creation_date, $creation_time, $creation_user, $modify_date, $modify_time, $modify_user);
 			    $stmtlog->execute();
             }
 			$stmtlog->close();
@@ -264,10 +266,10 @@ switch ($postType) {
 			$stmt->execute();
 			$stmt->close();
 
-			// query to store item data into invoice_detail_log table - 16 field
-			$stmtlog = $mysqli->prepare("INSERT INTO invoice_detail_log (mode, invoice_id_header_log, item_no, description, quantity, uom, price, discount, amount, base_cost, creation_date, creation_time, creation_user, modified_date, modified_time, modified_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			// query to store item data into invoice_detail_log table - 17 field
+			$stmtlog = $mysqli->prepare("INSERT INTO invoice_detail_log (mode, invoice_id_header_log, item_id, item_no, description, quantity, uom, price, discount, amount, base_cost, creation_date, creation_time, creation_user, modified_date, modified_time, modified_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			for($i = 0; $i < $itemCount; $i++){
-                $stmtlog->bind_param("ssssisiiiissssss", $mode,  $_POST['invoice_id'], $item_no[$i], $description[$i], $quantity[$i], $uom[$i], $price[$i], $discount[$i], $amount[$i], $base_cost[$i], $creation_date, $creation_time, $creation_user, $modify_date, $modify_time, $modify_user);
+                $stmtlog->bind_param("ssissisiiiissssss", $mode,  $_POST['invoice_id'], $item_id[$i], $item_no[$i], $description[$i], $quantity[$i], $uom[$i], $price[$i], $discount[$i], $amount[$i], $base_cost[$i], $creation_date, $creation_time, $creation_user, $modify_date, $modify_time, $modify_user);
 			    $stmtlog->execute();
             }
 			$stmtlog->close();
@@ -291,24 +293,24 @@ switch ($postType) {
 			//$modify_user = "admin"; // comment this when submit
 			$mode = "Delete";
 
-			// query for fetch selected invoice data from invoice_detail table - 12 fields
-			$stmt = $mysqli->prepare("SELECT item_no, description, quantity, uom, price, discount, amount, base_cost, creation_date, creation_time, creation_user FROM invoice_detail WHERE invoice_id_header = ?");
+			// query for fetch selected invoice data from invoice_detail table - 13 fields
+			$stmt = $mysqli->prepare("SELECT item_id, item_no, description, quantity, uom, price, discount, amount, base_cost, creation_date, creation_time, creation_user FROM invoice_detail WHERE invoice_id_header = ?");
 			$stmt->bind_param("s", $_POST['invoice_id']);
 			$stmt->execute();
 			$stmt->store_result();
 			if ($stmt->num_rows > 0) {
-				$stmt->bind_result( $item_no, $description, $quantity, $uom, $price, $discount, $amount, $base_cost, $creation_date, $creation_time, $creation_user);
+				$stmt->bind_result( $item_id, $item_no, $description, $quantity, $uom, $price, $discount, $amount, $base_cost, $creation_date, $creation_time, $creation_user);
 				while ($stmt->fetch()) {
-					$itemArr[] = ['item_no' => $item_no, 'description' => $description, 'quantity' => $quantity, 'uom' => $uom, 'price' => $price, 'discount' => $discount, 'amount' => $amount, 'base_cost' => $base_cost, 'creation_date' => $creation_date, 'creation_time' => $creation_time, 'creation_user' => $creation_user];
+					$itemArr[] = ['item_id' => $item_id, 'item_no' => $item_no, 'description' => $description, 'quantity' => $quantity, 'uom' => $uom, 'price' => $price, 'discount' => $discount, 'amount' => $amount, 'base_cost' => $base_cost, 'creation_date' => $creation_date, 'creation_time' => $creation_time, 'creation_user' => $creation_user];
 				}
 				$stmt->close();
 
 				$countArray = count($itemArr);
 
-				// query to store item detail data into invoice_detail_log table - 16 field
-				$stmtlog = $mysqli->prepare("INSERT INTO invoice_detail_log (mode, invoice_id_header_log, item_no, description, quantity, uom, price, discount, amount, base_cost, creation_date, creation_time, creation_user, modified_date, modified_time, modified_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+				// query to store item detail data into invoice_detail_log table - 17 field
+				$stmtlog = $mysqli->prepare("INSERT INTO invoice_detail_log (mode, invoice_id_header_log, item_id, item_no, description, quantity, uom, price, discount, amount, base_cost, creation_date, creation_time, creation_user, modified_date, modified_time, modified_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 				for($y=0; $y<$countArray; $y++){
-					$stmtlog->bind_param("ssssisiiiissssss", $mode, $_POST['invoice_id'], $itemArr[$y]["item_no"], $itemArr[$y]["description"], $itemArr[$y]["quantity"], $itemArr[$y]["uom"], $itemArr[$y]["price"], $itemArr[$y]["discount"], $itemArr[$y]["amount"], $itemArr[$y]["base_cost"], $itemArr[$y]["creation_date"], $itemArr[$y]["creation_time"], $itemArr[$y]["creation_user"], $modify_date, $modify_time, $modify_user);
+					$stmtlog->bind_param("ssissisiiiissssss", $mode, $_POST['invoice_id'], $itemArr[$y]["item_id"], $itemArr[$y]["item_no"], $itemArr[$y]["description"], $itemArr[$y]["quantity"], $itemArr[$y]["uom"], $itemArr[$y]["price"], $itemArr[$y]["discount"], $itemArr[$y]["amount"], $itemArr[$y]["base_cost"], $itemArr[$y]["creation_date"], $itemArr[$y]["creation_time"], $itemArr[$y]["creation_user"], $modify_date, $modify_time, $modify_user);
 					$stmtlog->execute();
 				}
 				$stmtlog->close();
@@ -344,7 +346,7 @@ switch ($postType) {
 				$stmt->execute();
 				$stmt->close();
 
-				// query to delete data from invoice_header table - because cannot use foreign key feature
+				// query to delete data from invoice_detail table - because cannot use foreign key feature
 				$stmt = $mysqli->prepare("DELETE FROM invoice_detail WHERE invoice_id_header = ?");
 				$stmt->bind_param("s", $_POST["invoice_id"]);
 				$stmt->execute();
