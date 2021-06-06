@@ -25,32 +25,32 @@ $(document).ready(function () {
         itemSearchResults(1);
     });
 
-    $("#search-customer_name").focusout(function(){
-        $("#customer-search").hide();
-    })
+    // $("#search-customer_name").focusout(function(){
+    //     $("#customer-search").hide();
+    // })
 
-    $("#search-customer_id").focusout(function(){
-        $("#customer-search").hide();
-    })
+    // $("#search-customer_id").focusout(function(){
+    //     $("#customer-search").hide();
+    // })
 
-    $("#search-item").focusout(function(){
-        $("#item-search").hide()
-    })
+    // $("#search-item").focusout(function(){
+    //     $("#item-search").hide()
+    // })
 
-    $("#search-customer_name").focus(function(){
-        if($(this).val() != "")
-            $("#customer-search").show();
-    })
+    // $("#search-customer_name").focus(function(){
+    //     if($(this).val() != "")
+    //         $("#customer-search").show();
+    // })
 
-    $("#search-customer_id").focus(function(){
-        if($(this).val() != "")
-            $("#customer-search").show();
-    })
+    // $("#search-customer_id").focus(function(){
+    //     if($(this).val() != "")
+    //         $("#customer-search").show();
+    // })
 
-    $("#search-item").focus(function(){
-        if($(this).val() != "")
-            $("#item-search").show()
-    })
+    // $("#search-item").focus(function(){
+    //     if($(this).val() != "")
+    //         $("#item-search").show()
+    // })
 
 
     $("#update-search-customer_name").on('keyup', function () {
@@ -64,32 +64,32 @@ $(document).ready(function () {
         updateitemSearchResults(1);
     });
 
-    $("#update-search-customer_name").focusout(function(){
-        $("#update-customer-search").hide();
-    })
+    // $("#update-search-customer_name").focusout(function(){
+    //     $("#update-customer-search").hide();
+    // })
 
-    $("#update-search-customer_id").focusout(function(){
-        $("#update-customer-search").hide();
-    })
+    // $("#update-search-customer_id").focusout(function(){
+    //     $("#update-customer-search").hide();
+    // })
 
-    $("#update-search-item").focusout(function(){
-        $("#update-item-search").hide()
-    })
+    // $("#update-search-item").focusout(function(){
+    //     $("#update-item-search").hide()
+    // })
 
-    $("#update-search-customer_name").focus(function(){
-        if($(this).val() != "")
-            $("#update-customer-search").show();
-    })
+    // $("#update-search-customer_name").focus(function(){
+    //     if($(this).val() != "")
+    //         $("#update-customer-search").show();
+    // })
 
-    $("#update-search-customer_id").focus(function(){
-        if($(this).val() != "")
-            $("#update-customer-search").show();
-    })
+    // $("#update-search-customer_id").focus(function(){
+    //     if($(this).val() != "")
+    //         $("#update-customer-search").show();
+    // })
 
-    $("#update-search-item").focus(function(){
-        if($(this).val() != "")
-            $("#update-item-search").show()
-    })
+    // $("#update-search-item").focus(function(){
+    //     if($(this).val() != "")
+    //         $("#update-item-search").show()
+    // })
 
     $("#addInvoiceSubmitBtn").click(function () {
         addInvoice();
