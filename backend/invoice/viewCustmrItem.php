@@ -135,12 +135,6 @@ switch ($postType) {
 				$stmt->close();
 			}
 
-			//$stmt = $mysqli->prepare("SELECT customer_id, customer_account, name, reg_num, outstanding, points, status, address, postcode, state, salutation, email, website, biz_nature, salesperson, category, city, country, attention, introducer, reg_date, expiry_date, telephone1, telephone2, fax, handphone, skype, nric, religion, control_ac, accounting_account FROM customers WHERE customer_account REGEXP ? OR name REGEXP ?");
-			// $stmt = $mysqli->prepare("SELECT customer_id, customer_account, name FROM customers WHERE customer_account REGEXP ? OR name REGEXP ?");
-			// $stmt->bind_param("ss", $_POST["searchCustomerID"], $_POST["searchCustomerName"]);
-
-
-
 		}
 		break;
 
