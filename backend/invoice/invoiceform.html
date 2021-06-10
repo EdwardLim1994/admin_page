@@ -30,6 +30,7 @@
     <input type="number"  placeholder="total_amount" id="total_amount" ><br><br><br>
 
     <label><b>first item</b></label>
+    <input type="number"  placeholder="item_id[]" class="item_id" name="item_id[]">
     <input type="text"  placeholder="item_no[]" class="item_no" name="item_no[]">
     <input type="text"  placeholder="description[]" class="description" name="description[]">
     <input type="number"  placeholder="quantity[]" class="quantity" name="quantity[]">
@@ -50,6 +51,7 @@
     <br><br><br>
 
     <label><b>second item</b></label>
+    <input type="number"  placeholder="item_id[]" class="item_id" name="item_id[]">
     <input type="text"  placeholder="item_no[]" class="item_no" name="item_no[]">
     <input type="text"  placeholder="description[]" class="description" name="description[]">
     <input type="number"  placeholder="quantity[]" class="quantity" name="quantity[]">
@@ -151,6 +153,8 @@
         fd.append('tax_percent', $('#tax_percent').val() );*/
         fd.append('total_amount', $('#total_amount').val() );
 
+        a_item_id = document.getElementsByName("item_id[]");
+        for (let item_id of a_item_id) { fd.append('item_id[]', item_id.value); }
         a_item_no = document.getElementsByName("item_no[]");
         for (let item_no of a_item_no) { fd.append('item_no[]', item_no.value); }
         a_description = document.getElementsByName("description[]");
@@ -303,6 +307,8 @@
         fd.append('tax_percent', $('#tax_percent').val() );*/
         fd.append('total_amount', $('#total_amount').val() );
 
+        a_item_id = document.getElementsByName("item_id[]");
+        for (let item_id of a_item_id) { fd.append('item_id[]', item_id.value); }
         a_item_no = document.getElementsByName("item_no[]");
         for (let item_no of a_item_no) { fd.append('item_no[]', item_no.value); }
         a_description = document.getElementsByName("description[]");

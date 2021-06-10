@@ -1,5 +1,4 @@
 <?php
-//$_POST = json_decode(file_get_contents("php://input"), true);  //###### comment ni time submit - shafie 
 require_once("../login/dbConfig.php");
 //require_once("dbConfig.php");
 session_start();
@@ -20,42 +19,21 @@ switch ($postType) {
 			$recordsPerPage= 20;
 	 		$offsetValue = ($_POST['pageNum']-1) * $recordsPerPage;
 
-			$sql = "SELECT item_id, item_no, doc_key, description, description2, description3, master_vendor, vendor_item, item_type, category, item_group, unit_cost, selling_price1, qty_hand, qty_hold, qty_available, qty_reorder_available, qty_max, vendor, vendor_company, item_picture, plu, info1, info2, info3, info4, info5, info6, info7, info8, info9, info10 FROM items WHERE item_no REGEXP ? OR description REGEXP ? limit $recordsPerPage OFFSET $offsetValue";
+			$stmt = $mysqli->prepare("SELECT item_id, item_no, doc_key, description, description2, description3, master_vendor, vendor_item, item_type, category, item_group, unit_cost, selling_price1, qty_hand, qty_hold, qty_available, qty_reorder_available, qty_max, vendor, vendor_company, item_picture, plu, info1, info2, info3, info4, info5, info6, info7, info8, info9, info10 FROM items WHERE item_no REGEXP ? OR description REGEXP ? limit $recordsPerPage OFFSET $offsetValue");
+	 		$stmt->bind_param("ss", $_POST["search"], $_POST["search"]);
 
-			if ($stmt = $mysqli->prepare($sql)) {
-				// Bind variables to the prepared statement as parameters
-				$stmt->bind_param("ss", $_POST["search"], $_POST["search"]);
-
-				// Set parameters
-				$param_term = $_REQUEST["search"] . '%';
-
-				// Attempt to execute the prepared statement
-				if ($stmt->execute()) {
-					$result = $stmt->get_result();
-
-					// Check number of rows in the result set
-					if ($result->num_rows > 0) {
-						// Fetch result rows as an associative array
-						while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
-							$jsonArray[] = $row;
-						}
-						echo json_encode($jsonArray);
-					} else {
-                       // $message = "No result";
-						//echo json_encode($message);
-						//header("location: ../../itemMaintenance.php?failed=No match found");
-						//header("location: itemNotify.php?failed=No match found");
-                        echo "No result";
-					}
-				} else {
-					//echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
-					//header("location: ../../itemMaintenance.php?failed=Cannot execute Sql");
-					echo "sqlfailed";
-					//header("location: itemNotify.php?failed=Cannot execute Sql");
+	 		$stmt->execute();
+	 		$result = $stmt->get_result();
+	 		// Check number of rows in the result set
+			if ($result->num_rows > 0) {
+				// Fetch result rows as an associative array
+				while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
+					$jsonArray[] = $row;
 				}
+					echo json_encode($jsonArray);
+			} else {
+                    echo "No result";
 			}
-
-			// Close statement
 			$stmt->close();
 		}
 		break;
@@ -73,13 +51,9 @@ switch ($postType) {
 
 	case ("searchRowCount"):
 		if (isset($_POST["search"])) {
-			$stmt = $mysqli->prepare("SELECT COUNT(item_no) FROM items WHERE item_no REGEXP ? OR description REGEXP ? ;");
+			$stmt = $mysqli->prepare("SELECT COUNT(item_no) FROM items WHERE item_no REGEXP ? OR description REGEXP ? ");
 			// Bind variables to the prepared statement as parameters
 			$stmt->bind_param("ss", $_POST["search"], $_POST["search"]);
-
-			// Set parameters
-			$param_term = $_REQUEST["search"] . '%';
-			
 			
 			$stmt->execute();
 			$row = $stmt->get_result()->fetch_row();
@@ -88,32 +62,6 @@ switch ($postType) {
 		}
 		$stmt->close();
 		break;
-
-
-
-	/*case ("viewCustom"):
-
-	 	$recordsPerPage= $_POST['customRow'];
-	 	$offsetValue = ($_POST['pageNum']-1) * $recordsPerPage;
-
-		$stmt = $mysqli->prepare("SELECT item_id, item_no, doc_key, description, description2, description3, master_vendor, vendor_item, item_type, category, item_group, unit_cost, selling_price1, qty_hand, qty_hold, qty_available, qty_reorder_available, qty_max, vendor, vendor_company, item_picture, plu, info1, info2, info3, info4, info5, info6, info7, info8, info9, info10 FROM items order by item_id desc limit $recordsPerPage OFFSET $offsetValue"); 
-
-		$stmt->execute();
-		$result = $stmt->get_result();
-
-		if (mysqli_num_rows($result) > 0) {
-			while ($row = mysqli_fetch_assoc($result)) {
-				$jsonArray[] = $row;
-			};
-			echo json_encode($jsonArray);
-		} else {
-			$message = "No result";
-			echo json_encode($message);
-			 //header("location: ../../itemMaintenance.php?failed=Zero result");
-			 //header("location: itemNotify.php?failed=Zero result");
-		}
-		$stmt->close();
-		break; */
 
 	case ("view"):
 
@@ -186,7 +134,7 @@ switch ($postType) {
 					//query insert data into items table
 					// have 34 field
 					$stmt = $mysqli->prepare("INSERT INTO items (item_no, doc_key, description, description2, description3, master_vendor, vendor_item, item_type, category, item_group, unit_cost, selling_price1, qty_hand, qty_hold, qty_available, qty_reorder_available, qty_max, vendor, vendor_company, item_picture, plu, info1, info2, info3, info4, info5, info6, info7, info8, info9, info10, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-					$stmt->bind_param("sissssssssiiiiiiisssssssssssssssss", $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $creation_date,  $creation_time,  $creation_user);
+					$stmt->bind_param("sissssssssddiiiiisssssssssssssssss", $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $creation_date,  $creation_time,  $creation_user);
 
 					$stmt->execute();
 					$stmt->close();
@@ -197,7 +145,7 @@ switch ($postType) {
 					// query to store information into itemlog table
 					//have 35 field
 					$stmtlog = $mysqli->prepare("INSERT INTO itemlog (mode, item_no, doc_key, description, description2, description3, master_vendor, vendor_item, item_type, category, item_group, unit_cost, selling_price1, qty_hand, qty_hold, qty_available, qty_reorder_available, qty_max, vendor, vendor_company, item_picture, plu, info1, info2, info3, info4, info5, info6, info7, info8, info9, info10, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-					$stmtlog->bind_param("ssissssssssiiiiiiisssssssssssssssss", $mode, $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $creation_date,  $creation_time, $creation_user);
+					$stmtlog->bind_param("ssissssssssddiiiiisssssssssssssssss", $mode, $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $creation_date,  $creation_time, $creation_user);
 
 					$stmtlog->execute();
 					$stmtlog->close();
@@ -216,14 +164,14 @@ switch ($postType) {
 				//have 34 field
 				$itemImage = "";
 				$stmt = $mysqli->prepare("INSERT INTO items (item_no, doc_key, description, description2, description3, master_vendor, vendor_item, item_type, category, item_group, unit_cost, selling_price1, qty_hand, qty_hold, qty_available, qty_reorder_available, qty_max, vendor, vendor_company, item_picture, plu, info1, info2, info3, info4, info5, info6, info7, info8, info9, info10, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-				$stmt->bind_param("sissssssssiiiiiiisssssssssssssssss", $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $creation_date,  $creation_time,  $creation_user);
+				$stmt->bind_param("sissssssssddiiiiisssssssssssssssss", $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $creation_date,  $creation_time,  $creation_user);
 
 				$stmt->execute();
 				$stmt->close();
 
 				// query to store information into itemlog table
 				$stmtlog = $mysqli->prepare("INSERT INTO itemlog (mode, item_no, doc_key, description, description2, description3, master_vendor, vendor_item, item_type, category, item_group, unit_cost, selling_price1, qty_hand, qty_hold, qty_available, qty_reorder_available, qty_max, vendor, vendor_company, item_picture, plu, info1, info2, info3, info4, info5, info6, info7, info8, info9, info10, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-				$stmtlog->bind_param("ssissssssssiiiiiiisssssssssssssssss", $mode, $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $creation_date,  $creation_time, $creation_user);
+				$stmtlog->bind_param("ssissssssssddiiiiisssssssssssssssss", $mode, $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $creation_date,  $creation_time, $creation_user);
 
 				$stmtlog->execute();
 				$stmtlog->close();
@@ -277,13 +225,13 @@ switch ($postType) {
 						//update data into items table 
 						//have 35 field
 						$stmt = $mysqli->prepare("UPDATE items SET item_no = ?, doc_key = ?, description = ?, description2 = ?, description3 = ?, master_vendor = ?, vendor_item = ?, item_type = ?, category = ?, item_group = ?, unit_cost = ?, selling_price1 = ?, qty_hand = ?, qty_hold = ?, qty_available = ?, qty_reorder_available = ?, qty_max = ?, vendor = ?, vendor_company = ?, item_picture = ?, plu = ?, info1 = ?, info2 = ?, info3 = ?, info4 = ?, info5 = ?, info6 = ?, info7 = ?, info8 = ?, info9 = ?, info10 = ?, modified_date = ?, modified_time = ?, modified_user = ? wHERE item_id = ?");
-						$stmt->bind_param("sissssssssiiiiiiisssssssssssssssssi", $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $modify_date,  $modify_time,  $modify_user, $_POST['item_id']);
+						$stmt->bind_param("sissssssssddiiiiisssssssssssssssssi", $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $modify_date,  $modify_time,  $modify_user, $_POST['item_id']);
 						$stmt->execute();
 						$stmt->close();
 
 						// query to insert update log to itemlog table
 						$stmtlog = $mysqli->prepare("INSERT INTO itemlog ( mode, item_id, item_no, doc_key, description, description2, description3, master_vendor, vendor_item, item_type, category, item_group, unit_cost, selling_price1, qty_hand, qty_hold, qty_available, qty_reorder_available, qty_max, vendor, vendor_company, item_picture, plu, info1, info2, info3, info4, info5, info6, info7, info8, info9, info10, creation_date, creation_time, creation_user, modified_date, modified_time, modified_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-						$stmtlog->bind_param("sisissssssssiiiiiiissssssssssssssssssss", $mode, $_POST['item_id'], $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $creation_date, $creation_time, $creation_user, $modify_date,  $modify_time, $modify_user);
+						$stmtlog->bind_param("sisissssssssddiiiiissssssssssssssssssss", $mode, $_POST['item_id'], $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $creation_date, $creation_time, $creation_user, $modify_date,  $modify_time, $modify_user);
 
 						$stmtlog->execute();
 						$stmtlog->close();
@@ -320,13 +268,13 @@ switch ($postType) {
 
 						//update data into items table
 						$stmt = $mysqli->prepare("UPDATE items SET item_no = ?, doc_key = ?, description = ?, description2 = ?, description3 = ?, master_vendor = ?, vendor_item = ?, item_type = ?, category = ?, item_group = ?, unit_cost = ?, selling_price1 = ?, qty_hand = ?, qty_hold = ?, qty_available = ?, qty_reorder_available = ?, qty_max = ?, vendor = ?, vendor_company = ?, item_picture = ?, plu = ?, info1 = ?, info2 = ?, info3 = ?, info4 = ?, info5 = ?, info6 = ?, info7 = ?, info8 = ?, info9 = ?, info10 = ?, modified_date = ?, modified_time = ?, modified_user = ? wHERE item_id = ?");
-						$stmt->bind_param("sissssssssiiiiiiisssssssssssssssssi", $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $modify_date,  $modify_time,  $modify_user, $_POST['item_id']);
+						$stmt->bind_param("sissssssssddiiiiisssssssssssssssssi", $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $modify_date,  $modify_time,  $modify_user, $_POST['item_id']);
 						$stmt->execute();
 						$stmt->close();
 
 						// query to insert update log to itemlog table
 						$stmtlog = $mysqli->prepare("INSERT INTO itemlog ( mode, item_id, item_no, doc_key, description, description2, description3, master_vendor, vendor_item, item_type, category, item_group, unit_cost, selling_price1, qty_hand, qty_hold, qty_available, qty_reorder_available, qty_max, vendor, vendor_company, item_picture, plu, info1, info2, info3, info4, info5, info6, info7, info8, info9, info10, creation_date, creation_time, creation_user, modified_date, modified_time, modified_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-						$stmtlog->bind_param("sisissssssssiiiiiiissssssssssssssssssss", $mode, $_POST['item_id'], $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $creation_date, $creation_time, $creation_user, $modify_date,  $modify_time, $modify_user);
+						$stmtlog->bind_param("sisissssssssddiiiiissssssssssssssssssss", $mode, $_POST['item_id'], $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $imgName, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $creation_date, $creation_time, $creation_user, $modify_date,  $modify_time, $modify_user);
 
 						$stmtlog->execute();
 						$stmtlog->close();
@@ -351,7 +299,7 @@ switch ($postType) {
 		} else {
 
 			$stmt = $mysqli->prepare("UPDATE items SET item_no = ?, doc_key = ?, description = ?, description2 = ?, description3 = ?, master_vendor = ?, vendor_item = ?, item_type = ?, category = ?, item_group = ?, unit_cost = ?, selling_price1 = ?, qty_hand = ?, qty_hold = ?, qty_available = ?, qty_reorder_available = ?, qty_max = ?, vendor = ?, vendor_company = ?, plu = ?, info1 = ?, info2 = ?, info3 = ?, info4 = ?, info5 = ?, info6 = ?, info7 = ?, info8 = ?, info9 = ?, info10 = ?, modified_date = ?, modified_time = ?, modified_user = ? wHERE item_id = ?");
-			$stmt->bind_param("sissssssssiiiiiiissssssssssssssssi",  $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $modify_date,  $modify_time,  $modify_user, $_POST['item_id']);
+			$stmt->bind_param("sissssssssddiiiiissssssssssssssssi",  $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $modify_date,  $modify_time,  $modify_user, $_POST['item_id']);
 			$stmt->execute();
 			$stmt->close();
 
@@ -367,7 +315,7 @@ switch ($postType) {
 
 			// query to insert update log to itemlog table
 			$stmtlog = $mysqli->prepare("INSERT INTO itemlog ( mode, item_id, item_no, doc_key, description, description2, description3, master_vendor, vendor_item, item_type, category, item_group, unit_cost, selling_price1, qty_hand, qty_hold, qty_available, qty_reorder_available, qty_max, vendor, vendor_company, item_picture, plu, info1, info2, info3, info4, info5, info6, info7, info8, info9, info10, creation_date, creation_time, creation_user, modified_date, modified_time, modified_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			$stmtlog->bind_param("sisissssssssiiiiiiissssssssssssssssssss", $mode, $_POST['item_id'], $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $item_picture, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $creation_date, $creation_time, $creation_user, $modify_date,  $modify_time, $modify_user);
+			$stmtlog->bind_param("sisissssssssddiiiiissssssssssssssssssss", $mode, $_POST['item_id'], $_POST['item_no'], $_POST['doc_key'], $_POST['description'], $_POST['description2'], $_POST['description3'], $_POST['master_vendor'], $_POST['vendor_item'], $_POST['item_type'], $_POST['category'], $_POST['item_group'], $_POST['unit_cost'], $_POST['selling_price1'], $_POST['qty_hand'], $_POST['qty_hold'], $_POST['qty_available'], $_POST['qty_reorder_available'], $_POST['qty_max'], $_POST['vendor'], $_POST['vendor_company'], $item_picture, $_POST['plu'], $_POST['info1'], $_POST['info2'], $_POST['info3'], $_POST['info4'], $_POST['info5'], $_POST['info6'], $_POST['info7'], $_POST['info8'], $_POST['info9'], $_POST['info10'], $creation_date, $creation_time, $creation_user, $modify_date,  $modify_time, $modify_user);
 
 			$stmtlog->execute();
 			$stmtlog->close();
@@ -408,7 +356,7 @@ switch ($postType) {
 
 			// query to insert update log to itemlog table
 			$stmtlog = $mysqli->prepare("INSERT INTO itemlog ( mode, item_id, item_no, doc_key, description, description2, description3, master_vendor, vendor_item, item_type, category, item_group, unit_cost, selling_price1, qty_hand, qty_hold, qty_available, qty_reorder_available, qty_max, vendor, vendor_company, item_picture, plu, info1, info2, info3, info4, info5, info6, info7, info8, info9, info10, creation_date, creation_time, creation_user, modified_date, modified_time, modified_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			$stmtlog->bind_param("sisissssssssiiiiiiissssssssssssssssssss", $mode, $_POST['item_id'], $item_no, $doc_key, $description, $description2, $description3, $master_vendor, $vendor_item, $item_type, $category, $item_group, $unit_cost, $selling_price1, $qty_hand, $qty_hold, $qty_available, $qty_reorder_available, $qty_max, $vendor, $vendor_company, $item_picture, $plu, $info1, $info2, $info3, $info4, $info5, $info6, $info7, $info8, $info9, $info10, $creation_date, $creation_time, $creation_user, $modify_date, $modify_time, $modify_user);
+			$stmtlog->bind_param("sisissssssssddiiiiissssssssssssssssssss", $mode, $_POST['item_id'], $item_no, $doc_key, $description, $description2, $description3, $master_vendor, $vendor_item, $item_type, $category, $item_group, $unit_cost, $selling_price1, $qty_hand, $qty_hold, $qty_available, $qty_reorder_available, $qty_max, $vendor, $vendor_company, $item_picture, $plu, $info1, $info2, $info3, $info4, $info5, $info6, $info7, $info8, $info9, $info10, $creation_date, $creation_time, $creation_user, $modify_date, $modify_time, $modify_user);
 
 			$stmtlog->execute();
 			$stmtlog->close();
