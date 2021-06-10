@@ -112,7 +112,7 @@ else
                         <h1 class="h1-responsive">Invoice Maintanance</h1>
                     </div>
                     <div class="col-lg-2 col-md-4 col-sm-6 text-right">
-                        <button class="btn btn-danger py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#addModal">
+                        <button id="addModalBtn" class="btn btn-danger py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#addModal">
                             <span class="textBreak">Add Invoice</span>
                             <span class="iconBreak"><i class="fas fa-file-invoice"></i></span>
                         </button>

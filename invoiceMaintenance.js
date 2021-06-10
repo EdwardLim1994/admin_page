@@ -91,6 +91,28 @@ $(document).ready(function () {
     //         $("#update-item-search").show()
     // })
 
+    $("#addModalBtn").click(function(){
+        $("#search-customer_name").val("");
+        $("#search-customer_id").val("");
+        $("#invoice_number").val("");
+        $("#doc_no").val("");
+        $("#invoice_date").val("");
+        $("#due_date").val("");
+        $("#invoice_remark").val("");
+        $("#search-item").val("");
+
+        $("#customer-search").removeClass("border").empty();
+        $("#item-search").removeClass("border").empty();
+
+        $("#item-bucket").empty().html(`
+            <tr class="noResultText">
+                <td colspan="9" class="text-center">
+                    <h5>No item added yet</h5>
+                </td>
+            </tr>
+        `);
+    });
+
     $("#addInvoiceSubmitBtn").click(function () {
         addInvoice();
     });
@@ -222,8 +244,10 @@ $(document).ready(function () {
         $("#customerSearchPageTotal").empty().text(totalPage);
         $("#customerSearchCurrentPageNum").attr("max", totalPage);
 
-        $("#customerSearchCurrentPageNum").on('focusout', function () {
-            if ($("#customerSearchCurrentPageNum").val() < totalPage)
+        $("#customerSearchCurrentPageNum").on('input', function () {
+            if($("#customerSearchCurrentPageNum").val() == ""){
+                console.log("empty customer search");
+            }else if ($("#customerSearchCurrentPageNum").val() < totalPage)
                 customerSearchResults($("#customerSearchCurrentPageNum").val());
             else
                 customerSearchResults(totalPage);
@@ -507,7 +531,7 @@ $(document).ready(function () {
             if ($.trim($("#item-bucket").html()).length == 0) {
                 $("#item-bucket").html(`
                     <tr class="noResultText">
-                        <td colspan="7" class="text-center">
+                        <td colspan="9" class="text-center">
                             <h5>No item added yet</h5>
                         </td>
                     </tr>
@@ -523,8 +547,10 @@ $(document).ready(function () {
         $("#itemSearchPageTotal").empty().text(totalPage);
         $("#itemSearchCurrentPageNum").attr("max", totalPage);
 
-        $("#itemSearchCurrentPageNum").on('focusout', function () {
-            if ($("#itemSearchCurrentPageNum").val() < totalPage)
+        $("#itemSearchCurrentPageNum").on('input', function () {
+            if($("#itemSearchCurrentPageNum").val() == ""){
+                console.log("empty item search");
+            }else if ($("#itemSearchCurrentPageNum").val() < totalPage)
                 itemSearchResults($("#itemSearchCurrentPageNum").val());
             else
                 itemSearchResults(totalPage);
@@ -666,8 +692,10 @@ $(document).ready(function () {
         $("#updatecustomerSearchPageTotal").empty().text(totalPage);
         $("#updatecustomerSearchCurrentPageNum").attr("max", totalPage);
 
-        $("#updatecustomerSearchCurrentPageNum").on('focusout', function () {
-            if ($("#updatecustomerSearchCurrentPageNum").val() < totalPage)
+        $("#updatecustomerSearchCurrentPageNum").on('input', function () {
+            if($("#updatecustomerSearchCurrentPageNum").val() == ""){
+                console.log("Empty update customer search");
+            } else if ($("#updatecustomerSearchCurrentPageNum").val() < totalPage)
                 updatecustomerSearchResults($("#updatecustomerSearchCurrentPageNum").val());
             else
                 updatecustomerSearchResults(totalPage);
@@ -952,7 +980,7 @@ $(document).ready(function () {
             if ($.trim($("#update-item-bucket").html()).length == 0) {
                 $("#update-item-bucket").html(`
                     <tr class="update-noResultText">
-                        <td colspan="7" class="text-center">
+                        <td colspan="9" class="text-center">
                             <h5>No item added yet</h5>
                         </td>
                     </tr>
@@ -968,8 +996,10 @@ $(document).ready(function () {
         $("#updateitemSearchPageTotal").empty().text(totalPage);
         $("#updateitemSearchCurrentPageNum").attr("max", totalPage);
 
-        $("#updateitemSearchCurrentPageNum").on('focusout', function () {
-            if ($("#updateitemSearchCurrentPageNum").val() < totalPage)
+        $("#updateitemSearchCurrentPageNum").on('input', function () {
+            if($("#updateitemSearchCurrentPageNum").val() == ""){
+                console.log("empty update item search");
+            }else if ($("#updateitemSearchCurrentPageNum").val() < totalPage)
                 updateitemSearchResults($("#updateitemSearchCurrentPageNum").val());
             else
                 updateitemSearchResults(totalPage);
