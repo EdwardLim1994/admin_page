@@ -58,10 +58,10 @@ else
     </script>
 
     <script src="./dist/js/script.prod.js"></script>
-    <!-- <script src="./dist/js/invoiceMaintenance.prod.js"></script> -->
+    <script src="./dist/js/invoiceMaintenance.prod.js"></script> 
     <script src="./dist/js/datatables.min.js"></script>
 
-    <script src="./invoiceMaintenance.js"></script>
+    <!-- <script src="./invoiceMaintenance.js"></script>-->
 
 </head>
 
@@ -114,7 +114,7 @@ else
                     <div class="col-lg-2 col-md-4 col-sm-6 text-right">
                         <button class="btn btn-danger py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#addModal">
                             <span class="textBreak">Add Invoice</span>
-                            <span class="iconBreak"><i class="fas fa-user-plus"></i></span>
+                            <span class="iconBreak"><i class="fas fa-file-invoice"></i></span>
                         </button>
                     </div>
                 </div>
@@ -127,7 +127,7 @@ else
                         </div>
                     </div>
                 </div> -->
-                <div class="row w-100">
+                <div class="row">
                     <!-- <div class="col-12 col-lg-6">
                         <div class="input-group md-form form-sm form-2 pl-0">
                             <input id="searchRow" class="form-control my-0 py-1" type="text" placeholder="Search" aria-label="Search" value="<?= isset($_SESSION['searchTerm']) ? $_SESSION['searchTerm'] : "" ?>">
@@ -144,7 +144,7 @@ else
                             </div>
                         </div>
                     </div> -->
-                    <div class="col-12 col-lg-6">
+                    <div class="col-12 text-right">
                         <div class="d-flex justify-content-end py-4 rowResults">
 
                             <h6 class="my-auto">Total rows in database: <span class="font-weight-bold" id="rowTotal"></span></h6>
@@ -170,13 +170,9 @@ else
         <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
                 <div class="modal-content">
-
-                    <!-- <form action="./backend/invoice/invoice.php" enctype="multipart/form-data" method="POST"> -->
-
                     <div class="bg-white sticky-top p-0 m-0 border-bottom">
-
                         <!--Header-->
-                        <input hidden="true" type="text" name="postType" value="add">
+                        
                         <div class="modal-header">
                             <p class="heading lead">Add Invoice</p>
 
@@ -190,7 +186,6 @@ else
                             <button id="addInvoiceSubmitBtn" class="btn btn-info">Add Invoice</button>
                             <!-- <a type="button" class="btn btn-outline-info waves-effect nevermind" data-dismiss="modal">Nevermind</a> -->
                         </div>
-
                     </div>
 
 
@@ -257,9 +252,9 @@ else
                                 <div class="col-12">
                                     <div class="position-relative">
                                         <label for="edit-customer_account">Item Name or Barcode:</label>
-                                        <input type="text" class="form-control"id="search-item" placeholder="">
-                                        
-                                         <!-- Item search result -->
+                                        <input type="text" class="form-control" id="search-item" placeholder="">
+
+                                        <!-- Item search result -->
                                         <div id="item-search" class="w-100 m-0 bg-white position-absolute" style="z-index:5;">
                                         </div>
                                     </div>
@@ -289,10 +284,10 @@ else
                                         </tr>
                                     </thead>
                                     <tbody id="item-bucket">
-                                    <tr class="noResultText">
-                                        <td colspan="9" class="text-center">
-                                        <h5>No item added yet</h5>
-                                        </td>
+                                        <tr class="noResultText">
+                                            <td colspan="9" class="text-center">
+                                                <h5>No item added yet</h5>
+                                            </td>
                                         </tr>
                                     </tbody>
                                     <tfoot class="grey white-text">
@@ -305,163 +300,269 @@ else
                                             <th id="total_cost"></th>
                                         </tr>
                                     </tfoot>
-
                                 </table>
                             </div>
                         </div>
-                        <!-- </div>
-                    </form> -->
                     </div>
-
                 </div>
             </div>
-            <!-- Central Modal Medium Info-->
+        </div>
 
-            <!-- Central Modal Medium Info -->
-            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
-                    <!--Content-->
-                    <form action="./backend/customer/customer.php" enctype="multipart/form-data" method="POST">
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
+                <!--Content-->
+                <input hidden="true" type="text" id="update-invoice_id">
+                <div class="modal-content">
+                    <div class="bg-white sticky-top p-0 m-0 border-bottom">
                         <!--Header-->
-                        <input hidden="true" type="text" name="postType" value="update">
-                        <input hidden="true" type="number" name="customer_id" id="edit_id">
-                        <div class="modal-content">
-                            <!--Header-->
-                            <div class="modal-header">
-                                <p class="heading lead">Edit Item</p>
+                        <input hidden="true" type="text" name="postType" value="add">
+                        <div class="modal-header">
+                            <p class="heading lead">Update Invoice</p>
 
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true" class="white-text">&times;</span>
-                                </button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</spans>
+                            </button>
+                        </div>
+
+                        <!--Footer-->
+                        <div class="modal-footer justify-content-end">
+                            <button id="updateInvoiceSubmitBtn" class="btn btn-info">Update Invoice</button>
+                            <!-- <a type="button" class="btn btn-outline-info waves-effect nevermind" data-dismiss="modal">Nevermind</a> -->
+                        </div>
+                    </div>
+
+
+                    <!--Body-->
+                    <div class="modal-body">
+                        <div class="form-group position-relative">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="edit-customer_name">Customer Name</label>
+                                    <input type="text" class="form-control" name="customer_account" id="update-search-customer_name" placeholder="">
+                                </div>
+                                <div class="col-6">
+                                    <label for="edit-customer_account">Account Number</label>
+                                    <input type="text" class="form-control" name="customer_account" id="update-search-customer_id" placeholder="">
+                                </div>
                             </div>
 
-                            <!--Body-->
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-12 col-md-6">
-                                            <label for="edit-customer_account">Customer Account</label>
-                                            <input type="text" class="form-control" name="customer_account" id="edit-customer_account" placeholder="">
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label for="edit-outstanding">Outstanding</label>
-                                            <input type="text" class="form-control" name="outstanding" id="edit-outstanding" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 col-md-6">
-                                            <label for="edit-name">Name</label>
-                                            <input type="text" class="form-control" name="name" id="edit-name" placeholder="">
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label for="edit-points">Points</label>
-                                            <input type="text" class="form-control" name="points" id="edit-points" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 col-md-6">
-                                            <label for="edit-reg_num">Reg Number</label>
-                                            <input type="text" class="form-control" name="reg_num" id="edit-reg_num" placeholder="">
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label for="edit-status">Status</label>
-                                            <input type="text" class="form-control" name="status" id="edit-status" placeholder="">
+                            <!-- Customer search result -->
+                            <div id="update-customer-search" class="w-100 m-0 bg-white position-absolute" style="z-index:5;"></div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+
+                            <h3>Receive Information</h3>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="edit-customer_account">Invoice No:</label>
+                                    <input type="text" class="form-control" name="customer_account" id="update-invoice_number" placeholder="">
+
+                                </div>
+
+                                <div class="col-6">
+                                    <label for="edit-customer_account">Doc No:</label>
+                                    <input type="text" class="form-control" name="customer_account" id="update-doc_no" placeholder="">
+
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-6">
+                                    <label for="edit-customer_account">Invoice Date:</label>
+                                    <input type="date" class="form-control" name="customer_account" id="update-invoice_date" placeholder="">
+
+                                </div>
+                                <div class="col-6">
+                                    <label for="edit-customer_account">Due Date:</label>
+                                    <input type="date" class="form-control" name="customer_account" id="update-due_date" placeholder="">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="edit-customer_account">Remark:</label>
+                                    <input type="text" class="form-control" name="customer_account" id="update-invoice_remark" placeholder="">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+
+                            <h3>Item Information</h3>
+
+                            <div class="row pb-5 ">
+                                <div class="col-12">
+                                    <div class="position-relative">
+                                        <label for="edit-customer_account">Item Name or Barcode:</label>
+                                        <input type="text" class="form-control" id="update-search-item" placeholder="">
+
+                                        <!-- Item search result -->
+                                        <div id="update-item-search" class="w-100 m-0 bg-white position-absolute" style="z-index:5;">
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-
-                            <!--Footer-->
-                            <div class="modal-footer justify-content-center">
-                                <button type="submit" id="editItemSubmitButton" class="btn btn-info">Edit Item</button>
-                                <a type="button" class="btn btn-outline-info waves-effect nevermind" data-dismiss="modal">Nevermind</a>
+                            <div class="overflow-auto">
+                                <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead class="grey white-text">
+                                        <tr>
+                                            <th class="th-sm text-center">Action</th>
+                                            <th class="th-sm text-center">Barcode
+                                            </th>
+                                            <th class="th-sm text-center">Description
+                                            </th>
+                                            <th class="th-sm text-center">Qty
+                                            </th>
+                                            <th class="th-sm text-center">UOM
+                                            </th>
+                                            <th class="th-sm text-center">Selling Price(RM)
+                                            </th>
+                                            <th class="th-sm text-center">Base Cost(RM)
+                                            </th>
+                                            <th class="th-sm text-center">Discount(%)
+                                            </th>
+                                            <th class="th-sm text-center">Amount(RM)
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="update-item-bucket">
+                                        <tr class="update-noResultText">
+                                            <td colspan="9" class="text-center">
+                                                <h5>No item added yet</h5>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot class="grey white-text">
+                                        <tr>
+                                            <th colspan="8" class="text-right"><strong>Discount : </strong></th>
+                                            <th id="update-total_discount"></th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="8" class="text-right"><strong>Total Amount : </strong></th>
+                                            <th id="update-total_cost"></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
                         </div>
-                    </form>
-                    <!-- </form> -->
-                    <!--/.Content-->
-                </div>
+                    </div>
             </div>
-            <!-- Central Modal Medium Info-->
+        </div>
+        </div>
+        <!-- Central Modal Medium Info-->
 
-            <!-- Central Modal Warning Demo-->
-            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-notify modal-warning" role="document">
-                    <!--Content-->
-                    <form action="./backend/customer/customer.php" method="POST">
+        <!-- Central Modal Warning Demo-->
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-notify modal-warning" role="document">
+                <!--Content-->
+                <!-- <form action="./backend/invoice/invoice.php" method="POST"> -->
+                    <!--Header-->
+                    <!-- <input hidden="true" type="text" name="postType" value="deleteHeader"> -->
+                    <input hidden="true" type="text" name="invoice_id" id="delete_id">
+                    <div class="modal-content">
                         <!--Header-->
-                        <input hidden="true" type="text" name="postType" value="delete">
-                        <input hidden="true" type="number" name="customer_id" id="delete_id">
-                        <div class="modal-content">
-                            <!--Header-->
-                            <div class="modal-header">
-                                <p class="heading">Delete Customer</p>
-
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true" class="white-text">&times;</span>
-                                </button>
-                            </div>
-
-                            <!--Body-->
-                            <div class="modal-body">
-                                <p>Are you want to delete <span id="deleteCustomerName"></span>?</p>
-                            </div>
-
-                            <!--Footer-->
-                            <div class="modal-footer justify-content-center">
-                                <button type="submit" id="deleteCsutomerSubmitButton" class="btn btn-warning">Yes</button>
-                                <a type="button" class="btn btn-outline-warning waves-effect" data-dismiss="modal">Nevermind</a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <!-- Central Modal Warning Demo-->
-
-            <!-- Success Alert -->
-            <div class="modal fade" id="successToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-notify modal-success" role="document">
-                    <div class="modal-content">
                         <div class="modal-header">
-                            <p class="heading lead" id="successModalHeadline"></p>
+                            <p class="heading">Delete Invoice</p>
+
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true" class="white-text">&times;</span>
                             </button>
                         </div>
+
+                        <!--Body-->
                         <div class="modal-body">
-                            <div class="text-center">
-                                <p id="successModalBody"></p>
-                            </div>
+                            <p>Are you want to delete <span id="deleteInvoiceName"></span>?</p>
                         </div>
+
+                        <!--Footer-->
                         <div class="modal-footer justify-content-center">
-                            <a type="button" class="btn btn-outline-success waves-effect" data-dismiss="modal">OK</a>
+                            <button id="deleteInvoiceSubmitButton" class="btn btn-warning">Yes</button>
+                            <a type="button" class="btn btn-outline-warning waves-effect" data-dismiss="modal">Nevermind</a>
                         </div>
                     </div>
-                </div>
+                <!-- </form> -->
             </div>
+        </div>
+        <!-- Central Modal Warning Demo-->
 
-            <!-- Failed Alert -->
-            <div class="modal fade" id="failedToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-notify modal-danger" role="document">
+        <!-- Central Modal Warning Demo-->
+        <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-notify modal-warning" role="document">
+                <!--Content-->
+                <form action="./backend/invoice/printInvoice.php" method="POST">
+                    <!--Header-->
+                    <input hidden="true" type="text" name="postType" value="print">
+                    <input hidden="true" type="text" name="invoice_id" id="print_id">
                     <div class="modal-content">
+                        <!--Header-->
                         <div class="modal-header">
-                            <p class="heading lead" id="failedModalHeadline"></p>
+                            <p class="heading">Print Invoice</p>
+
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true" class="white-text">&times;</span>
                             </button>
                         </div>
+
+                        <!--Body-->
                         <div class="modal-body">
-                            <div class="text-center">
-                                <p id="failedModalBody"></p>
-                            </div>
+                            <p>Do you want to print <span id="printInvoiceName"></span>?</p>
                         </div>
+
+                        <!--Footer-->
                         <div class="modal-footer justify-content-center">
-                            <a type="button" class="btn btn-outline-danger waves-effect" data-dismiss="modal">OK</a>
+                            <button type="submit" id="printInvoiceSubmitButton" class="btn btn-warning">Yes</button>
+                            <a type="button" class="btn btn-outline-warning waves-effect" data-dismiss="modal">Nevermind</a>
                         </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Central Modal Warning Demo-->
+
+        <!-- Success Alert -->
+        <div class="modal fade" id="successToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-notify modal-success" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <p class="heading lead" id="successModalHeadline"></p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <p id="successModalBody"></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <a type="button" class="btn btn-outline-success waves-effect" data-dismiss="modal">OK</a>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Failed Alert -->
+        <div class="modal fade" id="failedToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-notify modal-danger" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <p class="heading lead" id="failedModalHeadline"></p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <p id="failedModalBody"></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <a type="button" class="btn btn-outline-danger waves-effect" data-dismiss="modal">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </main>
 
@@ -520,7 +621,6 @@ else
                 $("#failedModalBody").empty().append(body);
             }
         <?php endif; ?>
-
     });
 </script>
 

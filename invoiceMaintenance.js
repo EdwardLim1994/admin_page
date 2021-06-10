@@ -139,7 +139,17 @@ $(document).ready(function () {
                     success: function (results) {
                         if (results == "No result") {
                             if (isSpinnerOn == true) {
-                                $("#customer-search").empty().html(`<h5>${results}</h5>`);
+                                $("#customer-search").empty().html(`
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h5>${results}</h5>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <a class="btn btn-primary" href="./customerMaintenance.php">Go add new customer</a>
+                                    </div>
+                                </div>
+                                    
+                                `);
                                 isSpinnerOn = false;
                             }
 
@@ -271,7 +281,16 @@ $(document).ready(function () {
                     success: function (results) {
                         if (results == "No result") {
                             if (isSpinnerOn == true) {
-                                $("#item-search").empty().html(`<h5>${results}</h5>`);
+                                $("#item-search").empty().html(`
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h5>${results}</h5>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <a class="btn btn-primary" href="./itemMaintenance.php">Go add new item</a>
+                                    </div>
+                                </div>
+                                `);
                                 isSpinnerOn = false;
                             }
 
@@ -355,8 +374,8 @@ $(document).ready(function () {
                     var itemID;
                     $.each(JSON.parse(results), function (i, value) {
                         itemID = value.item_id;
-                        if (value.qty_available > 0) {
-                            isItemSoldOut = false;
+                        //if (value.qty_available > 0) {
+                         //   isItemSoldOut = false;
                             if (value.item_id == $(".item-row").data("id")) {
                                 var itemQty = $('[data-id=' + value.item_id + ']').find(".itemQuantity").val();
                                 $('[data-id=' + value.item_id + ']').find(".itemQuantity").val((parseInt(itemQty) + 1));
@@ -371,7 +390,7 @@ $(document).ready(function () {
                                     <td class="item_no">${value.item_no}</td>
                                     <td class="description">${value.description}</td>
                                     <td>
-                                        <input type="number" class="form-control itemQuantity" min="1" max="${value.qty_available}" value="1">
+                                        <input type="number" class="form-control itemQuantity" min="1" value="1">
                                     </td>
                                     <td>
                                         <input type="text" class="form-control itemUnit" value="unit">
@@ -385,11 +404,11 @@ $(document).ready(function () {
                                 </tr>
                                 `;
                             }
-                        } else {
-                            isItemSoldOut = true;
-                        }
+                        //} else {
+                        //    isItemSoldOut = true;
+                        //}
                     })
-                    if (isItemSoldOut == false) {
+                    //if (isItemSoldOut == false) {
                         if ($("#item-bucket").find(".noResultText").length > 0) {
                             $("#item-bucket").empty();
                         }
@@ -431,7 +450,7 @@ $(document).ready(function () {
                             itemBucketTotalCost();
 
                         });
-                    }
+                    //}
                     itemBucketRemoveItem();
                 }
             });
@@ -565,7 +584,16 @@ $(document).ready(function () {
                     success: function (results) {
                         if (results == "No result") {
                             if (isSpinnerOn == true) {
-                                $("#update-customer-search").empty().html(`<h5>${results}</h5>`);
+                                $("#update-customer-search").empty().html(`
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h5>${results}</h5>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <a class="btn btn-primary" href="./customerMaintenance.php">Go add new customer</a>
+                                    </div>
+                                </div>
+                                `);
                                 isSpinnerOn = false;
                             }
 
@@ -697,7 +725,16 @@ $(document).ready(function () {
                     success: function (results) {
                         if (results == "No result") {
                             if (isSpinnerOn == true) {
-                                $("#update-item-search").empty().html(`<h5>${results}</h5>`);
+                                $("#update-item-search").empty().html(`
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h5>${results}</h5>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <a class="btn btn-primary" href="./itemMaintenance.php">Go add new item</a>
+                                    </div>
+                                </div>
+                                `);
                                 isSpinnerOn = false;
                             }
 
@@ -725,11 +762,11 @@ $(document).ready(function () {
                             `;
                             $.each(JSON.parse(results), function (i, value) {
                                 var isItemSoldOut = false;
-                                if (value.qty_available == 0) {
-                                    isItemSoldOut = true
-                                } else {
-                                    isItemSoldOut = false;
-                                }
+                                // if (value.qty_available == 0) {
+                                //     isItemSoldOut = true
+                                // } else {
+                                //     isItemSoldOut = false;
+                                // }
                                 searchResult += `
                                 <a class="update-item-search-results" data-id="${value.item_id}">
                                     <div class="view overlay  ${value.qty_available == 0 ? "red lighten-4" : ""}">
@@ -782,8 +819,8 @@ $(document).ready(function () {
                     var itemID;
                     $.each(JSON.parse(results), function (i, value) {
                         itemID = value.item_id;
-                        if (value.qty_available > 0) {
-                            isItemSoldOut = false;
+                        //if (value.qty_available > 0) {
+                            //isItemSoldOut = false;
                             if (value.item_id == $(".update-item-row").data("id")) {
                                 var itemQty = $('[data-id=' + value.item_id + ']').find(".update-itemQuantity").val();
                                 $('[data-id=' + value.item_id + ']').find(".update-itemQuantity").val((parseInt(itemQty) + 1));
@@ -798,7 +835,7 @@ $(document).ready(function () {
                                     <td class="update-item_no">${value.item_no}</td>
                                     <td class="update-description">${value.description}</td>
                                     <td>
-                                        <input type="number" class="form-control update-itemQuantity" min="1" max="${value.qty_available}" value="1">
+                                        <input type="number" class="form-control update-itemQuantity" min="1"  value="1">
                                     </td>
                                     <td>
                                         <input type="text" class="form-control update-itemUnit" value="unit">
@@ -812,11 +849,11 @@ $(document).ready(function () {
                                 </tr>
                                 `;
                             }
-                        } else {
-                            isItemSoldOut = true;
-                        }
+                        //} else {
+                        //    isItemSoldOut = true;
+                        //}
                     })
-                    if (isItemSoldOut == false) {
+                    //if (isItemSoldOut == false) {
                         if ($("#update-item-bucket").find(".update-noResultText").length > 0) {
                             $("#update-item-bucket").empty();
                         }
@@ -858,7 +895,7 @@ $(document).ready(function () {
                             updateitemBucketTotalCost();
 
                         });
-                    }
+                    //}
                     updateitemBucketRemoveItem();
                 }
             });
@@ -1152,7 +1189,7 @@ $(document).ready(function () {
             type: "POST",
             url: "./backend/invoice/invoice.php",
             data: {
-                postType: "delete",
+                postType: "deleteHeader",
                 invoice_id: $("#delete_id").val()
             },
             success: function(results){
@@ -1257,7 +1294,8 @@ $(document).ready(function () {
             },
             //dataType: "json",
             success: function (results) {
-
+                
+                
                 if (results == "0 results" || results == "No Result") {
 
                     renderTable("general");
@@ -1310,7 +1348,7 @@ $(document).ready(function () {
                                         <td class="update-item_no">${value.item_no}</td>
                                         <td class="update-description">${value.description}</td>
                                         <td>
-                                            <input type="number" class="form-control update-itemQuantity" min="1" max="${value.quantity}" value="1">
+                                            <input type="number" class="form-control update-itemQuantity" min="1" value="${value.quantity}">
                                         </td>
                                         <td>
                                             <input type="text" class="form-control update-itemUnit" placeholder="unit" val="${value.uom}">
