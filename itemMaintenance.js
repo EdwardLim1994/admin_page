@@ -154,7 +154,7 @@ $(document).ready(function () {
                         var item_group = $("#item-group-" + current_index[1]).text();
 
                         var unit_cost = $("#unit-cost-" + current_index[1]).text();
-                        var selling_price1 = $("#selling-price1-" + +current_index[1]).text();
+                        var selling_price1 = $("#selling-price1-" + current_index[1]).text();
                         var qty_hand = $("#qty-hand-" + current_index[1]).text();
                         var qty_hold = $("#qty-hold-" + current_index[1]).text();
                         var qty_available = $("#qty-available-" + current_index[1]).text();
@@ -315,7 +315,7 @@ $(document).ready(function () {
                         var item_group = $("#item-group-" + current_index[1]).text();
 
                         var unit_cost = $("#unit-cost-" + current_index[1]).text();
-                        var selling_price1 = $("#selling-price1-" + +current_index[1]).text();
+                        var selling_price1 = $("#selling-price1-" + current_index[1]).text();
                         var qty_hand = $("#qty-hand-" + current_index[1]).text();
                         var qty_hold = $("#qty-hold-" + current_index[1]).text();
                         var qty_available = $("#qty-available-" + current_index[1]).text();

@@ -165,9 +165,9 @@ else
                                     <label for="addFilename" id="addFilenameLabel" class="">
                                         Image
                                     </label>
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="addFilename" name="imgUpload" aria-describedby="inputGroupFileAddon01">
-                                        <label class="custom-file-label" for="addFilename">Choose file</label>
+                                    <div class="custom-file">-->
+                                        <input type="file" hidden class="custom-file-input" id="addFilename" name="imgUpload" aria-describedby="inputGroupFileAddon01">
+                                        <!--<label class="custom-file-label" for="addFilename">Choose file</label>
                                     </div>
                                 </div>
                                 <div class="col-4 mb-3 border">

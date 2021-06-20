@@ -58,10 +58,10 @@ else
     </script>
 
     <script src="./dist/js/script.prod.js"></script>
-    <!-- <script src="./dist/js/invoiceMaintenance.prod.js"></script> -->
+    <script src="./dist/js/invoiceMaintenance.prod.js"></script> 
     <script src="./dist/js/datatables.min.js"></script>
 
-    <script src="./invoiceMaintenance.js"></script>
+    <!-- <script src="./invoiceMaintenance.js"></script>-->
 
 </head>
 
@@ -112,7 +112,7 @@ else
                         <h1 class="h1-responsive">Invoice Maintanance</h1>
                     </div>
                     <div class="col-lg-2 col-md-4 col-sm-6 text-right">
-                        <button class="btn btn-danger py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#addModal">
+                        <button id="addModalBtn" class="btn btn-danger py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#addModal">
                             <span class="textBreak">Add Invoice</span>
                             <span class="iconBreak"><i class="fas fa-file-invoice"></i></span>
                         </button>
@@ -127,7 +127,7 @@ else
                         </div>
                     </div>
                 </div> -->
-                <div class="row w-100">
+                <div class="row">
                     <!-- <div class="col-12 col-lg-6">
                         <div class="input-group md-form form-sm form-2 pl-0">
                             <input id="searchRow" class="form-control my-0 py-1" type="text" placeholder="Search" aria-label="Search" value="<?= isset($_SESSION['searchTerm']) ? $_SESSION['searchTerm'] : "" ?>">
@@ -144,7 +144,7 @@ else
                             </div>
                         </div>
                     </div> -->
-                    <div class="col-12 col-lg-6">
+                    <div class="col-12 text-right">
                         <div class="d-flex justify-content-end py-4 rowResults">
 
                             <h6 class="my-auto">Total rows in database: <span class="font-weight-bold" id="rowTotal"></span></h6>
