@@ -126,7 +126,7 @@ else
                     $stmt->execute();
                     $result = $stmt->get_result();
                 }else{
-                    $stmt = $mysqli->prepare("SELECT para_description, para_description2 FROM parameter where para_code = 'menu_button' and para_description3 like '%" .$_SESSION['role']. "%'");
+                    $stmt = $mysqli->prepare("SELECT para_description, para_description2 FROM parameter where para_code = 'menu_button' and para_description3 like '%" .$_SESSION['role']. "%' ORDER BY quantity");
                     $stmt->execute();
                     $result = $stmt->get_result();
                 }

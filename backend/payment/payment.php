@@ -11,104 +11,7 @@ $postType = $_POST["postType"];
 // SQL for view all items data //
 
 switch ($postType) {
-	case ("searchRow"):
-
-		if (isset($_POST["search"])) {
-			//$_POST['pageNum'] = 1; // comment when commit
-
-			// Prepare a select statement
-			$recordsPerPage= 20;
-	 		$offsetValue = ($_POST['pageNum']-1) * $recordsPerPage;
-
-	 		$stmt = $mysqli->prepare("SELECT invoice_id, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount FROM invoice_header WHERE in_account REGEXP ? OR in_name REGEXP ?");
-	 		$stmt->bind_param("ss", $_POST["search"], $_POST["search"]);
-
-	 		$stmt->execute();
-	 		$result = $stmt->get_result();
-	 		// Check number of rows in the result set
-			if ($result->num_rows > 0) {
-				// Fetch result rows as an associative array
-				while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
-					$jsonArray[] = $row;
-				}
-					echo json_encode($jsonArray);
-			} else {
-                    echo "No result";
-			}
-			$stmt->close();
-		}
-		break;
-
-	case ("countRow"):
-
-		//calculate total row of data
-		$stmt = $mysqli->prepare("SELECT COUNT(invoice_id) FROM invoice_header;");
-		$stmt->execute();
-		$row = $stmt->get_result()->fetch_row();
-		$rowTotal = $row[0];
-		echo json_encode($rowTotal);
-		$stmt->close();
-		break;
-
-	case ("searchRowCount"):
-
-		if (isset($_POST["search"])) {
-			$stmt = $mysqli->prepare("SELECT COUNT(invoice_id) FROM invoice_header WHERE in_account REGEXP ? OR in_name REGEXP ? ");
-			// Bind variables to the prepared statement as parameters
-			$stmt->bind_param("ss", $_POST["search"], $_POST["search"]);
-				
-			$stmt->execute();
-			$row = $stmt->get_result()->fetch_row();
-			$rowTotal = $row[0];
-			echo json_encode($rowTotal);
-			$stmt->close();
-		}
-		break;
-	
-	case ("viewHeader"):
-		//$_POST['pageNum'] = 1;// comment this after commit
-
-	 	$recordsPerPage= 20;
-	 	$offsetValue = ($_POST['pageNum']-1) * $recordsPerPage;
-
-		$stmt = $mysqli->prepare("SELECT invoice_id, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount FROM invoice_header ORDER BY id desc limit $recordsPerPage OFFSET $offsetValue"); 
-
-		$stmt->execute();
-		$result = $stmt->get_result();
-
-		if (mysqli_num_rows($result) > 0) {
-			while ($row = mysqli_fetch_assoc($result)) {
-				$jsonArray[] = $row;
-			};
-			//$_SESSION["currPageInvoice"] = $_POST['pageNum'];
-			echo json_encode($jsonArray);
-           
-		} else {
-			echo "No Result";
-		}
-		$stmt->close();
-		break;
-
-	case ("viewDetail"):
-		
-		$stmt = $mysqli->prepare("SELECT invoice_detail_id, invoice_id_header, item_id, item_no, description, quantity, uom, price, discount, amount, base_cost FROM invoice_detail WHERE invoice_id_header = ? ");
-	 	$stmt->bind_param("s", $_POST["invoice_id"]);
-		$stmt->execute();
-		$result = $stmt->get_result();
-	
-		if (mysqli_num_rows($result) > 0) {
-			while ($row = mysqli_fetch_assoc($result)) {
-				$jsonArray[] = $row;
-			};;
-			echo json_encode($jsonArray);
-			   
-		} else {
-			echo "No Result";
-		}
-		$stmt->close();
-		break;
-
-	case ("add"):
+	case ("pay"):
 
 		// check isset for all post variable
 		$countSetAdd = 0;
@@ -150,14 +53,11 @@ switch ($postType) {
 			$itemCount = count($item_no);
 		
 			// create invoice id 
-			$invoice_id = "iv" . $date_id . $time_id;
-
-			//create outstanding variable
-			$outstanding = $_POST['total_amount'];
+			$invoice_id = $_POST['in_account'] . $date_id . $time_id;
 
 			//query insert data into invoice_header table - 14 field
-			$stmt = $mysqli->prepare("INSERT INTO invoice_header (invoice_id, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount, outstanding, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			$stmt->bind_param("ssssssssddddsss", $invoice_id, $_POST['in_account'], $_POST['in_name'], $_POST['invoice_num'], $_POST['invoice_date'], $_POST['invoice_remark'], $_POST['doc_no'], $_POST['due_date'], $_POST['subtotal_ex'], $_POST['discount_header'], $_POST['total_amount'], $outstanding, $creation_date, $creation_time, $creation_user);
+			$stmt = $mysqli->prepare("INSERT INTO invoice_header (invoice_id, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			$stmt->bind_param("ssssssssdddsss", $invoice_id, $_POST['in_account'], $_POST['in_name'], $_POST['invoice_num'], $_POST['invoice_date'], $_POST['invoice_remark'], $_POST['doc_no'], $_POST['due_date'], $_POST['subtotal_ex'], $_POST['discount_header'], $_POST['total_amount'], $creation_date, $creation_time, $creation_user);
 			$stmt->execute();
 			$stmt->close();
 
@@ -170,8 +70,8 @@ switch ($postType) {
 			$stmtlog->close();
 
             //query insert data into invoice_header_log table - 15 field
-			$stmt = $mysqli->prepare("INSERT INTO invoice_header_log (invoice_id_log, mode, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount, outstanding, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			$stmt->bind_param("sssssssssddddsss", $invoice_id, $mode, $_POST['in_account'], $_POST['in_name'], $_POST['invoice_num'], $_POST['invoice_date'], $_POST['invoice_remark'], $_POST['doc_no'], $_POST['due_date'], $_POST['subtotal_ex'], $_POST['discount_header'], $_POST['total_amount'], $outstanding, $creation_date, $creation_time, $creation_user);
+			$stmt = $mysqli->prepare("INSERT INTO invoice_header_log (invoice_id_log, mode, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			$stmt->bind_param("sssssssssdddsss", $invoice_id, $mode, $_POST['in_account'], $_POST['in_name'], $_POST['invoice_num'], $_POST['invoice_date'], $_POST['invoice_remark'], $_POST['doc_no'], $_POST['due_date'], $_POST['subtotal_ex'], $_POST['discount_header'], $_POST['total_amount'], $creation_date, $creation_time, $creation_user);
 			$stmt->execute();
 			$stmt->close();
 
@@ -234,12 +134,9 @@ switch ($postType) {
 
 			$itemCount = count($item_no);
 
-			//create outstanding variable
-			$outstanding = $_POST['total_amount'];
-
 			//update query for invoice_header tabel - 14 fields
-			$stmt = $mysqli->prepare("UPDATE invoice_header SET invoice_id = ?, in_account = ?, in_name = ?, invoice_num = ?, invoice_date = ?, invoice_remark = ?, doc_no = ?, due_date = ?, subtotal_ex = ?, discount_header = ?, total_amount = ?, outstanding = ?, modified_date = ?, modified_time = ?, modified_user = ? WHERE invoice_id = ?");
-			$stmt->bind_param("ssssssssddddssss", $_POST['invoice_id'], $_POST['in_account'], $_POST['in_name'], $_POST['invoice_num'], $_POST['invoice_date'], $_POST['invoice_remark'], $_POST['doc_no'], $_POST['due_date'], $_POST['subtotal_ex'], $_POST['discount_header'], $_POST['total_amount'], $outstanding, $modify_date, $modify_time, $modify_user, $_POST['invoice_id']);
+			$stmt = $mysqli->prepare("UPDATE invoice_header SET invoice_id = ?, in_account = ?, in_name = ?, invoice_num = ?, invoice_date = ?, invoice_remark = ?, doc_no = ?, due_date = ?, subtotal_ex = ?, discount_header = ?, total_amount = ?, modified_date = ?, modified_time = ?, modified_user = ? WHERE invoice_id = ?");
+			$stmt->bind_param("ssssssssdddssss", $_POST['invoice_id'], $_POST['in_account'], $_POST['in_name'], $_POST['invoice_num'], $_POST['invoice_date'], $_POST['invoice_remark'], $_POST['doc_no'], $_POST['due_date'], $_POST['subtotal_ex'], $_POST['discount_header'], $_POST['total_amount'], $modify_date, $modify_time, $modify_user, $_POST['invoice_id']);
 			$stmt->execute();
 			$stmt->close();
 
@@ -267,8 +164,8 @@ switch ($postType) {
 			$stmt->close();
 
 			//query insert data into invoice_header_log table - 18 field
-			$stmt = $mysqli->prepare("INSERT INTO invoice_header_log (invoice_id_log, mode, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount, outstanding, creation_date, creation_time, creation_user, modified_date, modified_time, modified_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			$stmt->bind_param("sssssssssdddssssss", $_POST['invoice_id'], $mode, $_POST['in_account'], $_POST['in_name'], $_POST['invoice_num'], $_POST['invoice_date'], $_POST['invoice_remark'], $_POST['doc_no'], $_POST['due_date'], $_POST['subtotal_ex'], $_POST['discount_header'], $_POST['total_amount'], $outstanding, $header_creation_date, $header_creation_time, $header_creation_user, $modify_date, $modify_time, $modify_user);
+			$stmt = $mysqli->prepare("INSERT INTO invoice_header_log (invoice_id_log, mode, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount, creation_date, creation_time, creation_user, modified_date, modified_time, modified_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			$stmt->bind_param("sssssssssdddssssss", $_POST['invoice_id'], $mode, $_POST['in_account'], $_POST['in_name'], $_POST['invoice_num'], $_POST['invoice_date'], $_POST['invoice_remark'], $_POST['doc_no'], $_POST['due_date'], $_POST['subtotal_ex'], $_POST['discount_header'], $_POST['total_amount'], $header_creation_date, $header_creation_time, $header_creation_user, $modify_date, $modify_time, $modify_user);
 			$stmt->execute();
 			$stmt->close();
 
