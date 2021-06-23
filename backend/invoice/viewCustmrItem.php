@@ -40,7 +40,7 @@ switch ($postType) {
 				$stmt->close();
 			} elseif ($_POST['searchCustomerID'] != "" && $_POST["searchCustomerName"] == "") {
 				$stmt = $mysqli->prepare("SELECT customer_id, customer_account, name FROM customers WHERE name REGEXP ? limit $recordsPerPage OFFSET $offsetValue");
-				$stmt->bind_param("i", $_POST["searchCustomerID"]);
+				$stmt->bind_param("s", $_POST["searchCustomerID"]);
 				$stmt->execute();
 				$result = $stmt->get_result();
 				// Check number of rows in the result set
@@ -56,7 +56,7 @@ switch ($postType) {
 				$stmt->close();
 			} elseif ($_POST["searchCustomerName"] != "" && $_POST['searchCustomerID'] != "") {
 				$stmt = $mysqli->prepare("SELECT customer_id, customer_account, name FROM customers WHERE customer_account REGEXP ? AND name REGEXP ? limit $recordsPerPage OFFSET $offsetValue");
-				$stmt->bind_param("is", $_POST["searchCustomerID"], $_POST["searchCustomerName"]);
+				$stmt->bind_param("ss", $_POST["searchCustomerID"], $_POST["searchCustomerName"]);
 				$stmt->execute();
 				$result = $stmt->get_result();
 				// Check number of rows in the result set
