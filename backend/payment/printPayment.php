@@ -12,7 +12,7 @@ $postType = $_POST["postType"];
 switch ($postType) {
 
     case ("paymentList"):
-        $_POST['pageNum'] = 1;// comment this after commit
+        //$_POST['pageNum'] = 1;// comment this after commit
 
 	 	$recordsPerPage= 20;
 	 	$offsetValue = ($_POST['pageNum']-1) * $recordsPerPage;

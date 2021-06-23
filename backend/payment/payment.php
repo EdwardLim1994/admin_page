@@ -14,7 +14,7 @@ switch ($postType) {
 
 	case ("viewInvoiceOutstanding"):
 		if (isset($_POST["account_num"])) {
-			$_POST['pageNum'] = 1;// comment this after commit
+			//$_POST['pageNum'] = 1;// comment this after commit
 
 			$recordsPerPage= 20;
 			$offsetValue = ($_POST['pageNum']-1) * $recordsPerPage;
@@ -39,7 +39,7 @@ switch ($postType) {
 
 	case ("viewInvoiceAll"):
 		if (isset($_POST["account_num"])) {
-			$_POST['pageNum'] = 1;// comment this after commit
+			//$_POST['pageNum'] = 1;// comment this after commit
 
 			$recordsPerPage= 20;
 			$offsetValue = ($_POST['pageNum']-1) * $recordsPerPage;
@@ -98,12 +98,12 @@ switch ($postType) {
 			$creation_time = date("H:i:s");
 			$date_id = date("Ymd");
 			$time_id = date("His");
-			//$creation_user = $_SESSION["username"];
-			$creation_user = "admin"; // comment this when submit
+			$creation_user = $_SESSION["username"];
+			//$creation_user = "admin"; // comment this when submit
 			$modify_date = date("Y-m-d");
 			$modify_time = date("H:i:s");
-			//$modify_user = $_SESSION["username"];
-			$modify_user = "admin";
+			$modify_user = $_SESSION["username"];
+			//$modify_user = "admin";
 			$mode = "Pay";
 
 			//count how many payment transaction
@@ -142,7 +142,7 @@ switch ($postType) {
 			}
 
 			echo"success pay";
-			//header("location: ../../paymentMaintenance.php?success=item added");
+			//header("location: ../../paymentMaintenance.php?success=payment added");
 
 		}else{
 			echo "Some input field is not set.";
@@ -151,7 +151,7 @@ switch ($postType) {
 
 	case ("viewPayment"):
 		if (isset($_POST["selected_id_pay"])) {
-			echo $_POST["selected_id_pay"];
+			//echo $_POST["selected_id_pay"];
 
 			$stmt = $mysqli->prepare("SELECT payment_id, invoice_id, payment_date, payment_mode, invoice_amount, payment_amount, payment_remark, payment_salesperson, payment_status FROM payment WHERE invoice_id = ?  ORDER BY payment_id desc"); 
 			$stmt->bind_param("s", $_POST["selected_id_pay"]);
