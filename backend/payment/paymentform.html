@@ -16,80 +16,60 @@
 <body>
 
     <form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo">
+        <label> customer information</label>
+        <input type="text" placeholder="account_num" id="account_num"><br><br><br>
 
-        <label><b>for UPDATE, do not change in_account & In_name</b></label>
-        <input type="text" placeholder="in_account" id="in_account">
-        <input type="text" placeholder="in_name" id="in_name">
-        <input type="text" placeholder="invoice_num" id="invoice_num">
-        <input type="date" placeholder="invoice_date" id="invoice_date">
-        <input type="text" placeholder="invoice_remark" id="invoice_remark">
-        <input type="text" placeholder="doc_no" id="doc_no">
-        <input type="date" placeholder="due_date" id="due_date">
-        <input type="number" placeholder="subtotal_ex" id="subtotal_ex">
-        <input type="number" placeholder="discount_header" id="discount_header">
-        <!-- <input type="number"  placeholder="purchase_tax" id="purchase_tax" >
-    <input type="number"  placeholder="tax_percent" id="tax_percent" > -->
-        <input type="number" placeholder="total_amount" id="total_amount"><br><br><br>
+        <label><b>invoice header detail: (for do payment) - no array in this field</b></label>
+        <input type="text" placeholder="payment_mode" id="payment_mode">
+        <input type="date" placeholder="payment_date" id="payment_date">
+        <input type="text" placeholder="payment_remark" id="payment_remark">
+        <input type="text" placeholder="payment_salesperson" id="payment_salesperson"><br><br><br><br>
 
-        <label><b>first item</b></label>
-        <input type="number" placeholder="item_id[]" class="item_id" name="item_id[]">
-        <input type="text" placeholder="item_no[]" class="item_no" name="item_no[]">
-        <input type="text" placeholder="description[]" class="description" name="description[]">
-        <input type="number" placeholder="quantity[]" class="quantity" name="quantity[]">
-        <input type="text" placeholder="uom[]" class="uom" name="uom[]">
-        <input type="number" placeholder="price[]" class="price" name="price[]">
-        <input type="number" placeholder="discount[]" class="discount" name="discount[]">
-        <!-- <input type="number"  placeholder="gr_price[]" class="gr_price" name="gr_price[]">
-    <input type="number"  placeholder="gr_price_ex[]" class="gr_price_ex" name="gr_price_ex[]"> -->
-        <input type="number" placeholder="amount[]" class="amount" name="amount[]">
-        <input type="number" placeholder="base_cost[]" class="base_cost" name="base_cost[]">
-        <!-- <input type="number"  placeholder="new_base_cost[]" class="new_base_cost" name="new_base_cost[]">
-    <input type="text"  placeholder="remark[]" class="remark" name="remark[]">
-    <input type="text"  placeholder="po[]" class="po" name="po[]">
-    <input type="number"  placeholder="min_price[]" class="min_price" name="min_price[]">
-    <input type="number"  placeholder="amount_tax[]" class="amount_tax" name="amount_tax[]">
-    <input type="number"  placeholder="taxable_amount[]" class="taxable_amount" name="taxable_amount[]"> -->
+        <label><b>first invoice</b></label>
+        <input type="number" placeholder="id[]" id="id[]" name="id[]">
+        <input type="text" placeholder="invoice_id[]" id="invoice_id[]" name="invoice_id[]">
+        <input type="number" placeholder="total_amount[]" id="total_amount[]" name="total_amount[]">
+        <input type="number" placeholder="outstanding[]" id="outstanding[]" name="outstanding[]">
+        <input type="number" placeholder="payment[]" id="payment[]" name="payment[]">
+        <input type="text" placeholder="payment_status[]" id="payment_status[]" name="payment_status[]">
 
         <br><br><br>
 
-        <label><b>second item</b></label>
-        <input type="number" placeholder="item_id[]" class="item_id" name="item_id[]">
-        <input type="text" placeholder="item_no[]" class="item_no" name="item_no[]">
-        <input type="text" placeholder="description[]" class="description" name="description[]">
-        <input type="number" placeholder="quantity[]" class="quantity" name="quantity[]">
-        <input type="text" placeholder="uom[]" class="uom" name="uom[]">
-        <input type="number" placeholder="price[]" class="price" name="price[]">
-        <input type="number" placeholder="discount[]" class="discount" name="discount[]">
-        <!-- <input type="number"  placeholder="gr_price[]" class="gr_price" name="gr_price[]">
-    <input type="number"  placeholder="gr_price_ex[]" class="gr_price_ex" name="gr_price_ex[]"> -->
-        <input type="number" placeholder="amount[]" class="amount" name="amount[]">
-        <input type="number" placeholder="base_cost[]" class="base_cost" name="base_cost[]">
-        <!-- <input type="number"  placeholder="new_base_cost[]" class="new_base_cost" name="new_base_cost[]">
-    <input type="text"  placeholder="remark[]" class="remark" name="remark[]">
-    <input type="text"  placeholder="po[]" class="po" name="po[]">
-    <input type="number"  placeholder="min_price[]" class="min_price" name="min_price[]">
-    <input type="number"  placeholder="amount_tax[]" class="amount_tax" name="amount_tax[]">
-    <input type="number"  placeholder="taxable_amount[]" class="taxable_amount" name="taxable_amount[]"> -->
+        <label><b>second invoice</b></label>
+        <input type="number" placeholder="id[]" id="id[]" name="id[]">
+        <input type="text" placeholder="invoice[]" id="invoice_id[]" name="invoice_id[]">
+        <input type="number" placeholder="total_amount[]" id="total_amount[]" name="total_amount[]">
+        <input type="number" placeholder="outstanding[]" id="outstanding[]" name="outstanding[]">
+        <input type="number" placeholder="payment[]" id="payment[]" name="payment[]">
+        <input type="text" placeholder="payment_status[]" id="payment_status[]" name="payment_status[]">
 
         <br><br><br>
 
+        <input type="button" value="Add payment" id="payBtn"></input>
+        <input type="button" value="view invoice outstanding" id="viewInvoiceOutstanding"></input>
+        <input type="button" value="view all invoice" id="viewInvoiceAll"></input><br><br><br><br>
+        
+        <label><b> for view individual payment record</label><br>
+        <input type="number" placeholder="selected_id (for view document header)" id="selected_id_doc">
+        <input type="button" value="view document (id in invoice_header table)" id="viewDocumentBtn"></input>
+        <input type="text" placeholder="selected_id (for document detail)" id="selected_id_doc_detail">
+        <input type="button" value="view document detail (invoice_id)" id="viewDocumentDetailBtn"></input>
+        <input type="text" placeholder="selected_id (for view payment)" id="selected_id_pay">
+        <input type="button" value="view payment (invoice_id)" id="viewPaymentBtn"></input><br><br><br><br>
+        
+        <label><b> for view all payment record and select</label><br>
+        <input type="button" value="view payment list" id="viewPaymentList">
+        <input type="text" placeholder="payment_identifier" id="payment_identifier">
+        <input type="text" placeholder="customer_account" id="customer_account">
+        <input type="button" value="print selected payment" id="printPayment">
 
-
-        <input type="button" value="Add Data" id="uploadBtn"></input>
-        <input type="button" value="view data header" id="viewBtn"></input>
-        <label><b>for UPDATE, DELETE, VIEW fill in invoice_id field</b></label>
-        <input type="text" placeholder="invoice_id" id="invoice_id">
-        <input type="button" value="view data item detail" id="viewDetail"></input>
-        <input type="button" value="update data" id="updateBtn"></input>
-        <input type="button" value="delete data" id="deleteBtn"></input>
-        <input type="button" value="count data" id="countBtn"></input>
         <div id="output"></div>
         <div id="viewData"></div>
 
 
-        <div class="search-box">
+        <!--<div class="search-box">
             <input type="text" autocomplete="off" placeholder="Search country..." />
-            <div class="result"></div>
+            <div class="result"></div> -->
         </div>
     </form>
 
@@ -123,10 +103,6 @@
                 processData: false
             });
 
-
-            /*$.get("item.php", {search: inputVal, postType: searchRow}).done(function(data){
-                // Display the returned data in browser
-                console.log(data);            });*/
         } else {
             resultDropdown.empty();
         }
@@ -138,79 +114,212 @@
         $(this).parent(".result").empty();
     });
 
-    $('#uploadBtn').on('click', function() {
+    $('#viewInvoiceOutstanding').on('click', function() {
+
+    var fd = new FormData();
+    fd.append('postType', 'viewInvoiceOutstanding');
+    fd.append('account_num', $('#account_num').val());
+
+    $.ajax({
+        url: 'payment.php', 
+        type: 'POST',
+        data: fd,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(data) {
+            //for(var i=0; i<data.lenght; i++){
+            //$('#viewData').append('<img src="itemUpload/'+ data[0].item_picture+'" title="Title of image"><br>')
+            //}     
+            console.log(data);
+
+
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    });
+
+    $('#viewInvoiceAll').on('click', function() {
+
+    var fd = new FormData();
+    fd.append('postType', 'viewInvoiceAll');
+    fd.append('account_num', $('#account_num').val());
+
+    $.ajax({
+        url: 'payment.php',
+        type: 'POST',
+        data: fd,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(data) {
+            //for(var i=0; i<data.lenght; i++){
+            //$('#viewData').append('<img src="itemUpload/'+ data[0].item_picture+'" title="Title of image"><br>')
+
+
+            //}     
+            console.log(data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    });
+
+    $('#viewDocumentBtn').on('click', function() {
+
+    var fd = new FormData();
+    fd.append('postType', 'viewInvoiceHeader');
+    fd.append('selected_id', $('#selected_id_doc').val());
+
+    $.ajax({
+        url: 'payment.php',
+        type: 'POST',
+        data: fd,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(data) {
+
+            console.log(data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    });
+
+    $('#viewDocumentDetailBtn').on('click', function() {
+
+    var fd = new FormData();
+    fd.append('postType', 'viewInvoiceDetail');
+    fd.append('selected_id', $('#selected_id_doc_detail').val());
+
+    $.ajax({
+        url: 'payment.php',
+        type: 'POST',
+        data: fd,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(data) {
+
+            console.log(data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    });
+
+    $('#viewPaymentBtn').on('click', function() {
+
+    var fd = new FormData();
+    fd.append('postType', 'viewPayment');
+    fd.append('selected_id_pay', $('#selected_id_pay').val());
+
+    $.ajax({
+        url: 'payment.php',
+        type: 'POST',
+        data: fd,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(data) {
+
+            console.log(data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    });
+
+    $('#viewPaymentList').on('click', function() {
+
+    var fd = new FormData();
+    fd.append('postType', 'paymentList');
+
+    $.ajax({
+        url: 'printPayment.php',
+        type: 'POST',
+        data: fd,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(data) {
+
+            console.log(data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    });
+
+    $('#printPayment').on('click', function() {
+
+    var fd = new FormData();
+    fd.append('postType', 'printPayment');
+    fd.append('payment_identifier', $('#payment_identifier').val());
+    fd.append('customer_account', $('#customer_account').val());
+
+    $.ajax({
+        url: 'printPayment.php',
+        type: 'POST',
+        data: fd,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(data) {
+
+            console.log(data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    });
+
+    $('#payBtn').on('click', function() {
 
         var fd = new FormData();
-        fd.append('in_account', $('#in_account').val());
-        fd.append('in_name', $('#in_name').val());
-        fd.append('invoice_num', $('#invoice_num').val());
-        fd.append('invoice_date', $('#invoice_date').val());
-        fd.append('invoice_remark', $('#invoice_remark').val());
-        fd.append('doc_no', $('#doc_no').val());
-        fd.append('due_date', $('#due_date').val());
-        fd.append('subtotal_ex', $('#subtotal_ex').val());
-        fd.append('discount_header', $('#discount_header').val());
-        /*fd.append('purchase_tax', $('#purchase_tax').val() );
-        fd.append('tax_percent', $('#tax_percent').val() );*/
-        fd.append('total_amount', $('#total_amount').val());
+        fd.append('payment_date', $('#payment_date').val());
+        fd.append('payment_mode', $('#payment_mode').val());
+        fd.append('payment_remark', $('#payment_remark').val());
+        fd.append('payment_salesperson', $('#payment_salesperson').val());
 
-        a_item_id = document.getElementsByName("item_id[]");
-        for (let item_id of a_item_id) {
-            fd.append('item_id[]', item_id.value);
+        a_id = document.getElementsByName("id[]");
+        for (let id of a_id) {
+            fd.append('id[]', id.value);
         }
-        a_item_no = document.getElementsByName("item_no[]");
-        for (let item_no of a_item_no) {
-            fd.append('item_no[]', item_no.value);
+        a_invoice_id = document.getElementsByName("invoice_id[]");
+        for (let invoice_id of a_invoice_id) {
+            fd.append('invoice_id[]', invoice_id.value);
         }
-        a_description = document.getElementsByName("description[]");
-        for (let description of a_description) {
-            fd.append('description[]', description.value);
+        a_total_amount = document.getElementsByName("total_amount[]");
+        for (let total_amount of a_total_amount) {
+            fd.append('total_amount[]', total_amount.value);
         }
-        a_quantity = document.getElementsByName("quantity[]");
-        for (let quantity of a_quantity) {
-            fd.append('quantity[]', quantity.value);
+        a_outstanding = document.getElementsByName("outstanding[]");
+        for (let outstanding of a_outstanding) {
+            fd.append('outstanding[]', outstanding.value);
         }
-        a_uom = document.getElementsByName("uom[]");
-        for (let uom of a_uom) {
-            fd.append('uom[]', uom.value);
+        a_payment = document.getElementsByName("payment[]");
+        for (let payment of a_payment) {
+            fd.append('payment[]', payment.value);
         }
-        a_price = document.getElementsByName("price[]");
-        for (let price of a_price) {
-            fd.append('price[]', price.value);
+        a_payment_status = document.getElementsByName("payment_status[]");
+        for (let payment_status of a_payment_status) {
+            fd.append('payment_status[]', payment_status.value);
         }
-        a_discount = document.getElementsByName("discount[]");
-        for (let discount of a_discount) {
-            fd.append('discount[]', discount.value);
-        }
-        /* a_gr_price = document.getElementsByName("gr_price[]");
-         for (let gr_price of a_gr_price) { fd.append('gr_price[]', gr_price.value); }
-         a_gr_price_ex = document.getElementsByName("gr_price_ex[]");
-         for (let gr_price_ex of a_gr_price_ex) { fd.append('gr_price_ex[]', gr_price_ex.value); }*/
-        a_amount = document.getElementsByName("amount[]");
-        for (let amount of a_amount) {
-            fd.append('amount[]', amount.value);
-        }
-        a_base_cost = document.getElementsByName("base_cost[]");
-        for (let base_cost of a_base_cost) {
-            fd.append('base_cost[]', base_cost.value);
-        }
-        /*a_new_base_cost = document.getElementsByName("new_base_cost[]");
-        for (let new_base_cost of a_new_base_cost) { fd.append('new_base_cost[]', new_base_cost.value); }
-        a_remark = document.getElementsByName("remark[]");
-        for (let remark of a_remark) { fd.append('remark[]', remark.value); }
-        a_po = document.getElementsByName("po[]");
-        for (let po of a_po) { fd.append('po[]', po.value); }
-        a_min_price = document.getElementsByName("min_price[]");
-        for (let min_price of a_min_price) { fd.append('min_price[]', min_price.value); }
-        a_amount_tax = document.getElementsByName("amount_tax[]");
-        for (let amount_tax of a_amount_tax) { fd.append('amount_tax[]', amount_tax.value); }
-        a_taxable_amount = document.getElementsByName("taxable_amount[]");
-        for (let taxable_amount of a_taxable_amount) { fd.append('taxable_amount[]', taxable_amount.value); }*/
 
-        fd.append('postType', 'add');
+        fd.append('postType', 'pay');
 
         $.ajax({
-            url: 'invoice.php',
+            url: 'payment.php',
             type: 'POST',
             data: fd,
             dataType: 'json',
@@ -224,205 +333,6 @@
         });
     });
 
-    $('#countBtn').on('click', function() {
-
-        var fd = new FormData();
-        fd.append('postType', 'countRow');
-        //fd.append('postType', 'countRowCustomer');
-        //fd.append('postType', 'countRowItem');
-
-        $.ajax({
-            url: 'invoice.php',
-            //url: 'viewCustmrItem.php',  
-            type: 'POST',
-            data: fd,
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function(data) {
-                //for(var i; i<data.lenght; i++){
-                //}     
-                //console.log(data);   
-                console.log(data);
-
-            },
-            cache: false,
-            contentType: false,
-            processData: false
-        });
-
-    });
-
-    $('#viewBtn').on('click', function() {
-
-        var fd = new FormData();
-        fd.append('postType', 'viewHeader');
-        //fd.append('postType', 'viewCustomer');
-        //fd.append('postType', 'viewItem');
-
-        $.ajax({
-            url: 'invoice.php',
-            //url: 'viewCustmrItem.php',   
-            type: 'POST',
-            data: fd,
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function(data) {
-                //for(var i=0; i<data.lenght; i++){
-                //$('#viewData').append('<img src="itemUpload/'+ data[0].item_picture+'" title="Title of image"><br>')
-                //}     
-                console.log(data);
-
-
-            },
-            cache: false,
-            contentType: false,
-            processData: false
-        });
-
-    });
-
-    $('#viewDetail').on('click', function() {
-
-        var fd = new FormData();
-        fd.append('postType', 'viewDetail');
-        fd.append('invoice_id', $('#invoice_id').val());
-
-        $.ajax({
-            url: 'invoice.php',
-            type: 'POST',
-            data: fd,
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function(data) {
-                //for(var i=0; i<data.lenght; i++){
-                //$('#viewData').append('<img src="itemUpload/'+ data[0].item_picture+'" title="Title of image"><br>')
-
-
-                //}     
-                console.log(data);
-
-
-            },
-            cache: false,
-            contentType: false,
-            processData: false
-        });
-
-    });
-
-    $('#updateBtn').on('click', function() {
-
-        var fd = new FormData();
-        fd.append('in_account', $('#in_account').val());
-        fd.append('in_name', $('#in_name').val());
-        fd.append('invoice_num', $('#invoice_num').val());
-        fd.append('invoice_date', $('#invoice_date').val());
-        fd.append('invoice_remark', $('#invoice_remark').val());
-        fd.append('doc_no', $('#doc_no').val());
-        fd.append('due_date', $('#due_date').val());
-        fd.append('subtotal_ex', $('#subtotal_ex').val());
-        fd.append('discount_header', $('#discount_header').val());
-        /*fd.append('purchase_tax', $('#purchase_tax').val() );
-        fd.append('tax_percent', $('#tax_percent').val() );*/
-        fd.append('total_amount', $('#total_amount').val());
-
-        a_item_id = document.getElementsByName("item_id[]");
-        for (let item_id of a_item_id) {
-            fd.append('item_id[]', item_id.value);
-        }
-        a_item_no = document.getElementsByName("item_no[]");
-        for (let item_no of a_item_no) {
-            fd.append('item_no[]', item_no.value);
-        }
-        a_description = document.getElementsByName("description[]");
-        for (let description of a_description) {
-            fd.append('description[]', description.value);
-        }
-        a_quantity = document.getElementsByName("quantity[]");
-        for (let quantity of a_quantity) {
-            fd.append('quantity[]', quantity.value);
-        }
-        a_uom = document.getElementsByName("uom[]");
-        for (let uom of a_uom) {
-            fd.append('uom[]', uom.value);
-        }
-        a_price = document.getElementsByName("price[]");
-        for (let price of a_price) {
-            fd.append('price[]', price.value);
-        }
-        a_discount = document.getElementsByName("discount[]");
-        for (let discount of a_discount) {
-            fd.append('discount[]', discount.value);
-        }
-        /* a_gr_price = document.getElementsByName("gr_price[]");
-         for (let gr_price of a_gr_price) { fd.append('gr_price[]', gr_price.value); }
-         a_gr_price_ex = document.getElementsByName("gr_price_ex[]");
-         for (let gr_price_ex of a_gr_price_ex) { fd.append('gr_price_ex[]', gr_price_ex.value); }*/
-        a_amount = document.getElementsByName("amount[]");
-        for (let amount of a_amount) {
-            fd.append('amount[]', amount.value);
-        }
-        a_base_cost = document.getElementsByName("base_cost[]");
-        for (let base_cost of a_base_cost) {
-            fd.append('base_cost[]', base_cost.value);
-        }
-        /*a_new_base_cost = document.getElementsByName("new_base_cost[]");
-        for (let new_base_cost of a_new_base_cost) { fd.append('new_base_cost[]', new_base_cost.value); }
-        a_remark = document.getElementsByName("remark[]");
-        for (let remark of a_remark) { fd.append('remark[]', remark.value); }
-        a_po = document.getElementsByName("po[]");
-        for (let po of a_po) { fd.append('po[]', po.value); }
-        a_min_price = document.getElementsByName("min_price[]");
-        for (let min_price of a_min_price) { fd.append('min_price[]', min_price.value); }
-        a_amount_tax = document.getElementsByName("amount_tax[]");
-        for (let amount_tax of a_amount_tax) { fd.append('amount_tax[]', amount_tax.value); }
-        a_taxable_amount = document.getElementsByName("taxable_amount[]");
-        for (let taxable_amount of a_taxable_amount) { fd.append('taxable_amount[]', taxable_amount.value); }*/
-
-        fd.append('postType', 'update');
-        fd.append('invoice_id', $('#invoice_id').val());
-
-        $.ajax({
-            url: 'invoice.php',
-            type: 'POST',
-            data: fd,
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function(data) {
-
-
-            },
-            cache: false,
-            contentType: false,
-            processData: false
-        });
-
-    });
-
-    $('#deleteBtn').on('click', function() {
-
-        var fd = new FormData();
-        fd.append('postType', 'deleteHeader');
-
-        //fd.append('item_id', 1);
-        fd.append('invoice_id', $('#invoice_id').val());
-
-        $.ajax({
-            url: 'invoice.php',
-            type: 'POST',
-            data: fd,
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function(data) {
-
-
-            },
-            cache: false,
-            contentType: false,
-            processData: false
-        });
-
-    });
 </script>
 
 </html>

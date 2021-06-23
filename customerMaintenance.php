@@ -32,7 +32,7 @@ else
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Maintanance</title>
+    <title>Customer Maintanance</title>
 
     <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png" />
@@ -58,10 +58,10 @@ else
     </script>
 
     <script src="./dist/js/script.prod.js"></script>
-    <!-- <script src="./dist/js/invoiceMaintenance.prod.js"></script> -->
+    <script src="./dist/js/customerMaintenance.prod.js"></script>
     <script src="./dist/js/datatables.min.js"></script>
 
-    <script src="./invoiceMaintenance.js"></script>
+    <!-- <script src="./customerMaintenance.js"></script> -->
 
 </head>
 
@@ -100,35 +100,55 @@ else
         <div class="container-fluid">
             <div class="container">
 
-
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb white pl-0">
-                        <li class="breadcrumb-item"><a href="./menu.php">Menu</a></li>
-                        <li class="breadcrumb-item active">Invoice Maintanance</li>
-                    </ol>
-                </nav>
-                <div class="row">
-                    <div class="col-lg-10 col-md-8 col-sm-6">
-                        <h1 class="h1-responsive">Invoice Maintanance</h1>
-                    </div>
-                    <div class="col-lg-2 col-md-4 col-sm-6 text-right">
-                        <button class="btn btn-danger py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#addModal">
-                            <span class="textBreak">Add Invoice</span>
-                            <span class="iconBreak"><i class="fas fa-file-invoice"></i></span>
-                        </button>
+                <div class="row bg-white sticky-top">
+                    <div class="col-12">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb white pl-0">
+                                <li class="breadcrumb-item"><a href="./menu.php">Menu</a></li>
+                                <li class="breadcrumb-item active">Customer Maintanance</li>
+                            </ol>
+                        </nav>
+                        <div class="row">
+                            <div class="col-lg-10 col-md-8 col-sm-6">
+                                <h1 class="h1-responsive">Customer Maintanance</h1>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-6 text-right">
+                                <button class="btn btn-danger py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#addModal">
+                                    <span class="textBreak">Add Customer</span>
+                                    <span class="iconBreak"><i class="fas fa-user-plus"></i></span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <div class="row py-3">
 
-                <!-- <div class="row">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">General</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="additionalinfo-tab" data-toggle="tab" href="#additionalinfo" role="tab" aria-controls="additionalinfo" aria-selected="false">Additional Info</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="accounting-tab" data-toggle="tab" href="#accounting" role="tab" aria-controls="accounting" aria-selected="false">Accounting</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="other-tab" data-toggle="tab" href="#other" role="tab" aria-controls="other" aria-selected="false">Other</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="row">
                     <div class="col-12 pt-2">
                         <div id="search-input-wrapper">
                             <h6>Searching: <span id="search-input"></span></h6>
                         </div>
                     </div>
-                </div> -->
+                </div>
                 <div class="row w-100">
-                    <!-- <div class="col-12 col-lg-6">
+                    <div class="col-12 col-lg-6">
                         <div class="input-group md-form form-sm form-2 pl-0">
                             <input id="searchRow" class="form-control my-0 py-1" type="text" placeholder="Search" aria-label="Search" value="<?= isset($_SESSION['searchTerm']) ? $_SESSION['searchTerm'] : "" ?>">
                             <div class="input-group-append" id="searchClear">
@@ -143,10 +163,10 @@ else
                                 </button>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                     <div class="col-12 col-lg-6">
                         <div class="d-flex justify-content-end py-4 rowResults">
-
+                            
                             <h6 class="my-auto">Total rows in database: <span class="font-weight-bold" id="rowTotal"></span></h6>
                         </div>
                     </div>
@@ -162,7 +182,31 @@ else
 
                     </div>
                 </div>
-                <div id="general-table" class='table-responsive'></div>
+                 <div class="row">
+                    <div class="tab-content w-100" id="myTabContent">
+                        <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                            <div id="general-table" class='table-responsive'>
+
+                            </div>
+
+                        </div>
+                        <div class="tab-pane fade" id="additionalinfo" role="tabpanel" aria-labelledby="additionalinfo-tab">
+                            <div id="additionalinfo-table" class='table-responsive'>
+
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="accounting" role="tabpanel" aria-labelledby="accounting-tab">
+                            <div id="accounting-table" class='table-responsive'>
+
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="other" role="tabpanel" aria-labelledby="other-tab">
+                            <div id="other-table" class='table-responsive'>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         </div>
@@ -170,285 +214,653 @@ else
         <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
                 <div class="modal-content">
-                    <div class="bg-white sticky-top p-0 m-0 border-bottom">
+
+                <form action="./backend/customer/customer.php" enctype="multipart/form-data" method="POST">
                         <!--Header-->
-                        
-                        <div class="modal-header">
-                            <p class="heading lead">Add Invoice</p>
+                        <input hidden="true" type="text" name="postType" value="add">
 
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true" class="white-text">&times;</spans>
-                            </button>
-                        </div>
+                        <div class="px-0 mx-0  bg-white sticky-top">
+                            <div class="modal-header">
+                                <p class="heading lead">Add Customer</p>
 
-                        <!--Footer-->
-                        <div class="modal-footer justify-content-end">
-                            <button id="addInvoiceSubmitBtn" class="btn btn-info">Add Invoice</button>
-                            <!-- <a type="button" class="btn btn-outline-info waves-effect nevermind" data-dismiss="modal">Nevermind</a> -->
-                        </div>
-                    </div>
-
-
-                    <!--Body-->
-                    <div class="modal-body">
-                        <div class="form-group position-relative">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="edit-customer_name">Customer Name</label>
-                                    <input type="text" class="form-control" name="customer_account" id="search-customer_name" placeholder="">
-                                </div>
-                                <div class="col-6">
-                                    <label for="edit-customer_account">Account Number</label>
-                                    <input type="text" class="form-control" name="customer_account" id="search-customer_id" placeholder="">
-                                </div>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true" class="white-text">&times;</spans>
+                                </button>
                             </div>
 
-                            <!-- Customer search result -->
-                            <div id="customer-search" class="w-100 m-0 bg-white position-absolute" style="z-index:5;"></div>
+                            <div class="modal-footer justify-content-center">
+                                <button type="submit" id="addItemSubmitBtn" class="btn btn-info">Add Customer</button>
+                                <a type="button" class="btn btn-outline-info waves-effect nevermind" data-dismiss="modal">Nevermind</a>
+                            </div>
+                            <hr>
                         </div>
-                        <hr>
-                        <div class="form-group">
-
-                            <h3>Receive Information</h3>
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="edit-customer_account">Invoice No:</label>
-                                    <input type="text" class="form-control" name="customer_account" id="invoice_number" placeholder="">
-
+                        <!--Body-->
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <label for="add-customer_account">Customer Account</label>
+                                        <input type="text" class="form-control" name="customer_account" id="add-customer_account" placeholder="">
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="add-outstanding">Outstanding</label>
+                                        <input type="text" class="form-control" name="outstanding" id="add-outstanding" placeholder="">
+                                    </div>
                                 </div>
-
-                                <div class="col-6">
-                                    <label for="edit-customer_account">Doc No:</label>
-                                    <input type="text" class="form-control" name="customer_account" id="doc_no" placeholder="">
-
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <label for="add-name">Name</label>
+                                        <input type="text" class="form-control" name="name" id="add-name" placeholder="">
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="add-points">Points</label>
+                                        <input type="text" class="form-control" name="points" id="add-points" placeholder="">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-
-                                <div class="col-6">
-                                    <label for="edit-customer_account">Invoice Date:</label>
-                                    <input type="date" class="form-control" name="customer_account" id="invoice_date" placeholder="">
-
-                                </div>
-                                <div class="col-6">
-                                    <label for="edit-customer_account">Due Date:</label>
-                                    <input type="date" class="form-control" name="customer_account" id="due_date" placeholder="">
-
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <label for="edit-customer_account">Remark:</label>
-                                    <input type="text" class="form-control" name="customer_account" id="invoice_remark" placeholder="">
-
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <label for="add-reg_num">Reg Name</label>
+                                        <input type="text" class="form-control" name="reg_num" id="add-reg_num" placeholder="">
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="add-status">Status</label>
+                                        <input type="text" class="form-control" name="status" id="add-status" placeholder="">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group ">
+                            <div class="row py-3">
 
-                            <h3>Item Information</h3>
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="add-general-tab" data-toggle="tab" href="#add-general" role="tab" aria-controls="add-general" aria-selected="true">General</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="add-additionalinfo-tab" data-toggle="tab" href="#add-additionalinfo" role="tab" aria-controls="add-additionalinfo" aria-selected="false">Additional Info</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="add-accounting-tab" data-toggle="tab" href="#add-accounting" role="tab" aria-controls="add-accounting" aria-selected="false">Accounting</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="add-other-tab" data-toggle="tab" href="#add-other" role="tab" aria-controls="add-other" aria-selected="false">Other</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tab-content w-100" id="myTabContent">
+                                <div class="tab-pane fade show active" id="add-general" role="tabpanel" aria-labelledby="add-general-tab">
 
-                            <div class="row pb-5 ">
-                                <div class="col-12">
-                                    <div class="position-relative">
-                                        <label for="edit-customer_account">Item Name or Barcode:</label>
-                                        <input type="text" class="form-control" id="search-item" placeholder="">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="add-address">Address</label>
+                                                <textarea class="form-control" name="address" id="add-address" rows="3" style="resize:none;" placeholder=""></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-postcode">Postcode</label>
+                                                <input type="text" class="form-control" name="postcode" id="add-postcode" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-city">City</label>
+                                                <input type="text" class="form-control" name="city" id="add-city" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-state">State</label>
+                                                <input type="text" class="form-control" name="state" id="add-state" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-country">Country</label>
+                                                <input type="text" class="form-control" name="country" id="add-country" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-salutation">Salutation</label>
+                                                <input type="text" class="form-control" name="salutation" id="add-salutation" placeholder="">
+                                            </div>
 
-                                        <!-- Item search result -->
-                                        <div id="item-search" class="w-100 m-0 bg-white position-absolute" style="z-index:5;">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="add-email">Email</label>
+                                                <input type="text" class="form-control" name="email" id="add-email" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-telephone1">Telephone 1</label>
+                                                <input type="text" class="form-control" name="telephone1" id="add-telephone1" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-reg_date">Reg Date</label>
+                                                <input type="date" class="form-control" name="reg_date" id="add-reg_date" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-telephone2">Telephone 2</label>
+                                                <input type="text" class="form-control" name="telephone2" id="add-telephone2" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-expiry_date">Expiry Date</label>
+                                                <input type="date" class="form-control" name="expiry_date" id="add-expiry_date" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="add-salesperson">Sales Person</label>
+                                                <input type="text" class="form-control" name="salesperson" id="add-salesperson" placeholder="">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="add-additionalinfo" role="tabpanel" aria-labelledby="add-additionalinfo-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="add-info1">Info 1</label>
+                                                <input type="text" class="form-control" id="add-info1" name="info1" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12 col-md-4">
+                                                <label for="add-info2">Info 2</label>
+                                                <input type="text" class="form-control" id="add-info2" name="info2" placeholder="">
+                                            </div>
+
+                                            <div class="col-12 col-md-4">
+                                                <label for="add-info3">Info 3</label>
+                                                <input type="text" class="form-control" id="add-info3" name="info3" placeholder="">
+                                            </div>
+
+                                            <div class="col-12 col-md-4">
+                                                <label for="add-info4">Info 4</label>
+                                                <input type="text" class="form-control" id="add-info4" name="info4" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12 col-md-4">
+                                                <label for="add-info5">Info 5</label>
+                                                <input type="text" class="form-control" id="add-info5" name="info5" placeholder="">
+                                            </div>
+
+                                            <div class="col-12 col-md-4">
+                                                <label for="add-info6">Info 6</label>
+                                                <input type="text" class="form-control" id="add-info6" name="info6" placeholder="">
+                                            </div>
+
+                                            <div class="col-12 col-md-4">
+                                                <label for="add-info7">Info 7</label>
+                                                <input type="text" class="form-control" id="add-info7" name="info7" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12 col-md-4">
+                                                <label for="add-info8">Info 8</label>
+                                                <input type="text" class="form-control" id="add-info8" name="info8" placeholder="">
+                                            </div>
+
+                                            <div class="col-12 col-md-4">
+                                                <label for="add-info9">Info 9</label>
+                                                <input type="text" class="form-control" id="add-info9" name="info9" placeholder="">
+                                            </div>
+
+                                            <div class="col-12 col-md-4">
+                                                <label for="add-info10">Info 10</label>
+                                                <input type="text" class="form-control" id="add-info10" name="info10" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="tab-pane fade" id="add-accounting" role="tabpanel" aria-labelledby="add-accounting-tab">
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-control_ac">Control A/C</label>
+                                                <input type="text" class="form-control" name="control_ac" id="add-control_ac" placeholder="">
+                                            </div>
+
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-accounting_account">Accounting Account</label>
+                                                <input type="text" class="form-control" name="accounting_account" id="add-accounting_account" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="add-other" role="tabpanel" aria-labelledby="add-other-tab">
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="add-website">Website</label>
+                                                <input type="text" class="form-control" name="website" id="add-website" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="add-biz_nature">Biz Nature</label>
+                                                <input type="text" class="form-control" name="biz_nature" id="add-biz_nature" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-attention">Attention</label>
+                                                <input type="text" class="form-control" name="attention" id="add-attention" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-introducer">Introducer</label>
+                                                <input type="text" class="form-control" name="introducer" id="add-introducer" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="add-category">Category</label>
+                                                <input type="text" class="form-control" name="category" id="add-category" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="add-nric">NRIC</label>
+                                                <input type="text" class="form-control" name="nric" id="add-nric" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-4">
+                                                <label for="add-gender">Gender</label>
+                                                <input type="text" class="form-control" name="gender" id="add-gender" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label for="add-dob">DOB</label>
+                                                <input type="text" class="form-control" name="dob" id="add-dob" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label for="add-race">Race</label>
+                                                <input type="text" class="form-control" name="race" id="add-race" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-fax">Fax</label>
+                                                <input type="text" class="form-control" name="fax" id="add-fax" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-handphone">Handphone</label>
+                                                <input type="text" class="form-control" name="handphone" id="add-handphone" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-skype">Skype</label>
+                                                <input type="text" class="form-control" name="skype" id="add-skype" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="add-religion">Religion</label>
+                                                <input type="text" class="form-control" name="religion" id="add-religion" placeholder="">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="overflow-auto">
-                                <table class="table table-striped table-bordered" cellspacing="0" width="100%">
-                                    <thead class="grey white-text">
-                                        <tr>
-                                            <th class="th-sm text-center">Action</th>
-                                            <th class="th-sm text-center">Barcode
-                                            </th>
-                                            <th class="th-sm text-center">Description
-                                            </th>
-                                            <th class="th-sm text-center">Qty
-                                            </th>
-                                            <th class="th-sm text-center">UOM
-                                            </th>
-                                            <th class="th-sm text-center">Selling Price(RM)
-                                            </th>
-                                            <th class="th-sm text-center">Base Cost(RM)
-                                            </th>
-                                            <th class="th-sm text-center">Discount(%)
-                                            </th>
-                                            <th class="th-sm text-center">Amount(RM)
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="item-bucket">
-                                        <tr class="noResultText">
-                                            <td colspan="9" class="text-center">
-                                                <h5>No item added yet</h5>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot class="grey white-text">
-                                        <tr>
-                                            <th colspan="8" class="text-right"><strong>Discount : </strong></th>
-                                            <th id="total_discount"></th>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="8" class="text-right"><strong>Total Amount : </strong></th>
-                                            <th id="total_cost"></th>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
                         </div>
-                    </div>
+
+                        <!--Footer-->
+
+                    </form>
                 </div>
+
+                <!-- </form> -->
+                <!--/.Content-->
             </div>
         </div>
+        <!-- Central Modal Medium Info-->
 
+        <!-- Central Modal Medium Info -->
         <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
                 <!--Content-->
-                <input hidden="true" type="text" id="update-invoice_id">
-                <div class="modal-content">
-                    <div class="bg-white sticky-top p-0 m-0 border-bottom">
+                <form action="./backend/customer/customer.php" enctype="multipart/form-data" method="POST">
+                    <!--Header-->
+                    <input hidden="true" type="text" name="postType" value="update">
+                    <input hidden="true" type="number" name="customer_id" id="edit_id">
+                    <div class="modal-content">
                         <!--Header-->
-                        <input hidden="true" type="text" name="postType" value="add">
-                        <div class="modal-header">
-                            <p class="heading lead">Update Invoice</p>
 
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true" class="white-text">&times;</spans>
-                            </button>
+                        <div class="px-0 mx-0  bg-white sticky-top">
+                       
+                            <div class="modal-header">
+                                <p class="heading lead">Edit Customer</p>
+
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true" class="white-text">&times;</span>
+                                </button>
+                            </div>
+                            
+                            <!--Footer-->
+                            <div class="modal-footer justify-content-center ">
+                                <button type="submit" id="editItemSubmitButton" class="btn btn-info">Edit Customer</button>
+                                <a type="button" class="btn btn-outline-info waves-effect nevermind" data-dismiss="modal">Nevermind</a>
+                            </div>
+                            <hr>
                         </div>
-
-                        <!--Footer-->
-                        <div class="modal-footer justify-content-end">
-                            <button id="updateInvoiceSubmitBtn" class="btn btn-info">Update Invoice</button>
-                            <!-- <a type="button" class="btn btn-outline-info waves-effect nevermind" data-dismiss="modal">Nevermind</a> -->
-                        </div>
-                    </div>
-
-
-                    <!--Body-->
-                    <div class="modal-body">
-                        <div class="form-group position-relative">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="edit-customer_name">Customer Name</label>
-                                    <input type="text" class="form-control" name="customer_account" id="update-search-customer_name" placeholder="">
+                        <!--Body-->
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <label for="edit-customer_account">Customer Account</label>
+                                        <input type="text" class="form-control" name="customer_account" id="edit-customer_account" placeholder="" readonly>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="edit-outstanding">Outstanding</label>
+                                        <input type="text" class="form-control" name="outstanding" id="edit-outstanding" placeholder="">
+                                    </div>
                                 </div>
-                                <div class="col-6">
-                                    <label for="edit-customer_account">Account Number</label>
-                                    <input type="text" class="form-control" name="customer_account" id="update-search-customer_id" placeholder="">
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <label for="edit-name">Name</label>
+                                        <input type="text" class="form-control" name="name" id="edit-name" placeholder="">
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="edit-points">Points</label>
+                                        <input type="text" class="form-control" name="points" id="edit-points" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <label for="edit-reg_num">Reg Number</label>
+                                        <input type="text" class="form-control" name="reg_num" id="edit-reg_num" placeholder="">
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="edit-status">Status</label>
+                                        <input type="text" class="form-control" name="status" id="edit-status" placeholder="">
+                                    </div>
                                 </div>
                             </div>
+                            <div class="row py-3">
 
-                            <!-- Customer search result -->
-                            <div id="update-customer-search" class="w-100 m-0 bg-white position-absolute" style="z-index:5;"></div>
-                        </div>
-                        <hr>
-                        <div class="form-group">
-
-                            <h3>Receive Information</h3>
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="edit-customer_account">Invoice No:</label>
-                                    <input type="text" class="form-control" name="customer_account" id="update-invoice_number" placeholder="">
-
-                                </div>
-
-                                <div class="col-6">
-                                    <label for="edit-customer_account">Doc No:</label>
-                                    <input type="text" class="form-control" name="customer_account" id="update-doc_no" placeholder="">
-
-                                </div>
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="edit-general-tab" data-toggle="tab" href="#edit-general" role="tab" aria-controls="edit-general" aria-selected="true">General</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="edit-additionalinfo-tab" data-toggle="tab" href="#edit-additionalinfo" role="tab" aria-controls="edit-additionalinfo" aria-selected="false">Additional Info</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="edit-accounting-tab" data-toggle="tab" href="#edit-accounting" role="tab" aria-controls="edit-accounting" aria-selected="false">Accounting</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="edit-other-tab" data-toggle="tab" href="#edit-other" role="tab" aria-controls="edit-other" aria-selected="false">Other</a>
+                                    </li>
+                                </ul>
                             </div>
-                            <div class="row">
+                            <div class="tab-content w-100" id="myTabContent">
+                                <div class="tab-pane fade show active" id="edit-general" role="tabpanel" aria-labelledby="edit-general-tab">
 
-                                <div class="col-6">
-                                    <label for="edit-customer_account">Invoice Date:</label>
-                                    <input type="date" class="form-control" name="customer_account" id="update-invoice_date" placeholder="">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="edit-address">Address</label>
+                                                <textarea class="form-control" name="address" id="edit-address" rows="3" style="resize:none;" placeholder=""></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-postcode">Postcode</label>
+                                                <input type="text" class="form-control" name="postcode" id="edit-postcode" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-city">City</label>
+                                                <input type="text" class="form-control" name="city" id="edit-city" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-state">State</label>
+                                                <input type="text" class="form-control" name="state" id="edit-state" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-country">Country</label>
+                                                <input type="text" class="form-control" name="country" id="edit-country" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-salutation">Salutation</label>
+                                                <input type="text" class="form-control" name="salutation" id="edit-salutation" placeholder="">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="edit-email">Email</label>
+                                                <input type="text" class="form-control" name="email" id="edit-email" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-telephone1">Telephone 1</label>
+                                                <input type="text" class="form-control" name="telephone1" id="edit-telephone1" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-reg_date">Reg Date</label>
+                                                <input type="date" class="form-control" name="reg_date" id="edit-reg_date" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-telephone2">Telephone 2</label>
+                                                <input type="text" class="form-control" name="telephone2" id="edit-telephone2" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-expiry_date">Expiry Date</label>
+                                                <input type="date" class="form-control" name="expiry_date" id="edit-expiry_date" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="edit-salesperson">Sales Person</label>
+                                                <input type="text" class="form-control" name="salesperson" id="edit-salesperson" placeholder="">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="edit-additionalinfo" role="tabpanel" aria-labelledby="edit-additionalinfo-tab">
+                                <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="edit-info1">Info 1</label>
+                                                <input type="text" class="form-control" id="edit-info1" name="info1" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12 col-md-4">
+                                                <label for="edit-info2">Info 2</label>
+                                                <input type="text" class="form-control" id="edit-info2" name="info2" placeholder="">
+                                            </div>
+
+                                            <div class="col-12 col-md-4">
+                                                <label for="edit-info3">Info 3</label>
+                                                <input type="text" class="form-control" id="edit-info3" name="info3" placeholder="">
+                                            </div>
+
+                                            <div class="col-12 col-md-4">
+                                                <label for="edit-info4">Info 4</label>
+                                                <input type="text" class="form-control" id="edit-info4" name="info4" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12 col-md-4">
+                                                <label for="edit-info5">Info 5</label>
+                                                <input type="text" class="form-control" id="edit-info5" name="info5" placeholder="">
+                                            </div>
+
+                                            <div class="col-12 col-md-4">
+                                                <label for="edit-info6">Info 6</label>
+                                                <input type="text" class="form-control" id="edit-info6" name="info6" placeholder="">
+                                            </div>
+
+                                            <div class="col-12 col-md-4">
+                                                <label for="edit-info7">Info 7</label>
+                                                <input type="text" class="form-control" id="edit-info7" name="info7" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12 col-md-4">
+                                                <label for="edit-info8">Info 8</label>
+                                                <input type="text" class="form-control" id="edit-info8" name="info8" placeholder="">
+                                            </div>
+
+                                            <div class="col-12 col-md-4">
+                                                <label for="edit-info9">Info 9</label>
+                                                <input type="text" class="form-control" id="edit-info9" name="info9" placeholder="">
+                                            </div>
+
+                                            <div class="col-12 col-md-4">
+                                                <label for="edit-info10">Info 10</label>
+                                                <input type="text" class="form-control" id="edit-info10" name="info10" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+
 
                                 </div>
-                                <div class="col-6">
-                                    <label for="edit-customer_account">Due Date:</label>
-                                    <input type="date" class="form-control" name="customer_account" id="update-due_date" placeholder="">
+                                <div class="tab-pane fade" id="edit-accounting" role="tabpanel" aria-labelledby="edit-accounting-tab">
 
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-control_ac">Control A/C</label>
+                                                <input type="text" class="form-control" name="control_ac" id="edit-control_ac" placeholder="">
+                                            </div>
+
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-accounting_account">Accounting Account</label>
+                                                <input type="text" class="form-control" name="accounting_account" id="edit-accounting_account" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <label for="edit-customer_account">Remark:</label>
-                                    <input type="text" class="form-control" name="customer_account" id="update-invoice_remark" placeholder="">
 
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group ">
+                                <div class="tab-pane fade" id="edit-other" role="tabpanel" aria-labelledby="edit-other-tab">
 
-                            <h3>Item Information</h3>
-
-                            <div class="row pb-5 ">
-                                <div class="col-12">
-                                    <div class="position-relative">
-                                        <label for="edit-customer_account">Item Name or Barcode:</label>
-                                        <input type="text" class="form-control" id="update-search-item" placeholder="">
-
-                                        <!-- Item search result -->
-                                        <div id="update-item-search" class="w-100 m-0 bg-white position-absolute" style="z-index:5;">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="edit-website">Website</label>
+                                                <input type="text" class="form-control" name="website" id="edit-website" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="edit-biz_nature">Biz Nature</label>
+                                                <input type="text" class="form-control" name="biz_nature" id="edit-biz_nature" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-attention">Attention</label>
+                                                <input type="text" class="form-control" name="attention" id="edit-attention" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-introducer">Introducer</label>
+                                                <input type="text" class="form-control" name="introducer" id="edit-introducer" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="edit-category">Category</label>
+                                                <input type="text" class="form-control" name="category" id="edit-category" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="edit-nric">NRIC</label>
+                                                <input type="text" class="form-control" name="nric" id="edit-nric" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-4">
+                                                <label for="edit-gender">Gender</label>
+                                                <input type="text" class="form-control" name="gender" id="edit-gender" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label for="edit-dob">DOB</label>
+                                                <input type="text" class="form-control" name="dob" id="edit-dob" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label for="edit-race">Race</label>
+                                                <input type="text" class="form-control" name="race" id="edit-race" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-fax">Fax</label>
+                                                <input type="text" class="form-control" name="fax" id="edit-fax" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-handphone">Handphone</label>
+                                                <input type="text" class="form-control" name="handphone" id="edit-handphone" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-skype">Skype</label>
+                                                <input type="text" class="form-control" name="skype" id="edit-skype" placeholder="">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="edit-religion">Religion</label>
+                                                <input type="text" class="form-control" name="religion" id="edit-religion" placeholder="">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="overflow-auto">
-                                <table class="table table-striped table-bordered" cellspacing="0" width="100%">
-                                    <thead class="grey white-text">
-                                        <tr>
-                                            <th class="th-sm text-center">Action</th>
-                                            <th class="th-sm text-center">Barcode
-                                            </th>
-                                            <th class="th-sm text-center">Description
-                                            </th>
-                                            <th class="th-sm text-center">Qty
-                                            </th>
-                                            <th class="th-sm text-center">UOM
-                                            </th>
-                                            <th class="th-sm text-center">Selling Price(RM)
-                                            </th>
-                                            <th class="th-sm text-center">Base Cost(RM)
-                                            </th>
-                                            <th class="th-sm text-center">Discount(%)
-                                            </th>
-                                            <th class="th-sm text-center">Amount(RM)
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="update-item-bucket">
-                                        <tr class="update-noResultText">
-                                            <td colspan="9" class="text-center">
-                                                <h5>No item added yet</h5>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot class="grey white-text">
-                                        <tr>
-                                            <th colspan="8" class="text-right"><strong>Discount : </strong></th>
-                                            <th id="update-total_discount"></th>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="8" class="text-right"><strong>Total Amount : </strong></th>
-                                            <th id="update-total_cost"></th>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
                         </div>
+
+
                     </div>
+                </form>
+                <!-- </form> -->
+                <!--/.Content-->
             </div>
-        </div>
         </div>
         <!-- Central Modal Medium Info-->
 
@@ -456,14 +868,14 @@ else
         <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-notify modal-warning" role="document">
                 <!--Content-->
-                <!-- <form action="./backend/invoice/invoice.php" method="POST"> -->
+                <form action="./backend/customer/customer.php"  method="POST">
                     <!--Header-->
-                    <!-- <input hidden="true" type="text" name="postType" value="deleteHeader"> -->
-                    <input hidden="true" type="text" name="invoice_id" id="delete_id">
+                    <input hidden="true" type="text" name="postType" value="delete">
+                    <input hidden="true" type="number" name="customer_id" id="delete_id">
                     <div class="modal-content">
                         <!--Header-->
                         <div class="modal-header">
-                            <p class="heading">Delete Invoice</p>
+                            <p class="heading">Delete Customer</p>
 
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true" class="white-text">&times;</span>
@@ -472,46 +884,12 @@ else
 
                         <!--Body-->
                         <div class="modal-body">
-                            <p>Are you want to delete <span id="deleteInvoiceName"></span>?</p>
+                            <p>Are you want to delete <span id="deleteCustomerName"></span>?</p>
                         </div>
 
                         <!--Footer-->
                         <div class="modal-footer justify-content-center">
-                            <button id="deleteInvoiceSubmitButton" class="btn btn-warning">Yes</button>
-                            <a type="button" class="btn btn-outline-warning waves-effect" data-dismiss="modal">Nevermind</a>
-                        </div>
-                    </div>
-                <!-- </form> -->
-            </div>
-        </div>
-        <!-- Central Modal Warning Demo-->
-
-        <!-- Central Modal Warning Demo-->
-        <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-notify modal-warning" role="document">
-                <!--Content-->
-                <form action="./backend/invoice/printInvoice.php" method="POST">
-                    <!--Header-->
-                    <input hidden="true" type="text" name="postType" value="print">
-                    <input hidden="true" type="text" name="invoice_id" id="print_id">
-                    <div class="modal-content">
-                        <!--Header-->
-                        <div class="modal-header">
-                            <p class="heading">Print Invoice</p>
-
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true" class="white-text">&times;</span>
-                            </button>
-                        </div>
-
-                        <!--Body-->
-                        <div class="modal-body">
-                            <p>Do you want to print <span id="printInvoiceName"></span>?</p>
-                        </div>
-
-                        <!--Footer-->
-                        <div class="modal-footer justify-content-center">
-                            <button type="submit" id="printInvoiceSubmitButton" class="btn btn-warning">Yes</button>
+                            <button type="submit" id="deleteCsutomerSubmitButton" class="btn btn-warning">Yes</button>
                             <a type="button" class="btn btn-outline-warning waves-effect" data-dismiss="modal">Nevermind</a>
                         </div>
                     </div>
@@ -621,6 +999,7 @@ else
                 $("#failedModalBody").empty().append(body);
             }
         <?php endif; ?>
+
     });
 </script>
 
