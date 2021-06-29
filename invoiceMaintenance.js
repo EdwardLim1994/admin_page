@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function() {
 
 
     var totalRow = countRow();
@@ -6,7 +6,7 @@ $(document).ready(function () {
     generateTable();
 
 
-    $("#currentPageNum").focusout(function () {
+    $("#currentPageNum").focusout(function() {
         if ($("#searchRow").val() != "") {
             searchTable();
         } else {
@@ -14,14 +14,14 @@ $(document).ready(function () {
         }
     });
 
-    $("#search-customer_name").on('keyup', function () {
+    $("#search-customer_name").on('keyup', function() {
         customerSearchResults(1);
     });
-    $("#search-customer_id").on('keyup', function () {
+    $("#search-customer_id").on('keyup', function() {
         customerSearchResults(1);
     });
 
-    $("#search-item").on("keyup", function () {
+    $("#search-item").on("keyup", function() {
         itemSearchResults(1);
     });
 
@@ -53,14 +53,14 @@ $(document).ready(function () {
     // })
 
 
-    $("#update-search-customer_name").on('keyup', function () {
+    $("#update-search-customer_name").on('keyup', function() {
         updatecustomerSearchResults(1);
     });
-    $("#update-search-customer_id").on('keyup', function () {
+    $("#update-search-customer_id").on('keyup', function() {
         updatecustomerSearchResults(1);
     });
 
-    $("#update-search-item").on("keyup", function () {
+    $("#update-search-item").on("keyup", function() {
         updateitemSearchResults(1);
     });
 
@@ -91,7 +91,7 @@ $(document).ready(function () {
     //         $("#update-item-search").show()
     // })
 
-    $("#addModalBtn").click(function(){
+    $("#addModalBtn").click(function() {
         $("#search-customer_name").val("");
         $("#search-customer_id").val("");
         $("#invoice_number").val("");
@@ -113,15 +113,15 @@ $(document).ready(function () {
         `);
     });
 
-    $("#addInvoiceSubmitBtn").click(function () {
+    $("#addInvoiceSubmitBtn").click(function() {
         addInvoice();
     });
 
-    $("#updateInvoiceSubmitBtn").click(function () {
+    $("#updateInvoiceSubmitBtn").click(function() {
         updateInvoice();
     });
 
-    $("#deleteInvoiceSubmitButton").click(function(){
+    $("#deleteInvoiceSubmitButton").click(function() {
         deleteInvoice();
     })
 
@@ -148,7 +148,7 @@ $(document).ready(function () {
             `);
 
             isSpinnerOn = true;
-            timer = setTimeout(function () {
+            timer = setTimeout(function() {
                 $.ajax({
                     type: "POST",
                     url: "./backend/invoice/viewCustmrItem.php",
@@ -158,7 +158,7 @@ $(document).ready(function () {
                         searchCustomerID: $("#search-customer_id").val(),
                         pageNum: pageNum
                     },
-                    success: function (results) {
+                    success: function(results) {
                         if (results == "No result") {
                             if (isSpinnerOn == true) {
                                 $("#customer-search").empty().html(`
@@ -197,7 +197,7 @@ $(document).ready(function () {
                             </div>
                             <div class="overflow-auto" style="max-height:200px;">
                             `;
-                            $.each(JSON.parse(results), function (i, value) {
+                            $.each(JSON.parse(results), function(i, value) {
                                 searchResult += `
                                 <a class="customer-search-results">
                                     <div class="view overlay">
@@ -231,7 +231,7 @@ $(document).ready(function () {
     }
 
     function customerSearchResultsSelect() {
-        $(".customer-search-results").click(function () {
+        $(".customer-search-results").click(function() {
             $("#search-customer_name").val($(this).find(".customerName").text());
             $("#search-customer_id").val($(this).find(".customerID").text());
             $("#customer-search").empty().removeClass("border");
@@ -244,10 +244,10 @@ $(document).ready(function () {
         $("#customerSearchPageTotal").empty().text(totalPage);
         $("#customerSearchCurrentPageNum").attr("max", totalPage);
 
-        $("#customerSearchCurrentPageNum").on('input', function () {
-            if($("#customerSearchCurrentPageNum").val() == ""){
+        $("#customerSearchCurrentPageNum").on('input', function() {
+            if ($("#customerSearchCurrentPageNum").val() == "") {
                 console.log("empty customer search");
-            }else if ($("#customerSearchCurrentPageNum").val() < totalPage)
+            } else if ($("#customerSearchCurrentPageNum").val() < totalPage)
                 customerSearchResults($("#customerSearchCurrentPageNum").val());
             else
                 customerSearchResults(totalPage);
@@ -263,7 +263,7 @@ $(document).ready(function () {
                 searchCustomerName: $("#search-customer_name").val(),
                 searchCustomerID: $("#search-customer_id").val()
             },
-            success: function (results) {
+            success: function(results) {
                 $("#customerSearchRowTotal").empty().html(results);
                 customerSearchResultsPagination(results);
             }
@@ -293,7 +293,7 @@ $(document).ready(function () {
 
             isSpinnerOn = true;
 
-            timer = setTimeout(function () {
+            timer = setTimeout(function() {
                 $.ajax({
                     type: "POST",
                     url: "./backend/invoice/viewCustmrItem.php",
@@ -302,7 +302,7 @@ $(document).ready(function () {
                         search: $("#search-item").val(),
                         pageNum: pageNum
                     },
-                    success: function (results) {
+                    success: function(results) {
                         if (results == "No result") {
                             if (isSpinnerOn == true) {
                                 $("#item-search").empty().html(`
@@ -340,7 +340,7 @@ $(document).ready(function () {
                             </div>
                             <div class="overflow-auto" style="max-height:200px;">
                             `;
-                            $.each(JSON.parse(results), function (i, value) {
+                            $.each(JSON.parse(results), function(i, value) {
                                 var isItemSoldOut = false;
                                 if (value.qty_available == 0) {
                                     isItemSoldOut = true
@@ -384,7 +384,7 @@ $(document).ready(function () {
     }
 
     function itemSearchResultsSelect() {
-        $(".item-search-results").click(function () {
+        $(".item-search-results").click(function() {
             $.ajax({
                 type: "POST",
                 url: "./backend/invoice/viewCustmrItem.php",
@@ -392,14 +392,14 @@ $(document).ready(function () {
                     postType: "searchRowItemAdd",
                     itemID: $(this).data("id")
                 },
-                success: function (results) {
+                success: function(results) {
                     var item_results;
                     var isItemSoldOut = false;
                     var itemID;
-                    $.each(JSON.parse(results), function (i, value) {
-                        itemID = value.item_id;
-                        //if (value.qty_available > 0) {
-                         //   isItemSoldOut = false;
+                    $.each(JSON.parse(results), function(i, value) {
+                            itemID = value.item_id;
+                            //if (value.qty_available > 0) {
+                            //   isItemSoldOut = false;
                             if (value.item_id == $(".item-row").data("id")) {
                                 var itemQty = $('[data-id=' + value.item_id + ']').find(".itemQuantity").val();
                                 $('[data-id=' + value.item_id + ']').find(".itemQuantity").val((parseInt(itemQty) + 1));
@@ -428,52 +428,52 @@ $(document).ready(function () {
                                 </tr>
                                 `;
                             }
-                        //} else {
-                        //    isItemSoldOut = true;
-                        //}
-                    })
-                    //if (isItemSoldOut == false) {
-                        if ($("#item-bucket").find(".noResultText").length > 0) {
-                            $("#item-bucket").empty();
+                            //} else {
+                            //    isItemSoldOut = true;
+                            //}
+                        })
+                        //if (isItemSoldOut == false) {
+                    if ($("#item-bucket").find(".noResultText").length > 0) {
+                        $("#item-bucket").empty();
+                    }
+                    if (item_results != "") {
+                        $("#item-bucket").append(item_results);
+                    }
+                    $("#item-search").empty().removeClass("border");
+                    $("#search-item").val("");
+                    itemBucketTotalPrice(itemID);
+                    itemBucketTotalDiscount();
+                    itemBucketTotalCost();
+
+
+                    $(".itemQuantity").change(function() {
+                        if ($(this).val() > parseInt($(this).attr("max"))) {
+                            $(this).val($(this).attr("max"));
                         }
-                        if (item_results != "") {
-                            $("#item-bucket").append(item_results);
+
+                        if ($(this).val() < parseInt($(this).attr("min"))) {
+                            $(this).val($(this).attr("min"));
                         }
-                        $("#item-search").empty().removeClass("border");
-                        $("#search-item").val("");
-                        itemBucketTotalPrice(itemID);
-                        itemBucketTotalDiscount();
+                        itemBucketTotalPrice($(this).closest("tr").data("id"));
+                        itemBucketTotalDiscount()
                         itemBucketTotalCost();
 
+                    })
 
-                        $(".itemQuantity").change(function () {
-                            if ($(this).val() > parseInt($(this).attr("max"))) {
-                                $(this).val($(this).attr("max"));
-                            }
+                    $(".itemDiscount").change(function() {
+                        if ($(this).val() > parseInt($(this).attr("max"))) {
+                            $(this).val($(this).attr("max"));
+                        }
 
-                            if ($(this).val() < parseInt($(this).attr("min"))) {
-                                $(this).val($(this).attr("min"));
-                            }
-                            itemBucketTotalPrice($(this).closest("tr").data("id"));
-                            itemBucketTotalDiscount()
-                            itemBucketTotalCost();
+                        if ($(this).val() < parseInt($(this).attr("min"))) {
+                            $(this).val($(this).attr("min"));
+                        }
 
-                        })
+                        itemBucketTotalPrice($(this).closest("tr").data("id"));
+                        itemBucketTotalDiscount()
+                        itemBucketTotalCost();
 
-                        $(".itemDiscount").change(function () {
-                            if ($(this).val() > parseInt($(this).attr("max"))) {
-                                $(this).val($(this).attr("max"));
-                            }
-
-                            if ($(this).val() < parseInt($(this).attr("min"))) {
-                                $(this).val($(this).attr("min"));
-                            }
-
-                            itemBucketTotalPrice($(this).closest("tr").data("id"));
-                            itemBucketTotalDiscount()
-                            itemBucketTotalCost();
-
-                        });
+                    });
                     //}
                     itemBucketRemoveItem();
                 }
@@ -495,7 +495,7 @@ $(document).ready(function () {
     function itemBucketTotalCost() {
         var totalCost = 0.0;
 
-        $.each($(".item-row"), function (i, value) {
+        $.each($(".item-row"), function(i, value) {
             var totalPrice = $(".item-row:nth-child(" + (i + 1) + ")").find(".total_price").text();
             totalCost += parseFloat(totalPrice);
         })
@@ -511,7 +511,7 @@ $(document).ready(function () {
     function itemBucketTotalDiscount() {
         var totalDiscount = 0.0;
 
-        $.each($(".item-row"), function (i, value) {
+        $.each($(".item-row"), function(i, value) {
             var unit_price = $(".item-row:nth-child(" + (i + 1) + ")").find(".selling_price").text();
             var quantity = $(".item-row:nth-child(" + (i + 1) + ")").find(".itemQuantity").val();
             var discount = $(".item-row:nth-child(" + (i + 1) + ")").find(".itemDiscount").val();
@@ -525,7 +525,7 @@ $(document).ready(function () {
 
     function itemBucketRemoveItem() {
 
-        $(".deleteItemBtn").click(function () {
+        $(".deleteItemBtn").click(function() {
             $(this).closest("tr").remove();
 
             if ($.trim($("#item-bucket").html()).length == 0) {
@@ -547,10 +547,10 @@ $(document).ready(function () {
         $("#itemSearchPageTotal").empty().text(totalPage);
         $("#itemSearchCurrentPageNum").attr("max", totalPage);
 
-        $("#itemSearchCurrentPageNum").on('input', function () {
-            if($("#itemSearchCurrentPageNum").val() == ""){
+        $("#itemSearchCurrentPageNum").on('input', function() {
+            if ($("#itemSearchCurrentPageNum").val() == "") {
                 console.log("empty item search");
-            }else if ($("#itemSearchCurrentPageNum").val() < totalPage)
+            } else if ($("#itemSearchCurrentPageNum").val() < totalPage)
                 itemSearchResults($("#itemSearchCurrentPageNum").val());
             else
                 itemSearchResults(totalPage);
@@ -565,7 +565,7 @@ $(document).ready(function () {
                 postType: "searchRowCountItem",
                 search: $("#search-item").val()
             },
-            success: function (results) {
+            success: function(results) {
                 $("#itemSearchRowTotal").empty().html(results);
                 itemSearchResultsPagination(results);
             }
@@ -597,7 +597,7 @@ $(document).ready(function () {
             `);
 
             isSpinnerOn = true;
-            timer = setTimeout(function () {
+            timer = setTimeout(function() {
                 $.ajax({
                     type: "POST",
                     url: "./backend/invoice/viewCustmrItem.php",
@@ -607,7 +607,7 @@ $(document).ready(function () {
                         searchCustomerID: $("#update-search-customer_id").val(),
                         pageNum: pageNum
                     },
-                    success: function (results) {
+                    success: function(results) {
                         if (results == "No result") {
                             if (isSpinnerOn == true) {
                                 $("#update-customer-search").empty().html(`
@@ -645,7 +645,7 @@ $(document).ready(function () {
                             </div>
                             <div class="overflow-auto" style="max-height:200px;">
                             `;
-                            $.each(JSON.parse(results), function (i, value) {
+                            $.each(JSON.parse(results), function(i, value) {
                                 searchResult += `
                                 <a class="update-customer-search-results">
                                     <div class="view overlay">
@@ -679,7 +679,7 @@ $(document).ready(function () {
     }
 
     function updatecustomerSearchResultsSelect() {
-        $(".update-customer-search-results").click(function () {
+        $(".update-customer-search-results").click(function() {
             $("#update-search-customer_name").val($(this).find(".customerName").text());
             $("#update-search-customer_id").val($(this).find(".customerID").text());
             $("#update-customer-search").empty().removeClass("border");
@@ -692,8 +692,8 @@ $(document).ready(function () {
         $("#updatecustomerSearchPageTotal").empty().text(totalPage);
         $("#updatecustomerSearchCurrentPageNum").attr("max", totalPage);
 
-        $("#updatecustomerSearchCurrentPageNum").on('input', function () {
-            if($("#updatecustomerSearchCurrentPageNum").val() == ""){
+        $("#updatecustomerSearchCurrentPageNum").on('input', function() {
+            if ($("#updatecustomerSearchCurrentPageNum").val() == "") {
                 console.log("Empty update customer search");
             } else if ($("#updatecustomerSearchCurrentPageNum").val() < totalPage)
                 updatecustomerSearchResults($("#updatecustomerSearchCurrentPageNum").val());
@@ -711,7 +711,7 @@ $(document).ready(function () {
                 searchCustomerName: $("#update-search-customer_name").val(),
                 searchCustomerID: $("#update-search-customer_id").val()
             },
-            success: function (results) {
+            success: function(results) {
                 $("#update-customerSearchRowTotal").empty().html(results);
                 updatecustomerSearchResultsPagination(results);
             }
@@ -741,7 +741,7 @@ $(document).ready(function () {
 
             isSpinnerOn = true;
 
-            timer = setTimeout(function () {
+            timer = setTimeout(function() {
                 $.ajax({
                     type: "POST",
                     url: "./backend/invoice/viewCustmrItem.php",
@@ -750,7 +750,7 @@ $(document).ready(function () {
                         search: $("#update-search-item").val(),
                         pageNum: pageNum
                     },
-                    success: function (results) {
+                    success: function(results) {
                         if (results == "No result") {
                             if (isSpinnerOn == true) {
                                 $("#update-item-search").empty().html(`
@@ -788,7 +788,7 @@ $(document).ready(function () {
                             </div>
                             <div class="overflow-auto" style="max-height:200px;">
                             `;
-                            $.each(JSON.parse(results), function (i, value) {
+                            $.each(JSON.parse(results), function(i, value) {
                                 var isItemSoldOut = false;
                                 // if (value.qty_available == 0) {
                                 //     isItemSoldOut = true
@@ -833,7 +833,7 @@ $(document).ready(function () {
     }
 
     function updateitemSearchResultsSelect() {
-        $(".update-item-search-results").click(function () {
+        $(".update-item-search-results").click(function() {
             $.ajax({
                 type: "POST",
                 url: "./backend/invoice/viewCustmrItem.php",
@@ -841,13 +841,13 @@ $(document).ready(function () {
                     postType: "searchRowItemAdd",
                     itemID: $(this).data("id")
                 },
-                success: function (results) {
+                success: function(results) {
                     var item_results;
                     var isItemSoldOut = false;
                     var itemID;
-                    $.each(JSON.parse(results), function (i, value) {
-                        itemID = value.item_id;
-                        //if (value.qty_available > 0) {
+                    $.each(JSON.parse(results), function(i, value) {
+                            itemID = value.item_id;
+                            //if (value.qty_available > 0) {
                             //isItemSoldOut = false;
                             if (value.item_id == $(".update-item-row").data("id")) {
                                 var itemQty = $('[data-id=' + value.item_id + ']').find(".update-itemQuantity").val();
@@ -877,52 +877,52 @@ $(document).ready(function () {
                                 </tr>
                                 `;
                             }
-                        //} else {
-                        //    isItemSoldOut = true;
-                        //}
-                    })
-                    //if (isItemSoldOut == false) {
-                        if ($("#update-item-bucket").find(".update-noResultText").length > 0) {
-                            $("#update-item-bucket").empty();
+                            //} else {
+                            //    isItemSoldOut = true;
+                            //}
+                        })
+                        //if (isItemSoldOut == false) {
+                    if ($("#update-item-bucket").find(".update-noResultText").length > 0) {
+                        $("#update-item-bucket").empty();
+                    }
+                    if (item_results != "") {
+                        $("#update-item-bucket").append(item_results);
+                    }
+                    $("#update-item-search").empty().removeClass("border");
+                    $("#update-search-item").val("");
+                    updateitemBucketTotalPrice(itemID);
+                    updateitemBucketTotalDiscount();
+                    updateitemBucketTotalCost();
+
+
+                    $(".update-itemQuantity").change(function() {
+                        if ($(this).val() > parseInt($(this).attr("max"))) {
+                            $(this).val($(this).attr("max"));
                         }
-                        if (item_results != "") {
-                            $("#update-item-bucket").append(item_results);
+
+                        if ($(this).val() < parseInt($(this).attr("min"))) {
+                            $(this).val($(this).attr("min"));
                         }
-                        $("#update-item-search").empty().removeClass("border");
-                        $("#update-search-item").val("");
-                        updateitemBucketTotalPrice(itemID);
+                        updateitemBucketTotalPrice($(this).closest("tr").data("id"));
                         updateitemBucketTotalDiscount();
                         updateitemBucketTotalCost();
 
+                    });
 
-                        $(".update-itemQuantity").change(function () {
-                            if ($(this).val() > parseInt($(this).attr("max"))) {
-                                $(this).val($(this).attr("max"));
-                            }
+                    $(".update-itemDiscount").change(function() {
+                        if ($(this).val() > parseInt($(this).attr("max"))) {
+                            $(this).val($(this).attr("max"));
+                        }
 
-                            if ($(this).val() < parseInt($(this).attr("min"))) {
-                                $(this).val($(this).attr("min"));
-                            }
-                            updateitemBucketTotalPrice($(this).closest("tr").data("id"));
-                            updateitemBucketTotalDiscount();
-                            updateitemBucketTotalCost();
+                        if ($(this).val() < parseInt($(this).attr("min"))) {
+                            $(this).val($(this).attr("min"));
+                        }
 
-                        });
+                        updateitemBucketTotalPrice($(this).closest("tr").data("id"));
+                        updateitemBucketTotalDiscount();
+                        updateitemBucketTotalCost();
 
-                        $(".update-itemDiscount").change(function () {
-                            if ($(this).val() > parseInt($(this).attr("max"))) {
-                                $(this).val($(this).attr("max"));
-                            }
-
-                            if ($(this).val() < parseInt($(this).attr("min"))) {
-                                $(this).val($(this).attr("min"));
-                            }
-
-                            updateitemBucketTotalPrice($(this).closest("tr").data("id"));
-                            updateitemBucketTotalDiscount();
-                            updateitemBucketTotalCost();
-
-                        });
+                    });
                     //}
                     updateitemBucketRemoveItem();
                 }
@@ -943,7 +943,7 @@ $(document).ready(function () {
     function updateitemBucketTotalCost() {
         var totalCost = 0.0;
 
-        $.each($(".update-item-row"), function (i, value) {
+        $.each($(".update-item-row"), function(i, value) {
             var totalPrice = $(".update-item-row:nth-child(" + (i + 1) + ")").find(".update-total_price").text();
             totalCost += parseFloat(totalPrice);
         })
@@ -960,7 +960,7 @@ $(document).ready(function () {
         var totalDiscount = 0.0;
         console.log("triggered");
 
-        $.each($(".update-item-row"), function (i, value) {
+        $.each($(".update-item-row"), function(i, value) {
             var unit_price = $(".update-item-row:nth-child(" + (i + 1) + ")").find(".update-selling_price").text();
             var quantity = $(".update-item-row:nth-child(" + (i + 1) + ")").find(".update-itemQuantity").val();
             var discount = $(".update-item-row:nth-child(" + (i + 1) + ")").find(".update-itemDiscount").val();
@@ -974,7 +974,7 @@ $(document).ready(function () {
 
     function updateitemBucketRemoveItem() {
 
-        $(".update-deleteItemBtn").click(function () {
+        $(".update-deleteItemBtn").click(function() {
             $(this).closest("tr").remove();
 
             if ($.trim($("#update-item-bucket").html()).length == 0) {
@@ -996,10 +996,10 @@ $(document).ready(function () {
         $("#updateitemSearchPageTotal").empty().text(totalPage);
         $("#updateitemSearchCurrentPageNum").attr("max", totalPage);
 
-        $("#updateitemSearchCurrentPageNum").on('input', function () {
-            if($("#updateitemSearchCurrentPageNum").val() == ""){
+        $("#updateitemSearchCurrentPageNum").on('input', function() {
+            if ($("#updateitemSearchCurrentPageNum").val() == "") {
                 console.log("empty update item search");
-            }else if ($("#updateitemSearchCurrentPageNum").val() < totalPage)
+            } else if ($("#updateitemSearchCurrentPageNum").val() < totalPage)
                 updateitemSearchResults($("#updateitemSearchCurrentPageNum").val());
             else
                 updateitemSearchResults(totalPage);
@@ -1014,7 +1014,7 @@ $(document).ready(function () {
                 postType: "searchRowCountItem",
                 search: $("#update-search-item").val()
             },
-            success: function (results) {
+            success: function(results) {
                 $("#updateitemSearchRowTotal").empty().html(results);
                 updateitemSearchResultsPagination(results);
             }
@@ -1060,7 +1060,7 @@ $(document).ready(function () {
             subtotal_ex = total_cost + discount_header;
 
 
-            $.each($(".item-row"), function (i, value) {
+            $.each($(".item-row"), function(i, value) {
                 item_id.push($(".item-row:nth-child(" + (i + 1) + ")").data("id"));
                 item_no.push($(".item-row:nth-child(" + (i + 1) + ")").find(".item_no").text());
                 description.push($(".item-row:nth-child(" + (i + 1) + ")").find(".description").text());
@@ -1087,7 +1087,7 @@ $(document).ready(function () {
                     subtotal_ex: subtotal_ex,
                     discount_header: discount_header,
                     total_amount: total_cost,
-                    item_id : item_id,
+                    item_id: item_id,
                     item_no: item_no,
                     description: description,
                     quantity: itemQuantity,
@@ -1097,7 +1097,8 @@ $(document).ready(function () {
                     amount: total_price,
                     base_cost: base_cost,
                 },
-                success: function (results) {
+                success: function(results) {
+                    console.log(results);
                     switch (results) {
                         case ("success add"):
                             $("#addModal").modal("hide");
@@ -1154,8 +1155,8 @@ $(document).ready(function () {
             subtotal_ex = total_cost + discount_header;
 
 
-            $.each($(".update-item-row"), function (i, value) {
-                
+            $.each($(".update-item-row"), function(i, value) {
+
                 item_id.push($(".update-item-row:nth-child(" + (i + 1) + ")").data("id"));
                 item_no.push($(".update-item-row:nth-child(" + (i + 1) + ")").find(".update-item_no").text());
                 description.push($(".update-item-row:nth-child(" + (i + 1) + ")").find(".update-description").text());
@@ -1183,7 +1184,7 @@ $(document).ready(function () {
                     subtotal_ex: subtotal_ex,
                     discount_header: discount_header,
                     total_amount: total_cost,
-                    item_id : item_id,
+                    item_id: item_id,
                     item_no: item_no,
                     description: description,
                     quantity: itemQuantity,
@@ -1193,7 +1194,7 @@ $(document).ready(function () {
                     amount: total_price,
                     base_cost: base_cost,
                 },
-                success: function (results) {
+                success: function(results) {
                     switch (results) {
                         case ("success edit"):
                             $("#editModal").modal("hide");
@@ -1213,7 +1214,7 @@ $(document).ready(function () {
         }
     }
 
-    function deleteInvoice(){
+    function deleteInvoice() {
 
         $.ajax({
             type: "POST",
@@ -1222,10 +1223,10 @@ $(document).ready(function () {
                 postType: "deleteHeader",
                 invoice_id: $("#delete_id").val()
             },
-            success: function(results){
+            success: function(results) {
 
                 switch (results) {
-                    
+
                     case ("success delete"):
                         $("#deleteModal").modal("hide");
                         successMessage("Success", "Invoice is successfully updated");
@@ -1238,13 +1239,13 @@ $(document).ready(function () {
                         $("#deleteModal").modal("hide");
                         failedMessage("Failed", results);
                         break;
-                    case("id not found"):
+                    case ("id not found"):
                         $("#deleteModal").modal("hide");
                         failedMessage("Failed", results);
                         break;
                 }
             },
-            error: function(e){
+            error: function(e) {
                 console.log(e);
             }
         })
@@ -1275,7 +1276,7 @@ $(document).ready(function () {
                 postType: "countRow",
             },
             async: false,
-            success: function (results) {
+            success: function(results) {
                 $("#rowTotal").empty().append(results);
                 totalRowCount = results;
 
@@ -1323,9 +1324,9 @@ $(document).ready(function () {
                 pageNum: currentPageNum
             },
             //dataType: "json",
-            success: function (results) {
-                
-                
+            success: function(results) {
+
+
                 if (results == "0 results" || results == "No Result") {
 
                     renderTable("general");
@@ -1335,10 +1336,10 @@ $(document).ready(function () {
                     results = results.includes("Success") ? JSON.parse(results.replace('Success', '')) : JSON.parse(results);
                     renderContent(results, "general");
 
-                    $(".editBtn").click(function () {
+                    $(".editBtn").click(function() {
                         var current_index_edit = $(this).attr('id');
                         var current_index = current_index_edit.split('-');
-                        
+
 
                         $("#update-invoice_id").val(current_index[1]);
                         $("#update-search-customer_name").val($("#in_name-" + current_index[1]).text());
@@ -1356,13 +1357,13 @@ $(document).ready(function () {
                                 postType: "viewDetail",
                                 invoice_id: current_index[1]
                             },
-                            success: function(results){
+                            success: function(results) {
                                 var item_results;
                                 var totalCost = 0;
                                 var totalDiscount = 0;
-                                $.each(JSON.parse(results), function(i, value){
-                                    
-                                    var discount = (value.discount == 0 ? 100 : value.discount)/100 ;
+                                $.each(JSON.parse(results), function(i, value) {
+
+                                    var discount = (value.discount == 0 ? 100 : value.discount) / 100;
                                     var discountPrice = discount == 1 ? 0 : value.price * discount;
                                     var newPrice = value.price - discountPrice;
                                     totalCost += newPrice;
@@ -1393,13 +1394,13 @@ $(document).ready(function () {
                                     `;
                                 });
 
-                                
+
                                 $("#update-item-bucket").empty().append(item_results);
                                 $("#update-total_discount").empty().text(totalDiscount.toFixed(2));
                                 $("#update-total_cost").empty().text(totalCost.toFixed(2));
-                                $(".update-deleteItemBtn").click(function () {
+                                $(".update-deleteItemBtn").click(function() {
                                     $(this).closest("tr").remove();
-                        
+
                                     if ($.trim($("#update-item-bucket").html()).length == 0) {
                                         $("#update-item-bucket").html(`
                                             <tr class="update-noResultText">
@@ -1411,40 +1412,40 @@ $(document).ready(function () {
                                     }
                                 });
 
-                                $(".update-itemQuantity").change(function () {
+                                $(".update-itemQuantity").change(function() {
                                     if ($(this).val() > parseInt($(this).attr("max"))) {
                                         $(this).val($(this).attr("max"));
                                     }
-        
+
                                     if ($(this).val() < parseInt($(this).attr("min"))) {
                                         $(this).val($(this).attr("min"));
                                     }
                                     updateitemBucketTotalPrice($(this).closest("tr").data("id"));
                                     updateitemBucketTotalDiscount();
                                     updateitemBucketTotalCost();
-        
+
                                 });
-        
-                                $(".update-itemDiscount").change(function () {
+
+                                $(".update-itemDiscount").change(function() {
                                     if ($(this).val() > parseInt($(this).attr("max"))) {
                                         $(this).val($(this).attr("max"));
                                     }
-        
+
                                     if ($(this).val() < parseInt($(this).attr("min"))) {
                                         $(this).val($(this).attr("min"));
                                     }
-        
+
                                     updateitemBucketTotalPrice($(this).closest("tr").data("id"));
                                     updateitemBucketTotalDiscount();
                                     updateitemBucketTotalCost();
-        
+
                                 });
-                                
+
                             }
                         })
                     });
 
-                    $(".deleteBtn").click(function () {
+                    $(".deleteBtn").click(function() {
                         var current_index_edit = $(this).attr('id');
                         var current_index = current_index_edit.split('-');
 
@@ -1452,7 +1453,7 @@ $(document).ready(function () {
                         $("#deleteInvoiceName").empty().text(current_index[1]);
                     });
 
-                    $(".printBtn").click(function(){
+                    $(".printBtn").click(function() {
                         var current_index_edit = $(this).attr('id');
                         var current_index = current_index_edit.split('-');
                         $("#print_id").val(current_index[1]);
@@ -1461,7 +1462,7 @@ $(document).ready(function () {
 
                 }
             },
-            error: function (e) {
+            error: function(e) {
                 failedMessage("Failed", "Unexpected error occur : " + e);
             }
         });
@@ -1547,7 +1548,7 @@ $(document).ready(function () {
             case ("general"):
 
                 renderTable("general");
-                $.each(results, function (i, invoice) {
+                $.each(results, function(i, invoice) {
                     i++;
                     $("#generalContent").append(
                         "<tr>" +
@@ -1558,7 +1559,7 @@ $(document).ready(function () {
                         ' </button>' +
                         ' <button id="delete-' + invoice.invoice_id + '" class="btn btn-danger deleteBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#deleteModal">' +
                         ' <i class="fas fa-trash-alt"></i>' +
-                        ' <button id="print-' + invoice.invoice_id +  '" class="btn btn-secondary printBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#printModal">' +
+                        ' <button id="print-' + invoice.invoice_id + '" class="btn btn-secondary printBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#printModal">' +
                         ' <i class="fas fa-print"></i>' +
                         ' </button>' +
                         ' </td>' +

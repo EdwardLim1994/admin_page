@@ -118,32 +118,7 @@ else
                         </button>
                     </div>
                 </div>
-
-
-                <!-- <div class="row">
-                    <div class="col-12 pt-2">
-                        <div id="search-input-wrapper">
-                            <h6>Searching: <span id="search-input"></span></h6>
-                        </div>
-                    </div>
-                </div> -->
                 <div class="row">
-                    <!-- <div class="col-12 col-lg-6">
-                        <div class="input-group md-form form-sm form-2 pl-0">
-                            <input id="searchRow" class="form-control my-0 py-1" type="text" placeholder="Search" aria-label="Search" value="<?= isset($_SESSION['searchTerm']) ? $_SESSION['searchTerm'] : "" ?>">
-                            <div class="input-group-append" id="searchClear">
-                                <button class="input-group-text lighten-2">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                            <div class="input-group-append">
-                                <button class="input-group-text lighten-2" id="searchConfirm">
-                                    <span class="textBreak">Search</span>
-                                    <span class="iconBreak"><i class="fas fa-search text-grey" aria-hidden="true"></i></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="col-12 text-right">
                         <div class="d-flex justify-content-end py-4 rowResults">
 
@@ -165,8 +140,7 @@ else
                 <div id="general-table" class='table-responsive'></div>
             </div>
         </div>
-        </div>
-        <!-- Central Modal Medium Info -->
+
         <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
                 <div class="modal-content">
@@ -174,7 +148,7 @@ else
                         <!--Header-->
 
                         <div class="modal-header">
-                            <p class="heading lead">Add Payment</p>
+                            <p class="heading lead">Payment Maintanance</p>
 
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true" class="white-text">&times;</spans>
@@ -183,37 +157,31 @@ else
 
                         <!--Footer-->
                         <div class="modal-footer justify-content-end">
-
                             <button id="addPaymentSubmitBtn" class="btn btn-info">Add Payment</button>
-                            <!-- <a type="button" class="btn btn-outline-info waves-effect nevermind" data-dismiss="modal">Nevermind</a> -->
                         </div>
                     </div>
 
-
-                    <!--Body-->
                     <div class="modal-body">
                         <div class="form-group position-relative">
                             <div class="row">
                                 <div class="col-6 col-md-4">
                                     <label for="edit-customer_name">Customer Name</label>
-                                    <input type="text" class="form-control" name="customer_account" id="search-customer_name" placeholder="">
+                                    <input type="text" class="form-control" name="customer_account" id="search-customer_name" placeholder="" required>
                                 </div>
                                 <div class="col-6 col-md-4">
                                     <label for="edit-customer_account">Account Number</label>
-                                    <input type="text" class="form-control" name="customer_account" id="search-customer_id" placeholder="">
+                                    <input type="text" class="form-control" name="customer_account" id="search-customer_id" placeholder="" required>
                                 </div>
 
                                 <div class="col-12 col-md-4">
                                     <label for="edit-customer_account">Outstanding</label>
-                                    <input type="number" readonly class="form-control" min="0" step="1" name="total_outstanding" id="total_outstanding" placeholder="">
+                                    <input type="number" readonly class="form-control" step="0.01" min="0" value="0.00" name="total_outstanding" id="total_outstanding" placeholder="">
                                 </div>
                             </div>
                             <div class="row m-0 p-0">
                                 <div class="col-12 col-md-8 m-0 p-0">
                                     <!-- Customer search result -->
-                                    <div id="customer-search" class="w-100 m-0 position-absolute" style="z-index:5;">
-
-                                    </div>
+                                    <div id="customer-search" class="w-100 m-0 position-absolute" style="z-index:5;"> </div>
                                 </div>
                             </div>
 
@@ -239,7 +207,7 @@ else
                             <div class="row">
                                 <div class="col-6">
                                     <label for="edit-customer_account">Date</label>
-                                    <input type="date" class="form-control" name="customer_account" id="payment_date" placeholder="">
+                                    <input type="date" class="form-control" name="customer_account" id="payment_date" placeholder="" required>
 
                                 </div>
 
@@ -261,29 +229,23 @@ else
 
                             <h3>Payment Detail</h3>
 
-                            <!--<div class="row pb-5 ">
-                                <div class="col-12">
-                                    <div class="position-relative">
-                                        <label for="edit-customer_account">Item Name or Barcode:</label>
-                                        <input type="text" class="form-control" id="search-item" placeholder="">-->
-
-                            <!-- Item search result -->
-                            <!--<div id="item-search" class="w-100 m-0 bg-white position-absolute" style="z-index:5;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
 
                             <div class="row py-4">
                                 <div class="col-6">
                                     <label for="edit-customer_account">Un-Apply Amount</label>
                                     <input type="number" readonly class="form-control" min="0" step="0.01" value="0.00" name="customer_account" id="unapply_amount" placeholder="">
                                 </div>
+                                <div class="col-6">
+                                    <label for="edit-customer_account">Total Paid</label>
+                                    <input type="number" readonly class="form-control" min="0" step="0.01" value="0.00" name="customer_account" id="total_pay" placeholder="">
+                                </div>
                             </div>
                             <div class="overflow-auto">
                                 <table class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead class="grey white-text">
                                         <tr>
+                                            <th class="th-sm text-center">Action
+                                            </th>
                                             <th class="th-sm text-center">Doc No
                                             </th>
                                             <th class="th-sm text-center">Doc Date
@@ -308,21 +270,11 @@ else
                                     </thead>
                                     <tbody id="payment-bucket">
                                         <tr class="noResultText">
-                                            <td colspan="10" class="text-center">
+                                            <td colspan="11" class="text-center">
                                                 <h5>No payment available</h5>
                                             </td>
                                         </tr>
                                     </tbody>
-                                    <!-- <tfoot class="grey white-text">
-                                        <tr>
-                                            <th colspan="8" class="text-right"><strong>Discount : </strong></th>
-                                            <th id="total_discount"></th>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="8" class="text-right"><strong>Total Amount : </strong></th>
-                                            <th id="total_cost"></th>
-                                        </tr>
-                                    </tfoot> -->
                                 </table>
                             </div>
                         </div>
@@ -331,160 +283,62 @@ else
             </div>
         </div>
 
-        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+        <div class="modal fade" id="invoiceDetailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
-                <!--Content-->
-                <input hidden="true" type="text" id="update-invoice_id">
                 <div class="modal-content">
                     <div class="bg-white sticky-top p-0 m-0 border-bottom">
                         <!--Header-->
-                        <input hidden="true" type="text" name="postType" value="add">
+
                         <div class="modal-header">
-                            <p class="heading lead">Update Payment</p>
+                            <p class="heading lead">Invoice Details</p>
 
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true" class="white-text">&times;</spans>
                             </button>
                         </div>
 
-                        <!--Footer-->
-                        <div class="modal-footer justify-content-end">
-                            <button id="updatePaymentSubmitBtn" class="btn btn-info">Update Payment</button>
-                            <!-- <a type="button" class="btn btn-outline-info waves-effect nevermind" data-dismiss="modal">Nevermind</a> -->
-                        </div>
                     </div>
-
 
                     <!--Body-->
                     <div class="modal-body">
-                        <div class="form-group position-relative">
-                            <div class="row">
-                                <div class="col-6 col-md-4">
-                                    <label for="edit-customer_name">Customer Name</label>
-                                    <input type="text" class="form-control" name="customer_account" id="update-search-customer_name" placeholder="">
-                                </div>
-                                <div class="col-6 col-md-4">
-                                    <label for="edit-customer_account">Account Number</label>
-                                    <input type="text" class="form-control" name="customer_account" id="update-search-customer_id" placeholder="">
-                                </div>
-
-                                <div class="col-12 col-md-4">
-                                    <label for="edit-customer_account">Outstanding</label>
-                                    <input type="number" class="form-control" min="0" step="1" name="total_outstanding" id="update-total_outstanding" placeholder="">
-                                </div>
-                            </div>
-                            <div class="row m-0 p-0">
-                                <div class="col-12 col-md-8 m-0 p-0">
-                                    <!-- Customer search result -->
-                                    <div id="update-customer-search" class="w-100 m-0 bg-white position-absolute" style="z-index:5;"></div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <hr>
-                        <div class="form-group">
-
-                            <h3>Payment Information</h3>
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="edit-customer_account">Total Payment</label>
-                                    <input type="text" class="form-control" name="customer_account" id="update-total_payment" placeholder="">
-
-                                </div>
-
-                                <div class="col-6">
-                                    <label for="edit-customer_account">Payment Mode</label>
-                                    <input type="text" class="form-control" name="customer_account" id="update-payment_mode" placeholder="">
-
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="edit-customer_account">Date</label>
-                                    <input type="date" class="form-control" name="customer_account" id="update-payment_date" placeholder="">
-
-                                </div>
-
-                                <div class="col-6">
-                                    <label for="edit-customer_account">Salesperson</label>
-                                    <input type="text" class="form-control" name="customer_account" id="update-payment_salesperson" placeholder="">
-
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-12">
-                                    <label for="edit-customer_account">Remark:</label>
-                                    <input type="text" class="form-control" name="customer_account" id="update-payment_remark" placeholder="">
-                                </div>
-                            </div>
-                        </div>
                         <div class="form-group ">
+                            <h3>Item Information</h3>
 
-                            <h3>Payment Detail</h3>
-
-                            <!--<div class="row pb-5 ">
-                                <div class="col-12">
-                                    <div class="position-relative">
-                                        <label for="edit-customer_account">Item Name or Barcode:</label>
-                                        <input type="text" class="form-control" id="search-item" placeholder="">-->
-
-                            <!-- Item search result -->
-                            <!--<div id="item-search" class="w-100 m-0 bg-white position-absolute" style="z-index:5;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
-
-                            <div class="row py-4">
-                                <div class="col-6">
-                                    <label for="edit-customer_account">Un-Apply Amount</label>
-                                    <input type="number" readonly class="form-control" name="customer_account" id="update-unapply_amount" placeholder="">
-                                </div>
-                            </div>
                             <div class="overflow-auto">
                                 <table class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead class="grey white-text">
                                         <tr>
-                                            <th class="th-sm text-center">Action</th>
-                                            <th class="th-sm text-center">Doc No
+                                            <th class="th-sm text-center">Item No
                                             </th>
-                                            <th class="th-sm text-center">Doc Date
+                                            <th class="th-sm text-center">Description
                                             </th>
-                                            <th class="th-sm text-center">Invoice No
+                                            <th class="th-sm text-center">Qty
                                             </th>
-                                            <th class="th-sm text-center">Invoice Date
+                                            <th class="th-sm text-center">UOM
                                             </th>
-                                            <th class="th-sm text-center">Due Date
+                                            <th class="th-sm text-center">Selling Price(RM)
                                             </th>
-                                            <th class="th-sm text-center">Amount
+                                            <th class="th-sm text-center">Base Cost(RM)
                                             </th>
-                                            <th class="th-sm text-center">Outstanding
+                                            <th class="th-sm text-center">Discount(%)
                                             </th>
-                                            <th class="th-sm text-center">Payment
-                                            </th>
-                                            <th class="th-sm text-center">Selected
+                                            <th class="th-sm text-center">Amount(RM)
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody id="payment-bucket">
-                                        <tr class="noResultText">
-                                            <td colspan="9" class="text-center">
-                                                <h5>No payment available</h5>
-                                            </td>
-                                        </tr>
+                                    <tbody id="item-bucket">
                                     </tbody>
-                                    <!-- <tfoot class="grey white-text">
+                                    <tfoot class="grey white-text">
                                         <tr>
-                                            <th colspan="8" class="text-right"><strong>Discount : </strong></th>
+                                            <th colspan="7" class="text-right"><strong>Discount : </strong></th>
                                             <th id="total_discount"></th>
                                         </tr>
                                         <tr>
-                                            <th colspan="8" class="text-right"><strong>Total Amount : </strong></th>
+                                            <th colspan="7" class="text-right"><strong>Total Amount : </strong></th>
                                             <th id="total_cost"></th>
                                         </tr>
-                                    </tfoot> -->
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -492,54 +346,21 @@ else
                 </div>
             </div>
         </div>
-        <!-- Central Modal Medium Info-->
 
-        <!-- Central Modal Warning Demo-->
-        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-notify modal-warning" role="document">
-                <!--Content-->
-                <!-- <form action="./backend/invoice/invoice.php" method="POST"> -->
-                <!--Header-->
-                <!-- <input hidden="true" type="text" name="postType" value="deleteHeader"> -->
-                <input hidden="true" type="text" name="invoice_id" id="delete_id">
-                <div class="modal-content">
-                    <!--Header-->
-                    <div class="modal-header">
-                        <p class="heading">Delete Invoice</p>
-
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true" class="white-text">&times;</span>
-                        </button>
-                    </div>
-
-                    <!--Body-->
-                    <div class="modal-body">
-                        <p>Are you want to delete <span id="deleteInvoiceName"></span>?</p>
-                    </div>
-
-                    <!--Footer-->
-                    <div class="modal-footer justify-content-center">
-                        <button id="deleteInvoiceSubmitButton" class="btn btn-warning">Yes</button>
-                        <a type="button" class="btn btn-outline-warning waves-effect" data-dismiss="modal">Nevermind</a>
-                    </div>
-                </div>
-                <!-- </form> -->
-            </div>
-        </div>
-        <!-- Central Modal Warning Demo-->
 
         <!-- Central Modal Warning Demo-->
         <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-notify modal-warning" role="document">
                 <!--Content-->
-                <form action="./backend/invoice/printInvoice.php" method="POST">
+                <form action="./backend/payment/printPayment.php" method="POST">
                     <!--Header-->
-                    <input hidden="true" type="text" name="postType" value="print">
-                    <input hidden="true" type="text" name="invoice_id" id="print_id">
+                    <input hidden type="text" name="postType" value="printPayment">
+                    <input hidden type="text" name="payment_identifier" id="print_id">
+                    <input hidden type="text" name="customer_account" id="customer_name">
                     <div class="modal-content">
                         <!--Header-->
                         <div class="modal-header">
-                            <p class="heading">Print Invoice</p>
+                            <p class="heading">Print Payment Detail</p>
 
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true" class="white-text">&times;</span>
@@ -548,13 +369,13 @@ else
 
                         <!--Body-->
                         <div class="modal-body">
-                            <p>Do you want to print <span id="printInvoiceName"></span>?</p>
+                            <p>Do you want to print current payment detail?</p>
                         </div>
 
                         <!--Footer-->
                         <div class="modal-footer justify-content-center">
-                            <button type="submit" id="printInvoiceSubmitButton" class="btn btn-warning">Yes</button>
-                            <a type="button" class="btn btn-outline-warning waves-effect" data-dismiss="modal">Nevermind</a>
+                            <button type="submit" id="printPaymentSubmitButton" class="btn btn-warning">Yes</button>
+                            <a type="button" id="printPaymentExitBtn" class="btn btn-outline-warning waves-effect" data-dismiss="modal">Nevermind</a>
                         </div>
                     </div>
                 </form>
@@ -578,7 +399,7 @@ else
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <a type="button" class="btn btn-outline-success waves-effect" data-dismiss="modal">OK</a>
+                        <a type="button" class="btn btn-outline-success btnSuccess waves-effect" data-dismiss="modal">OK</a>
                     </div>
                 </div>
             </div>
