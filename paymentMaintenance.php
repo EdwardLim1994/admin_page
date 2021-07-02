@@ -150,40 +150,38 @@ else
                         <div class="modal-header">
                             <p class="heading lead">Payment Maintanance</p>
 
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close addModalDismiss" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true" class="white-text">&times;</spans>
                             </button>
                         </div>
 
                         <!--Footer-->
                         <div class="modal-footer justify-content-end">
-                            <button id="addPaymentSubmitBtn" class="btn btn-info">Add Payment</button>
+                            <button id="addPaymentSubmitBtn" class="btn btn-info" disabled>Add Payment</button>
                         </div>
                     </div>
 
                     <div class="modal-body">
                         <div class="form-group position-relative">
                             <div class="row">
-                                <div class="col-6 col-md-4">
+                                <div class="col-6">
                                     <label for="edit-customer_name">Customer Name</label>
                                     <input type="text" class="form-control" name="customer_account" id="search-customer_name" placeholder="" required>
                                 </div>
-                                <div class="col-6 col-md-4">
+                                <div class="col-6">
                                     <label for="edit-customer_account">Account Number</label>
                                     <input type="text" class="form-control" name="customer_account" id="search-customer_id" placeholder="" required>
                                 </div>
+                                <!-- <div class="row m-0 p-0"> -->
 
-                                <div class="col-12 col-md-4">
-                                    <label for="edit-customer_account">Outstanding</label>
-                                    <input type="number" readonly class="form-control" step="0.01" min="0" value="0.00" name="total_outstanding" id="total_outstanding" placeholder="">
-                                </div>
+                                <!-- </div> -->
+
+
                             </div>
-                            <div class="row m-0 p-0">
-                                <div class="col-12 col-md-8 m-0 p-0">
-                                    <!-- Customer search result -->
-                                    <div id="customer-search" class="w-100 m-0 position-absolute" style="z-index:5;"> </div>
-                                </div>
-                            </div>
+
+                            <!-- Customer search result -->
+                            <div id="customer-search" class="w-100 m-0 position-absolute" style="z-index:5;"> </div>
+
 
                         </div>
                         <hr>
@@ -231,11 +229,15 @@ else
 
 
                             <div class="row py-4">
-                                <div class="col-6">
+                                <div class="col-4">
                                     <label for="edit-customer_account">Un-Apply Amount</label>
                                     <input type="number" readonly class="form-control" min="0" step="0.01" value="0.00" name="customer_account" id="unapply_amount" placeholder="">
                                 </div>
-                                <div class="col-6">
+                                <div class="col-4">
+                                    <label for="edit-customer_account">Outstanding</label>
+                                    <input type="number" readonly class="form-control" step="0.01" min="0" value="0.00" name="total_outstanding" id="total_outstanding" placeholder="">
+                                </div>
+                                <div class="col-4">
                                     <label for="edit-customer_account">Total Paid</label>
                                     <input type="number" readonly class="form-control" min="0" step="0.01" value="0.00" name="customer_account" id="total_pay" placeholder="">
                                 </div>

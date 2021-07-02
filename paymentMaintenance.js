@@ -24,11 +24,7 @@ $(document).ready(function() {
     })
 
     $("#currentPageNum").focusout(function() {
-        if ($("#searchRow").val() != "") {
-            searchTable();
-        } else {
-            generateTable();
-        }
+        generateTable();
     });
 
     $("#search-customer_name").on('keyup', function() {
@@ -41,37 +37,30 @@ $(document).ready(function() {
     $("#addModalBtn").click(function() {
         $("#search-customer_name").val("");
         $("#search-customer_id").val("");
-        $("#invoice_number").val("");
-        $("#doc_no").val("");
-        $("#invoice_date").val("");
-        $("#due_date").val("");
-        $("#invoice_remark").val("");
-        $("#search-item").val("");
 
         $("#customer-search").removeClass("border").empty();
-        $("#item-search").removeClass("border").empty();
+        $("#total_payment").val("0.00");
+        $("#payment_mode").val("");
+        $("#payment_date").val("");
+        $("#payment_salesperson").val("");
+        $("#payment_remark").val("");
+        $("#unapply_amount").val("0.00");
+        $("#total_outstanding").val("0.00");
+        $("#total_pay").val("0.00");
 
-        $("#item-bucket").empty().html(`
-            <tr class="noResultText">
-                <td colspan="9" class="text-center">
-                    <h5>No item added yet</h5>
-                </td>
-            </tr>
+        $("#payment-bucket").empty().html(`
+        <tr class="noResultText">
+            <td colspan="11" class="text-center">
+                <h5>No payment available</h5>
+            </td>
+        </tr>
         `);
     });
 
     $("#addPaymentSubmitBtn").click(function() {
-        if (parseFloat($("#total_payment").val()) != 0)
-            addPayment();
-        else
-            failedMessage("Failed", "Total Payment currently is 0. Please add some credit in total payment to pay");
+        addPayment();
     });
 
-
-    //customer name or customer id on input
-    //show dropdown result
-    //after choose result
-    //both customer name and id will set value in input
 
     function customerSearchResults(pageNum) {
 
@@ -104,22 +93,23 @@ $(document).ready(function() {
                     success: function(results) {
                         if (results == "No result") {
                             if (isSpinnerOn == true) {
-                                $("#customer-search").empty().html(`
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h5>${results}</h5>
+                                $("#customer-search").addClass("customer-search-nothing").empty().html(`
+                                <div class="sticky-top bg-white">
+                                    <div class="row px-3 py-2">
+                                        <div class="col-6">
+                                            <h5>${results}</h5>
+                                        </div>
+                                        <div class="col-6 text-right">
+                                            <a class="btn btn-primary" href="./customerMaintenance.php">Go add new customer</a>
+                                        </div>
                                     </div>
-                                    <div class="col-6 text-right">
-                                        <a class="btn btn-primary" href="./customerMaintenance.php">Go add new customer</a>
-                                    </div>
-                                </div>
-                                    
+                                </div> 
                                 `);
                                 isSpinnerOn = false;
                             }
 
                         } else if (results == "") {
-                            $("#customer-search").empty().removeClass("border").removeClass("bg-white");
+                            $("#customer-search").empty().removeClass("customer-search-nothing").removeClass("border").removeClass("bg-white");
                             isSpinnerOn = false;
                         } else {
                             searchResult = `
@@ -159,10 +149,11 @@ $(document).ready(function() {
                                 `;
                             });
                             searchResult += `</div>`;
-                            $("#customer-search").empty().addClass("bg-white").html(searchResult);
+                            $("#customer-search").removeClass("customer-search-nothing").empty().addClass("bg-white").html(searchResult);
                             isSpinnerOn = false;
                             customerSearchResultsCountRow();
                             customerSearchResultsSelect();
+
                         }
                     }
                 });
@@ -192,7 +183,7 @@ $(document).ready(function() {
                     var total_outstanding = 0.00;
                     if (results != "") {
                         $.each(JSON.parse(results), function(i, value) {
-                            var status = value.outstanding == 0 ? ["text-success", "paid", "disabled", "checked"] : ["text-danger", "unpaid", "", ""];
+                            var status = value.outstanding == 0 ? ["text-success", "paid", "disabled='disabled'", "checked"] : ["text-danger", "unpaid", "", ""];
                             total_outstanding += parseFloat(value.outstanding);
                             invoice_results += `
                             <tr class="item-row" data-id="${value.id}" data-invoice_id=${value.invoice_id}>
@@ -210,15 +201,16 @@ $(document).ready(function() {
                                 <td class="outstanding-${value.id}">${value.outstanding}</td>
                                 <td class="payment-${value.id}">${value.payment}</td>
                                 <td class="status-${value.id} ${status[0]} text-capitalize font-weight-bold text-center">${status[1]}</td>
-                                <td class="total_price-${value.id} text-center">
-                                    <input type="checkbox" class="select_to_pay" ${status[2]} ${status[3]}/>
+                                <td class="total_price-${value.id} pay_item text-center">
+                                    <input type="checkbox" class="select_to_pay" data-previous-outstanding="${value.outstanding}" data-previous-payment="${value.payment}" aria-label="${value.outstanding == 0 ? "paid" : "unpaid"}" ${status[2]} ${status[3]}/>
                                 </td>
                             </tr>
                             `;
-                        })
+                        });
 
                         $("#total_outstanding").val(total_outstanding.toFixed(2));
                         $("#payment-bucket").empty().html(invoice_results);
+
                     }
 
                     $(".showInvoiceDetailBtn").click(function() {
@@ -230,109 +222,147 @@ $(document).ready(function() {
                                 selected_id: $(this).parent().parent().data("invoice_id")
                             },
                             success: function(results) {
-                                var invoice_results;
-                                var total_amount = 0;
-                                var total_discount = 0;
-                                $.each(JSON.parse(results), function(i, item) {
-                                    total_amount += parseFloat(item.amount);
-                                    total_discount += parseFloat(item.discount);
-                                    invoice_results += `
-                                    <tr>
-                                        <td>${item.item_no}</td>
-                                        <td>${item.description}</td>
-                                        <td>${item.quantity}</td>
-                                        <td>${item.uom}</td>
-                                        <td>${item.price}</td>
-                                        <td>${item.base_cost}</td>
-                                        <td>${item.discount}</td>
-                                        <td>${item.amount}</td>
-                                    </tr>
-                                    `;
-                                })
 
-                                $("#item-bucket").empty().html(invoice_results);
-                                $("#total_discount").empty().text(total_discount.toFixed(2));
-                                $("#total_cost").empty().text(total_amount.toFixed(2));
-                                $("#invoiceDetailModal").modal("show");
+                                if (results == "No Result") {
+                                    failedMessage("Failed", "Could not find any invoice results");
+                                } else {
+                                    var invoice_results;
+                                    var total_amount = 0;
+                                    var total_discount = 0;
+                                    $.each(JSON.parse(results), function(i, item) {
+                                        total_amount += parseFloat(item.amount);
+                                        total_discount += parseFloat(item.discount);
+                                        invoice_results += `
+                                        <tr>
+                                            <td>${item.item_no}</td>
+                                            <td>${item.description}</td>
+                                            <td>${item.quantity}</td>
+                                            <td>${item.uom}</td>
+                                            <td>${item.price}</td>
+                                            <td>${item.base_cost}</td>
+                                            <td>${item.discount}</td>
+                                            <td>${item.amount}</td>
+                                        </tr>
+                                        `;
+                                    })
+
+                                    $("#item-bucket").empty().html(invoice_results);
+                                    $("#total_discount").empty().text(total_discount.toFixed(2));
+                                    $("#total_cost").empty().text(total_amount.toFixed(2));
+                                    $("#invoiceDetailModal").modal("show");
+                                }
+
                             }
                         });
                     })
 
                     $(".select_to_pay").click(function() {
-                        //TODO: finish select to pay logic
+
                         var row_item_id = $(this).parent().parent().data("id");
-
-                        var unapply_amount = parseFloat($("#unapply_amount").val());
-                        var current_total_outstanding = parseFloat($("#total_outstanding").val());
-
-                        var current_outstanding = parseFloat($(`.outstanding-${row_item_id}`).text());
-                        var current_payment = parseFloat($(`.payment-${row_item_id}`).text());
-                        var new_outstanding = unapply_amount - current_outstanding < 0 ? current_outstanding - unapply_amount : 0.00;
-                        var new_payment = unapply_amount - current_outstanding < 0 ? unapply_amount : current_outstanding;
-
-                        var deducted_outstanding = current_outstanding - new_outstanding;
-
-
-                        $(`.outstanding-${row_item_id}`).text(new_outstanding.toFixed(2));
-                        $(`.payment-${row_item_id}`).text(current_payment + new_payment);
-                        $("#unapply_amount").val(parseFloat(new_unapply_amount).toFixed(2));
-                        $("#total_pay").val((parseFloat($("#total_pay").val()) + new_payment).toFixed(2));
-                        $("#total_outstanding").val(current_total_outstanding + deducted_outstanding)
-
                         if (parseFloat($("#total_payment").val()) > 0) {
                             if (parseFloat($("#unapply_amount").val()) > 0) {
                                 if ($(this).prop('checked') == true) {
+                                    var current_unapply_amount = parseFloat($("#unapply_amount").val());
+                                    var current_total_outstanding = parseFloat($("#total_outstanding").val());
+                                    var current_total_pay = parseFloat($("#total_pay").val());
 
-                                    $(`.outstanding-${row_item_id}`).text(new_outstanding.toFixed(2));
-                                    $(`.payment-${row_item_id}`).text((current_payment + new_payment).toFixed(2));
+                                    var current_outstanding = parseFloat($(`.outstanding-${row_item_id}`).text());
+                                    var current_payment = parseFloat($(`.payment-${row_item_id}`).text());
 
-                                    $("#unapply_amount").val(parseFloat(unapply_amount - new_payment).toFixed(2));
-                                    $("#total_pay").val((parseFloat($("#total_pay").val()) + new_payment).toFixed(2));
-                                    $("#total_outstanding").val(parseFloat(current_total_outstanding + deducted_outstanding).toFixed(2));
+                                    var new_outstanding = current_unapply_amount < current_outstanding ? current_outstanding - current_unapply_amount : current_outstanding - current_outstanding;
+                                    var new_payment = current_unapply_amount < current_outstanding ? current_payment + current_unapply_amount : current_payment + current_outstanding;
 
-                                    if (outstanding == 0) {
-                                        $(`.status-${row_item_id}`).removeClass("text-danger").addClass("text-success").empty().text("paid");
-                                    }
+                                    var new_unapply_amount = current_unapply_amount < current_outstanding ? current_unapply_amount - current_unapply_amount : current_unapply_amount - current_outstanding;
+                                    var new_total_outstanding = current_unapply_amount < current_outstanding ? current_total_outstanding - current_unapply_amount : current_total_outstanding - current_outstanding;
+                                    var new_total_pay = current_unapply_amount < current_outstanding ? current_total_pay + current_unapply_amount : current_total_pay + current_outstanding;
+
+                                    var payment_made = current_unapply_amount < current_outstanding ? current_unapply_amount : current_outstanding;
+
+                                    $(this).attr(
+                                        "data-current-payment-made", payment_made
+                                    );
+
+                                    $(`.outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
+                                    $(`.payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
+
+                                    $("#total_pay").val(new_total_pay.toFixed(2))
+                                    $("#unapply_amount").val(new_unapply_amount.toFixed(2))
+                                    $("#total_outstanding").val(new_total_outstanding.toFixed(2))
+
+
                                 } else {
-                                    $(`.outstanding-${row_item_id}`).text((parseFloat($(`.payment-${row_item_id}`).text()) + parseFloat($(`.outstanding-${row_item_id}`).text())).toFixed(2));
-                                    $(`.payment-${row_item_id}`).text((parseFloat($(`.payment-${row_item_id}`).text()) - payment).toFixed(2));
 
-                                    $("#unapply_amount").val((parseFloat($("#unapply_amount").val()) + payment).toFixed(2));
-                                    $("#total_pay").val((parseFloat($("#total_pay").val()) - payment).toFixed(2));
+                                    var current_unapply_amount = parseFloat($("#unapply_amount").val());
+                                    var current_total_outstanding = parseFloat($("#total_outstanding").val());
+                                    var current_total_pay = parseFloat($("#total_pay").val());
 
-                                    $(`.outstanding-${row_item_id}`).text(new_outstanding.toFixed(2));
-                                    $(`.payment-${row_item_id}`).text((current_payment + new_payment).toFixed(2));
+                                    var current_outstanding = parseFloat($(`.outstanding-${row_item_id}`).text());
+                                    var current_payment = parseFloat($(`.payment-${row_item_id}`).text());
+                                    var payment_made = parseFloat($(this).data("current-payment-made"));
 
-                                    $("#unapply_amount").val(parseFloat(unapply_amount - new_payment).toFixed(2));
-                                    $("#total_pay").val((parseFloat($("#total_pay").val()) + new_payment).toFixed(2));
-                                    $("#total_outstanding").val(parseFloat(current_total_outstanding + deducted_outstanding).toFixed(2));
+                                    var new_outstanding = current_outstanding + payment_made;
+                                    var new_payment = current_payment - payment_made;
 
-                                    if (outstanding == 0) {
-                                        $(`.status-${row_item_id}`).removeClass("text-success").addClass("text-danger").empty().text("unpaid");
-                                    }
+                                    var new_unapply_amount = current_unapply_amount + payment_made;
+                                    var new_total_outstanding = current_total_outstanding + payment_made;
+                                    var new_total_pay = current_total_pay - payment_made;
+
+
+                                    $(`.outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
+                                    $(`.payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
+
+                                    $("#total_pay").val(new_total_pay.toFixed(2))
+                                    $("#unapply_amount").val(new_unapply_amount.toFixed(2))
+                                    $("#total_outstanding").val(new_total_outstanding.toFixed(2))
+
+
                                 }
-                                return true
                             } else {
-
-                                if ($(this).prop('checked') == false) {
-                                    $("#unapply_amount").val(parseFloat(unapply_amount - new_payment).toFixed(2));
-                                    $("#total_pay").val((parseFloat($("#total_pay").val()) + new_payment).toFixed(2));
-                                    $("#total_outstanding").val(current_total_outstanding + deducted_outstanding);
-
-                                    $(`.outstanding-${row_item_id}`).text(new_outstanding.toFixed(2));
-                                    $(`.payment-${row_item_id}`).text("0.00");
-
-                                    if (outstanding == 0) {
-                                        $(`.status-${row_item_id}`).removeClass("text-success").addClass("text-danger").empty().text("unpaid");
-                                    }
-                                } else {
+                                if ($(this).prop('checked') == true) {
                                     failedMessage("Failed", "Unapply amount currently is 0. Please add some credit in total payment to pay");
                                     return false;
+                                } else {
+
+                                    var current_unapply_amount = parseFloat($("#unapply_amount").val());
+                                    var current_total_outstanding = parseFloat($("#total_outstanding").val());
+                                    var current_total_pay = parseFloat($("#total_pay").val());
+
+                                    var current_outstanding = parseFloat($(`.outstanding-${row_item_id}`).text());
+                                    var current_payment = parseFloat($(`.payment-${row_item_id}`).text());
+                                    var payment_made = parseFloat($(this).data("current-payment-made"));
+
+                                    var new_outstanding = current_outstanding + payment_made;
+                                    var new_payment = current_payment - payment_made;
+
+                                    var new_unapply_amount = current_unapply_amount + payment_made;
+                                    var new_total_outstanding = current_total_outstanding + payment_made;
+                                    var new_total_pay = current_total_pay - payment_made;
+
+
+
+                                    $(`.outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
+                                    $(`.payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
+
+                                    $("#total_pay").val(new_total_pay.toFixed(2))
+                                    $("#unapply_amount").val(new_unapply_amount.toFixed(2))
+                                    $("#total_outstanding").val(new_total_outstanding.toFixed(2))
+
                                 }
                             }
                         } else {
                             failedMessage("Failed", "Total Payment currently is 0. Please add some credit in total payment to pay");
                             return false;
+                        }
+                        if (parseFloat($(`.outstanding-${row_item_id}`).text()) > 0) {
+                            $(`.status-${row_item_id}`).removeClass("text-success").addClass("text-danger").empty().text("unpaid");
+                        } else {
+                            $(`.status-${row_item_id}`).removeClass("text-danger").addClass("text-success").empty().text("paid");
+                        }
+
+                        if (parseFloat($("#total_pay").val()) == 0) {
+                            $("#addPaymentSubmitBtn").prop("disabled", true);
+                        } else {
+                            $("#addPaymentSubmitBtn").prop("disabled", false);
                         }
                     });
 
@@ -348,19 +378,31 @@ $(document).ready(function() {
                         }
                     });
 
+                    //TODO: finish total payment reset logic
                     $("#total_payment").on("focusout", function() {
-                        $.each($(".item-row"), function(i, item) {
-                            var invoice_id = $(`.item-row:nth-child(${i+1})`).data("id");
-                            $(`.total_price-${invoice_id}>.select_to_pay`).prop('checked', false);
-                            if ($(`.status-${invoice_id}`).text() === "unpaid" && parseFloat($(`.payment-${invoice_id}`).text()) == 0) {
+                        if ($("#total_pay").val() > 0) {
+                            var total_outstanding_deducted = 0;
+                            $("#total_pay").val("0.00");
+                            $.each($('.item-row'), function(i, item) {
+                                if ($(`.select_to_pay:eq(${i})`).attr('aria-label') === "unpaid") {
+                                    var invoice_id = $(`.item-row:eq(${i})`).data("id");
 
+                                    var original_payment = parseFloat($(`.select_to_pay:eq(${i})`).data("previous-payment"));
+                                    var original_outstanding = parseFloat($(`.select_to_pay:eq(${i})`).data("previous-outstanding"));
 
-                                $(`.outstanding-${invoice_id}`).empty().text($(`.total_amount-${invoice_id}`).text());
-                                $(`.payment-${invoice_id}`).empty().text("0.00");
-                                $(`.status-${invoice_id}`).removeClass("text-success").addClass("text-danger").empty().text("unpaid");
-                            }
-                        });
+                                    total_outstanding_deducted += original_outstanding
+                                    $(`.outstanding-${invoice_id}`).empty().text(original_outstanding.toFixed(2));
+                                    $(`.payment-${invoice_id}`).empty().text(original_payment.toFixed(2));
+                                    $(`.status-${invoice_id}`).removeClass("text-success").addClass("text-danger").empty().text("unpaid");
+                                    $(`.select_to_pay:eq(${i})`).prop("checked", false);
+
+                                }
+                            });
+                            $("#total_outstanding").val(total_outstanding_deducted.toFixed(2))
+                        }
                     });
+
+
                 },
                 error: function(e) {
                     console.log(e);
@@ -448,16 +490,14 @@ $(document).ready(function() {
                     payment_salesperson: payment_salesperson
                 },
                 success: function(results) {
-                    console.log(results);
                     switch (results) {
                         case ("success pay"):
                             $("#addModal").modal("hide");
                             successMessage("Success", "Invoice is successfully added");
-                            $("#general-table").empty();
-                            $("#currentPageNum").val(1);
                             $(".btnSuccess").click(function() {
-                                window.reload();
+                                location.reload();
                             })
+                            break;
                         case ("Some input field is not set."):
                             $("#addModal").modal("hide");
                             failedMessage("Failed", results);
@@ -474,7 +514,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: "POST",
-            url: "./backend/invoice/invoice.php",
+            url: "./backend/payment/printPayment.php",
             data: {
                 postType: "countRow",
             },
@@ -490,7 +530,7 @@ $(document).ready(function() {
     }
 
     function paginate(total) {
-        var rowperpage = 10;
+        var rowperpage = 20;
         var totalPage = Math.ceil(total / rowperpage);
         $("#pageTotal").empty().text(totalPage);
 

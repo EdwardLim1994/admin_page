@@ -1224,7 +1224,7 @@ $(document).ready(function() {
                 invoice_id: $("#delete_id").val()
             },
             success: function(results) {
-
+                console.log(results);
                 switch (results) {
 
                     case ("success delete"):

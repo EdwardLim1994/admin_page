@@ -34,6 +34,15 @@ switch ($postType) {
 		}
 		$stmt->close();
 		break;
+    
+    case ("countRow"):
+        $stmt = $mysqli->prepare("SELECT COUNT(invoice_id) FROM payment;");
+		$stmt->execute();
+		$row = $stmt->get_result()->fetch_row();
+		$rowTotal = $row[0];
+		echo json_encode($rowTotal);
+		$stmt->close();
+        break;
 
     case ("printPayment"):
         if (isset($_POST["payment_identifier"], $_POST["customer_account"] )) {

@@ -127,15 +127,17 @@ body.modal-open .fixed-bottom {
     }
 }
 
-@media (max-width: 768px) {
-    #customer-search {
-        transform: translateY(-45%);
-    }
-    .search-result-spinner {
-        transform: translateY(-163%);
-    }
-}
-
+// @media (max-width: 768px) {
+//     #customer-search {
+//         transform: translateY(-45%);
+//     }
+//     .customer-search-nothing {
+//         transform: translateY(-75%)!important;
+//     }
+//     .search-result-spinner {
+//         transform: translateY(-163%);
+//     }
+// }
 @media (min-width: 768px) {
     .textBreak {
         display: inline-block;
