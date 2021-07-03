@@ -58,10 +58,10 @@ else
     </script>
 
     <script src="./dist/js/script.prod.js"></script>
-    <!-- <script src="./dist/js/invoiceMaintenance.prod.js"></script> -->
+    <script src="./dist/js/paymentMaintenance.prod.js"></script>
     <script src="./dist/js/datatables.min.js"></script>
 
-    <script src="./paymentMaintenance.js"></script>
+    <!-- <script src="./paymentMaintenance.js"></script> -->
 
 </head>
 
@@ -386,14 +386,14 @@ else
         <!-- Central Modal Warning Demo-->
 
         <!-- Success Alert -->
-        <div class="modal fade" id="successToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="successToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-notify modal-success" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <p class="heading lead" id="successModalHeadline"></p>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true" class="white-text">&times;</span>
-                        </button>
+                        </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="text-center">

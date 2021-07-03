@@ -202,7 +202,7 @@ $(document).ready(function() {
                                 <td class="payment-${value.id}">${value.payment}</td>
                                 <td class="status-${value.id} ${status[0]} text-capitalize font-weight-bold text-center">${status[1]}</td>
                                 <td class="total_price-${value.id} pay_item text-center">
-                                    <input type="checkbox" class="select_to_pay" data-previous-outstanding="${value.outstanding}" data-previous-payment="${value.payment}" aria-label="${value.outstanding == 0 ? "paid" : "unpaid"}" ${status[2]} ${status[3]}/>
+                                    <input type="checkbox" class="select_to_pay" data-current-payment-made="0" data-previous-outstanding="${value.outstanding}" data-previous-payment="${value.payment}" aria-label="${value.outstanding == 0 ? "paid" : "unpaid"}" ${status[2]} ${status[3]}/>
                                 </td>
                             </tr>
                             `;
@@ -307,6 +307,10 @@ $(document).ready(function() {
                                     var new_total_outstanding = current_total_outstanding + payment_made;
                                     var new_total_pay = current_total_pay - payment_made;
 
+                                    $(this).attr(
+                                        "data-current-payment-made", 0
+                                    );
+
 
                                     $(`.outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
                                     $(`.payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
@@ -338,7 +342,9 @@ $(document).ready(function() {
                                     var new_total_outstanding = current_total_outstanding + payment_made;
                                     var new_total_pay = current_total_pay - payment_made;
 
-
+                                    $(this).attr(
+                                        "data-current-payment-made", 0
+                                    );
 
                                     $(`.outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
                                     $(`.payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
@@ -461,12 +467,15 @@ $(document).ready(function() {
         } else {
             $.each($(".item-row"), function(i, item) {
                 var row_id = $(`.item-row:nth-child(${i+1})`).data('id');
-                id.push(row_id);
-                invoice_id.push($(`.item-row:nth-child(${i+1})`).data('invoice_id'));
-                total_amount.push(parseFloat($(`.total_amount-${row_id}`).text()));
-                outstanding.push(parseFloat($(`.outstanding-${row_id}`).text()));
-                payment.push(parseFloat($(`.payment-${row_id}`).text()));
-                payment_status.push($(`.status-${row_id}`).text());
+                //if ($(`.select_to_pay:eq(${i})`).data("current-payment-made") > 0 && $(`.status-${row_id}`).text() === "paid") {
+                if ($(`.select_to_pay:eq(${i})`).prop("checked") == true && $(`.select_to_pay:eq(${i})`).data("current-payment-made") > 0) {
+                    id.push(row_id);
+                    invoice_id.push($(`.item-row:nth-child(${i+1})`).data('invoice_id'));
+                    total_amount.push(parseFloat($(`.total_amount-${row_id}`).text()));
+                    outstanding.push(parseFloat($(`.outstanding-${row_id}`).text()));
+                    payment.push(parseFloat($(`.payment-${row_id}`).text()));
+                    payment_status.push($(`.status-${row_id}`).text());
+                }
             })
             payment_mode = $("#payment_mode").val();
             payment_remark = $('#payment_remark').val();
@@ -490,16 +499,16 @@ $(document).ready(function() {
                     payment_salesperson: payment_salesperson
                 },
                 success: function(results) {
+                    console.log(results);
                     switch (results) {
                         case ("success pay"):
                             $("#addModal").modal("hide");
-                            successMessage("Success", "Invoice is successfully added");
+                            successMessage("Success", "Payment is successfully added");
                             $(".btnSuccess").click(function() {
                                 location.reload();
                             })
                             break;
                         case ("Some input field is not set."):
-                            $("#addModal").modal("hide");
                             failedMessage("Failed", results);
                             break;
                     }
