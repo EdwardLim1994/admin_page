@@ -44,7 +44,7 @@ switch ($postType) {
 			$recordsPerPage= 20;
 			$offsetValue = ($_POST['pageNum']-1) * $recordsPerPage;
 
-			$stmt = $mysqli->prepare("SELECT id, invoice_id, invoice_date, due_date, total_amount, outstanding FROM invoice_header WHERE in_account = ? ORDER BY id limit $recordsPerPage OFFSET $offsetValue"); 
+			$stmt = $mysqli->prepare("SELECT id, invoice_id, doc_no, creation_date, invoice_num,  invoice_date, due_date, total_amount, outstanding, payment FROM invoice_header WHERE in_account = ? ORDER BY id limit $recordsPerPage OFFSET $offsetValue"); 
 			$stmt->bind_param("s", $_POST["account_num"]);
 			$stmt->execute();
 			$result = $stmt->get_result();
@@ -73,7 +73,7 @@ switch ($postType) {
 				$countSet++;
 			}else{
 				$countSet--;
-				echo $variable_name. "not set<br>";
+				//echo $variable_name. "not set<br>";
 			}
 		}
 
@@ -174,7 +174,6 @@ switch ($postType) {
 
 	case ("viewInvoiceHeader"):
 		if (isset($_POST["selected_id"])) {
-	
 			$stmt = $mysqli->prepare("SELECT invoice_id, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount FROM invoice_header where id = ?"); 
 			$stmt->bind_param("i", $_POST["selected_id"]);
 			$stmt->execute();
@@ -191,7 +190,6 @@ switch ($postType) {
 			}
 				$stmt->close();
 			}
-	
 		break;
 		
 	case ("viewInvoiceDetail"):
@@ -204,7 +202,7 @@ switch ($postType) {
 			if (mysqli_num_rows($result) > 0) {
 			while ($row = mysqli_fetch_assoc($result)) {
 				$jsonArray[] = $row;
-			};;
+			};
 			echo json_encode($jsonArray);
 			   
 			} else {
