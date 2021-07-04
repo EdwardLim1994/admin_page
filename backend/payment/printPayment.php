@@ -17,7 +17,7 @@ switch ($postType) {
 	 	$recordsPerPage= 20;
 	 	$offsetValue = ($_POST['pageNum']-1) * $recordsPerPage;
 
-		$stmt = $mysqli->prepare("SELECT payment_identifier, customer_account, payment_date, invoice_id FROM payment ORDER BY payment_id desc limit $recordsPerPage OFFSET $offsetValue"); 
+		$stmt = $mysqli->prepare("SELECT payment_identifier, invoice_id, payment_date, payment_mode, payment_remark, payment_salesperson, customer_account FROM payment ORDER BY payment_id desc limit $recordsPerPage OFFSET $offsetValue"); 
 
 		$stmt->execute();
 		$result = $stmt->get_result();
@@ -66,6 +66,7 @@ switch ($postType) {
                     $jsonArrayPayment[] = $row;
                 };
                 $jsonArrayPayment[] = $customer_name;
+				$jsonArrayPayment[] = $_POST["payment_identifier"];
                 echo json_encode($jsonArrayPayment);
             } else {
                 echo "No Result";

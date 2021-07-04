@@ -17,7 +17,9 @@
 
     <form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo">
         <label> customer information</label>
-        <input type="text" placeholder="account_num" id="account_num"><br><br><br>
+        <input type="text" placeholder="account_num" id="account_num">
+        <input type="button" value="view payment History (this customer)" id="historyBtn"></input>
+        <br><br><br>
 
         <label><b>invoice header detail: (for do payment) - no array in this field</b></label>
         <input type="text" placeholder="payment_mode" id="payment_mode">
@@ -49,6 +51,21 @@
         <input type="button" value="view invoice outstanding" id="viewInvoiceOutstanding"></input>
         <input type="button" value="view all invoice" id="viewInvoiceAll"></input><br><br><br><br>
         
+        <label><b> DELETE SECTION</label><br>
+        <label><b> first invoice to delete</label><br>
+        <input type="text" placeholder="invoice_id[]" id="invoice_id_del[]" name="invoice_id_del[]">
+        <input type="number" placeholder="payment_amount[]" id="payment_amount_del[]" name="payment_amount_del[]">
+        <input type="text" placeholder="payment_identifier[]" id="payment_identifier_del[]" name="payment_identifier_del[]"><br><br>
+
+        <label><b> second invoice to delete</label><br>
+        <input type="text" placeholder="invoice_id[]" id="invoice_id_del[]" name="invoice_id_del[]">
+        <input type="number" placeholder="payment_amount[]" id="payment_amount_del[]" name="payment_amount_del[]">
+        <input type="text" placeholder="payment_identifier[]" id="payment_identifier_del[]" name="payment_identifier_del[]"><br><br><br>
+
+        <input type="button" value="Delete Payment" id="deleteBtn"></input>
+
+        <br><br><br>
+
         <label><b> for view individual payment record</label><br>
         <input type="number" placeholder="selected_id (for view document header)" id="selected_id_doc">
         <input type="button" value="view document (id in invoice_header table)" id="viewDocumentBtn"></input>
@@ -159,6 +176,29 @@
 
 
             //}     
+            console.log(data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    });
+
+    $('#historyBtn').on('click', function() {
+
+    var fd = new FormData();
+    fd.append('postType', 'paymentHistory');
+    fd.append('customer_account', $('#account_num').val());
+
+    $.ajax({
+        url: 'payment.php',
+        type: 'POST',
+        data: fd,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(data) {
+
             console.log(data);
         },
         cache: false,
@@ -331,6 +371,40 @@
             contentType: false,
             processData: false
         });
+    });
+
+    $('#deleteBtn').on('click', function() {
+
+    var fd = new FormData();
+
+    a_invoice_id_del = document.getElementsByName("invoice_id_del[]");
+    for (let invoice_id_del of a_invoice_id_del) {
+        fd.append('invoice_id[]', invoice_id_del.value);
+    }
+    a_payment_amount_del = document.getElementsByName("payment_amount_del[]");
+    for (let payment_amount_del of a_payment_amount_del) {
+        fd.append('payment_amount[]', payment_amount_del.value);
+    }
+    a_payment_identifier_del = document.getElementsByName("payment_identifier_del[]");
+    for (let payment_identifier_del of a_payment_identifier_del) {
+        fd.append('payment_identifier[]', payment_identifier_del.value);
+    }
+    
+    fd.append('postType', 'deletePayment');
+
+    $.ajax({
+        url: 'payment.php',
+        type: 'POST',
+        data: fd,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(data) {
+            //$('#output').html(data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
     });
 
 </script>
