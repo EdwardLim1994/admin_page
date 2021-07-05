@@ -22,7 +22,7 @@ switch ($postType) {
 		$recordsPerPage= 20;
 		$offsetValue = ($_POST['pageNum']-1) * $recordsPerPage;
 
-        $stmt = $mysqli->prepare("SELECT payment_identifier, payment_id, invoice_id, payment_date, payment_mode, invoice_amount, payment_amount, payment_remark, payment_salesperson, payment_status FROM payment WHERE customer_account = ?  ORDER BY payment_id desc limit $recordsPerPage OFFSET $offsetValue"); 
+        $stmt = $mysqli->prepare("SELECT customer_id, payment_identifier, payment_id, invoice_id, payment_date, payment_mode, invoice_amount, payment_amount, payment_remark, payment_salesperson, payment_status FROM payment WHERE customer_account = ?  ORDER BY payment_id desc limit $recordsPerPage OFFSET $offsetValue"); 
 			$stmt->bind_param("s", $_POST["customer_account"]);
 			$stmt->execute();
 			$result = $stmt->get_result();
@@ -44,7 +44,7 @@ switch ($postType) {
 	case ("updatePayment"):
 		// check isset for all post variable
 		$countSet = 0;
-		$postVariable = array('id', 'invoice_id', 'customer_account', 'payment_mode', 'payment_date', 'payment_remark', 'payment_salesperson', 'total_amount', 'outstanding', 'payment', 'payment_status', 'payment_identifier');
+		$postVariable = array('id', 'customer_id', 'invoice_id', 'customer_account', 'payment_mode', 'payment_date', 'payment_remark', 'payment_salesperson', 'total_amount', 'outstanding', 'payment', 'payment_status', 'payment_identifier');
 
 		foreach ($postVariable as $variable_name) {
 			if(isset($_POST[$variable_name])){
@@ -67,6 +67,7 @@ switch ($postType) {
 			$payment = $_POST['payment'];
 			$payment_status = $_POST['payment_status'];
 
+			$customer_id = $_POST['customer_id'];
 			$customer_account = $_POST['customer_account'];
 			$payment_identifier_old = $_POST['payment_identifier'];
 			$payment_date = $_POST['payment_date'];
@@ -174,9 +175,9 @@ switch ($postType) {
 				$stmt->fetch();
 				$stmt->close();
 
-				//query insert data into payment table - 13 field
-				$stmt = $mysqli->prepare("INSERT INTO payment (invoice_id, payment_date, payment_mode, invoice_amount, payment_amount, payment_remark, payment_salesperson, payment_status, payment_identifier, customer_account, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?)");
-				$stmt->bind_param("sssddssssssss", $invoice_id[$x], $payment_date, $payment_mode, $total_amount[$x], $payment[$x], $payment_remark, $payment_salesperson, $payment_status[$x], $payment_identifier[0], $customer_account, $creation_date, $creation_time, $creation_user);
+				//query insert data into payment table - 14 field
+				$stmt = $mysqli->prepare("INSERT INTO payment (customer_id, invoice_id, payment_date, payment_mode, invoice_amount, payment_amount, payment_remark, payment_salesperson, payment_status, payment_identifier, customer_account, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?)");
+				$stmt->bind_param("isssddssssssss", $customer_id, $invoice_id[$x], $payment_date, $payment_mode, $total_amount[$x], $payment[$x], $payment_remark, $payment_salesperson, $payment_status[$x], $payment_identifier[0], $customer_account, $creation_date, $creation_time, $creation_user);
 				$stmt->execute();
 				$stmt->close();
 
@@ -324,7 +325,7 @@ switch ($postType) {
 
 		// check isset for all post variable
 		$countSet = 0;
-		$postVariable = array('id', 'invoice_id', 'payment_mode', 'payment_date', 'payment_remark', 'payment_salesperson', 'total_amount', 'outstanding', 'payment', 'payment_status');
+		$postVariable = array('id','customer_id', 'invoice_id', 'payment_mode', 'payment_date', 'payment_remark', 'payment_salesperson', 'total_amount', 'outstanding', 'payment', 'payment_status');
 
 		foreach ($postVariable as $variable_name) {
 			if(isset($_POST[$variable_name])){
@@ -347,6 +348,7 @@ switch ($postType) {
 			$payment = $_POST['payment'];
 			$payment_status = $_POST['payment_status'];
 
+			$customer_id = $_POST['customer_id'];
 			$payment_date = $_POST['payment_date'];
 			$payment_remark = $_POST['payment_remark'];
 			$payment_salesperson = $_POST['payment_salesperson'];
@@ -385,9 +387,9 @@ switch ($postType) {
 				$stmt->fetch();
 				$stmt->close();
 
-				//query insert data into payment table - 13 field
-				$stmt = $mysqli->prepare("INSERT INTO payment (invoice_id, payment_date, payment_mode, invoice_amount, payment_amount, payment_remark, payment_salesperson, payment_status, payment_identifier, customer_account, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?)");
-				$stmt->bind_param("sssddssssssss", $invoice_id[$i], $payment_date, $payment_mode, $total_amount[$i], $payment[$i], $payment_remark, $payment_salesperson, $payment_status[$i], $payment_identifier[0], $header_in_account, $creation_date, $creation_time, $creation_user);
+				//query insert data into payment table - 14 field
+				$stmt = $mysqli->prepare("INSERT INTO payment (customer_id, invoice_id, payment_date, payment_mode, invoice_amount, payment_amount, payment_remark, payment_salesperson, payment_status, payment_identifier, customer_account, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?)");
+				$stmt->bind_param("isssddssssssss", $customer_id, $invoice_id[$i], $payment_date, $payment_mode, $total_amount[$i], $payment[$i], $payment_remark, $payment_salesperson, $payment_status[$i], $payment_identifier[0], $header_in_account, $creation_date, $creation_time, $creation_user);
 				$stmt->execute();
 				$stmt->close();
 
