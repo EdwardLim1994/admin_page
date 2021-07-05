@@ -17,6 +17,7 @@
 
     <form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo">
         <label> customer information</label>
+        <input type="number" placeholder="customer_id" id="customer_id">
         <input type="text" placeholder="account_num" id="account_num">
         <input type="button" value="view payment History (this customer)" id="historyBtn"></input>
         <br><br><br>
@@ -326,6 +327,7 @@
     $('#payBtn').on('click', function() {
 
         var fd = new FormData();
+        fd.append('customer_id', $('#customer_id').val());
         fd.append('payment_date', $('#payment_date').val());
         fd.append('payment_mode', $('#payment_mode').val());
         fd.append('payment_remark', $('#payment_remark').val());

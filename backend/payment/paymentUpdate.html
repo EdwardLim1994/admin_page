@@ -20,6 +20,7 @@
         <input type="text" placeholder="payment_identifier" id="payment_identifier">
 
         <label> customer information</label>
+        <input type="number" placeholder="customer_id" id="customer_id">
         <input type="text" placeholder="account_num" id="account_num">
         <br><br><br>
 
@@ -107,6 +108,7 @@
     $('#updateBtn').on('click', function() {
 
         var fd = new FormData();
+        fd.append('customer_id', $('#customer_id').val());
         fd.append('customer_account', $('#account_num').val());
         fd.append('payment_date', $('#payment_date').val());
         fd.append('payment_mode', $('#payment_mode').val());
