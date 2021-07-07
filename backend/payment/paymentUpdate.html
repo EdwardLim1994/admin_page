@@ -20,15 +20,17 @@
         <input type="text" placeholder="payment_identifier" id="payment_identifier">
 
         <label> customer information</label>
-        <input type="number" placeholder="customer_id" id="customer_id">
-        <input type="text" placeholder="account_num" id="account_num">
+        <input type="text" placeholder="customer_account" id="customer_account">
+        <input type="text" placeholder="customer_name" id="customer_name">
         <br><br><br>
 
         <label><b>invoice header detail: (for do payment) - no array in this field</b></label>
         <input type="text" placeholder="payment_mode" id="payment_mode">
         <input type="date" placeholder="payment_date" id="payment_date">
         <input type="text" placeholder="payment_remark" id="payment_remark">
-        <input type="text" placeholder="payment_salesperson" id="payment_salesperson"><br><br><br><br>
+        <input type="text" placeholder="payment_salesperson" id="payment_salesperson">
+        <input type="number" placeholder="total_payment_amount" id="total_payment_amount">
+        <input type="text" placeholder="payment_id" id="payment_id"><br><br><br><br>
 
         <label><b>first invoice</b></label>
         <input type="number" placeholder="id[]" id="id[]" name="id[]">
@@ -108,13 +110,15 @@
     $('#updateBtn').on('click', function() {
 
         var fd = new FormData();
-        fd.append('customer_id', $('#customer_id').val());
-        fd.append('customer_account', $('#account_num').val());
+        fd.append('customer_account', $('#customer_account').val());
+        fd.append('customer_name', $('#customer_name').val());
         fd.append('payment_date', $('#payment_date').val());
         fd.append('payment_mode', $('#payment_mode').val());
         fd.append('payment_remark', $('#payment_remark').val());
         fd.append('payment_salesperson', $('#payment_salesperson').val());
         fd.append('payment_identifier', $('#payment_identifier').val());
+        fd.append('total_payment_amount', $('#total_payment_amount').val());
+        fd.append('payment_id', $('#payment_id').val());
 
         a_id = document.getElementsByName("id[]");
         for (let id of a_id) {

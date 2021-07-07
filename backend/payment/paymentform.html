@@ -17,8 +17,9 @@
 
     <form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo">
         <label> customer information</label>
-        <input type="number" placeholder="customer_id" id="customer_id">
-        <input type="text" placeholder="account_num" id="account_num">
+        <!--<input type="number" placeholder="customer_id" id="customer_id">-->
+        <input type="text" placeholder="customer_account" id="customer_account">
+        <input type="text" placeholder="customer_name" id="customer_name">
         <input type="button" value="view payment History (this customer)" id="historyBtn"></input>
         <br><br><br>
 
@@ -26,15 +27,16 @@
         <input type="text" placeholder="payment_mode" id="payment_mode">
         <input type="date" placeholder="payment_date" id="payment_date">
         <input type="text" placeholder="payment_remark" id="payment_remark">
-        <input type="text" placeholder="payment_salesperson" id="payment_salesperson"><br><br><br><br>
+        <input type="text" placeholder="payment_salesperson" id="payment_salesperson">
+        <input type="number" placeholder="total_payment_amount" id="total_payment_amount"><br><br><br><br>
 
-        <label><b>first invoice</b></label>
+        <!--<label><b>first invoice</b></label>
         <input type="number" placeholder="id[]" id="id[]" name="id[]">
         <input type="text" placeholder="invoice_id[]" id="invoice_id[]" name="invoice_id[]">
         <input type="number" placeholder="total_amount[]" id="total_amount[]" name="total_amount[]">
         <input type="number" placeholder="outstanding[]" id="outstanding[]" name="outstanding[]">
         <input type="number" placeholder="payment[]" id="payment[]" name="payment[]">
-        <input type="text" placeholder="payment_status[]" id="payment_status[]" name="payment_status[]">
+        <input type="text" placeholder="payment_status[]" id="payment_status[]" name="payment_status[]">-->
 
         <br><br><br>
 
@@ -53,15 +55,8 @@
         <input type="button" value="view all invoice" id="viewInvoiceAll"></input><br><br><br><br>
         
         <label><b> DELETE SECTION</label><br>
-        <label><b> first invoice to delete</label><br>
-        <input type="text" placeholder="invoice_id[]" id="invoice_id_del[]" name="invoice_id_del[]">
-        <input type="number" placeholder="payment_amount[]" id="payment_amount_del[]" name="payment_amount_del[]">
-        <input type="text" placeholder="payment_identifier[]" id="payment_identifier_del[]" name="payment_identifier_del[]"><br><br>
-
-        <label><b> second invoice to delete</label><br>
-        <input type="text" placeholder="invoice_id[]" id="invoice_id_del[]" name="invoice_id_del[]">
-        <input type="number" placeholder="payment_amount[]" id="payment_amount_del[]" name="payment_amount_del[]">
-        <input type="text" placeholder="payment_identifier[]" id="payment_identifier_del[]" name="payment_identifier_del[]"><br><br><br>
+        <input type="number" placeholder="payment_id" id="payment_id_del" name="payment_id_del">
+        <input type="text" placeholder="payment_identifier" id="payment_identifier_del" name="payment_identifier_del"><br><br>
 
         <input type="button" value="Delete Payment" id="deleteBtn"></input>
 
@@ -72,13 +67,12 @@
         <input type="button" value="view document (id in invoice_header table)" id="viewDocumentBtn"></input>
         <input type="text" placeholder="selected_id (for document detail)" id="selected_id_doc_detail">
         <input type="button" value="view document detail (invoice_id)" id="viewDocumentDetailBtn"></input>
-        <input type="text" placeholder="selected_id (for view payment)" id="selected_id_pay">
-        <input type="button" value="view payment (invoice_id)" id="viewPaymentBtn"></input><br><br><br><br>
+        <br><br><br><br>
         
         <label><b> for view all payment record and select</label><br>
-        <input type="button" value="view payment list" id="viewPaymentList">
+        <input type="button" value="view payment header list" id="viewPaymentList">
         <input type="text" placeholder="payment_identifier" id="payment_identifier">
-        <input type="text" placeholder="customer_account" id="customer_account">
+        <input type="button" value="view payment detail based on payment identifier" id="viewPaymentDetail">
         <input type="button" value="print selected payment" id="printPayment">
 
         <div id="output"></div>
@@ -136,7 +130,7 @@
 
     var fd = new FormData();
     fd.append('postType', 'viewInvoiceOutstanding');
-    fd.append('account_num', $('#account_num').val());
+    fd.append('customer_account', $('#customer_account').val());
 
     $.ajax({
         url: 'payment.php', 
@@ -163,7 +157,7 @@
 
     var fd = new FormData();
     fd.append('postType', 'viewInvoiceAll');
-    fd.append('account_num', $('#account_num').val());
+    fd.append('customer_account', $('#customer_account').val());
 
     $.ajax({
         url: 'payment.php',
@@ -190,7 +184,7 @@
 
     var fd = new FormData();
     fd.append('postType', 'paymentHistory');
-    fd.append('customer_account', $('#account_num').val());
+    fd.append('customer_account', $('#customer_account').val());
 
     $.ajax({
         url: 'payment.php',
@@ -255,11 +249,10 @@
 
     });
 
-    $('#viewPaymentBtn').on('click', function() {
+    $('#viewPaymentList').on('click', function() {
 
     var fd = new FormData();
-    fd.append('postType', 'viewPayment');
-    fd.append('selected_id_pay', $('#selected_id_pay').val());
+    fd.append('postType', 'viewPaymentHeader');
 
     $.ajax({
         url: 'payment.php',
@@ -278,13 +271,14 @@
 
     });
 
-    $('#viewPaymentList').on('click', function() {
+    $('#viewPaymentDetail').on('click', function() {
 
     var fd = new FormData();
-    fd.append('postType', 'paymentList');
+    fd.append('postType', 'viewPaymentDetail');
+    fd.append('payment_identifier', $('#payment_identifier').val());
 
     $.ajax({
-        url: 'printPayment.php',
+        url: 'payment.php',
         type: 'POST',
         data: fd,
         dataType: 'json',
@@ -305,7 +299,6 @@
     var fd = new FormData();
     fd.append('postType', 'printPayment');
     fd.append('payment_identifier', $('#payment_identifier').val());
-    fd.append('customer_account', $('#customer_account').val());
 
     $.ajax({
         url: 'printPayment.php',
@@ -327,11 +320,14 @@
     $('#payBtn').on('click', function() {
 
         var fd = new FormData();
-        fd.append('customer_id', $('#customer_id').val());
+        //fd.append('customer_id', $('#customer_id').val());
+        fd.append('customer_account', $('#customer_account').val());
+        fd.append('customer_name', $('#customer_name').val());
         fd.append('payment_date', $('#payment_date').val());
         fd.append('payment_mode', $('#payment_mode').val());
         fd.append('payment_remark', $('#payment_remark').val());
         fd.append('payment_salesperson', $('#payment_salesperson').val());
+        fd.append('total_payment_amount', $('#total_payment_amount').val());
 
         a_id = document.getElementsByName("id[]");
         for (let id of a_id) {
@@ -379,18 +375,9 @@
 
     var fd = new FormData();
 
-    a_invoice_id_del = document.getElementsByName("invoice_id_del[]");
-    for (let invoice_id_del of a_invoice_id_del) {
-        fd.append('invoice_id[]', invoice_id_del.value);
-    }
-    a_payment_amount_del = document.getElementsByName("payment_amount_del[]");
-    for (let payment_amount_del of a_payment_amount_del) {
-        fd.append('payment_amount[]', payment_amount_del.value);
-    }
-    a_payment_identifier_del = document.getElementsByName("payment_identifier_del[]");
-    for (let payment_identifier_del of a_payment_identifier_del) {
-        fd.append('payment_identifier[]', payment_identifier_del.value);
-    }
+    var fd = new FormData();
+    fd.append('payment_id', $('#payment_id_del').val());
+    fd.append('payment_identifier', $('#payment_identifier_del').val());
     
     fd.append('postType', 'deletePayment');
 
