@@ -740,17 +740,16 @@ $(document).ready(function() {
             type: "POST",
             url: "./backend/payment/payment.php",
             data: {
-                postType: "viewInvoiceAll",
-                customer_account: customer_account,
-                pageNum: 1
+                postType: "viewPaymentUpdate",
+                payment_identifier: payment_identifier
             },
             success: function(results) {
-
+                console.log(results);
                 var invoice_results;
                 var total_outstanding = 0.00;
                 if (results != "") {
                     $.each(JSON.parse(results), function(i, value) {
-                        var status = value.outstanding == 0 ? ["text-success", "paid", "disabled='disabled'", "checked"] : ["text-danger", "unpaid", "", ""];
+                        //var status = value.outstanding == 0 ? ["text-success", "paid", "disabled='disabled'", "checked"] : ["text-danger", "unpaid", "", ""];
                         total_outstanding += parseFloat(value.outstanding);
                         invoice_results += `
                         <tr class="update-item-row" data-id="${value.id}" data-invoice_id=${value.invoice_id}>
@@ -766,8 +765,7 @@ $(document).ready(function() {
                             <td class="update-due_date-${value.id}">${value.due_date}</td>
                             <td class="update-total_amount-${value.id}">${value.total_amount}</td>
                             <td class="update-outstanding-${value.id}">${value.outstanding}</td>
-                            <td class="update-payment-${value.id}"><input class="form-control" type="number" /></td>
-                            <td class="update-status-${value.id} ${status[0]} text-capitalize font-weight-bold text-center">${status[1]}</td>
+                            <td class="update-payment-${value.id}"><input class="form-control update-payment-amount-${value.id}" type="number" min="0" step="0.01"/></td>
                             <td class="update-total_price-${value.id} pay_item text-center">
                                 <input type="checkbox" class="update-select_to_pay" data-current-payment-made="0" data-previous-outstanding="${value.outstanding}" data-previous-payment="${value.payment}" aria-label="${value.outstanding == 0 ? "paid" : "unpaid"}" ${status[2]} ${status[3]}/>
                             </td>
@@ -853,120 +851,120 @@ $(document).ready(function() {
                     });
                 })
 
-                $(".update-select_to_pay").click(function() {
+                // $(".update-select_to_pay").click(function() {
 
-                    var row_item_id = $(this).parent().parent().data("id");
-                    if (parseFloat($("#update-total_payment").val()) > 0) {
-                        if (parseFloat($("#update-unapply_amount").val()) > 0) {
-                            if ($(this).prop('checked') == true) {
-                                var current_unapply_amount = parseFloat($("#update-unapply_amount").val());
-                                var current_total_outstanding = parseFloat($("#update-total_outstanding").val());
-                                var current_total_pay = parseFloat($("#update-total_pay").val());
+                //     var row_item_id = $(this).parent().parent().data("id");
+                //     if (parseFloat($("#update-total_payment").val()) > 0) {
+                //         if (parseFloat($("#update-unapply_amount").val()) > 0) {
+                //             if ($(this).prop('checked') == true) {
+                //                 var current_unapply_amount = parseFloat($("#update-unapply_amount").val());
+                //                 var current_total_outstanding = parseFloat($("#update-total_outstanding").val());
+                //                 var current_total_pay = parseFloat($("#update-total_pay").val());
 
-                                var current_outstanding = parseFloat($(`.update-outstanding-${row_item_id}`).text());
-                                var current_payment = parseFloat($(`.update-payment-${row_item_id}`).text());
+                //                 var current_outstanding = parseFloat($(`.update-outstanding-${row_item_id}`).text());
+                //                 var current_payment = parseFloat($(`.update-payment-${row_item_id}`).text());
 
-                                var new_outstanding = current_unapply_amount < current_outstanding ? current_outstanding - current_unapply_amount : current_outstanding - current_outstanding;
-                                var new_payment = current_unapply_amount < current_outstanding ? current_payment + current_unapply_amount : current_payment + current_outstanding;
+                //                 var new_outstanding = current_unapply_amount < current_outstanding ? current_outstanding - current_unapply_amount : current_outstanding - current_outstanding;
+                //                 var new_payment = current_unapply_amount < current_outstanding ? current_payment + current_unapply_amount : current_payment + current_outstanding;
 
-                                var new_unapply_amount = current_unapply_amount < current_outstanding ? current_unapply_amount - current_unapply_amount : current_unapply_amount - current_outstanding;
-                                var new_total_outstanding = current_unapply_amount < current_outstanding ? current_total_outstanding - current_unapply_amount : current_total_outstanding - current_outstanding;
-                                var new_total_pay = current_unapply_amount < current_outstanding ? current_total_pay + current_unapply_amount : current_total_pay + current_outstanding;
+                //                 var new_unapply_amount = current_unapply_amount < current_outstanding ? current_unapply_amount - current_unapply_amount : current_unapply_amount - current_outstanding;
+                //                 var new_total_outstanding = current_unapply_amount < current_outstanding ? current_total_outstanding - current_unapply_amount : current_total_outstanding - current_outstanding;
+                //                 var new_total_pay = current_unapply_amount < current_outstanding ? current_total_pay + current_unapply_amount : current_total_pay + current_outstanding;
 
-                                var payment_made = current_unapply_amount < current_outstanding ? current_unapply_amount : current_outstanding;
+                //                 var payment_made = current_unapply_amount < current_outstanding ? current_unapply_amount : current_outstanding;
 
-                                $(this).attr(
-                                    "data-current-payment-made", payment_made
-                                );
+                //                 $(this).attr(
+                //                     "data-current-payment-made", payment_made
+                //                 );
 
-                                $(`.update-outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
-                                $(`.update-payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
+                //                 $(`.update-outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
+                //                 $(`.update-payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
 
-                                $("#update-total_pay").val(new_total_pay.toFixed(2))
-                                $("#update-unapply_amount").val(new_unapply_amount.toFixed(2))
-                                $("#update-total_outstanding").val(new_total_outstanding.toFixed(2))
-
-
-                            } else {
-
-                                var current_unapply_amount = parseFloat($("#update-unapply_amount").val());
-                                var current_total_outstanding = parseFloat($("#update-total_outstanding").val());
-                                var current_total_pay = parseFloat($("#update-total_pay").val());
-
-                                var current_outstanding = parseFloat($(`.update-outstanding-${row_item_id}`).text());
-                                var current_payment = parseFloat($(`.update-payment-${row_item_id}`).text());
-                                var payment_made = parseFloat($(this).data("current-payment-made"));
-
-                                var new_outstanding = current_outstanding + payment_made;
-                                var new_payment = current_payment - payment_made;
-
-                                var new_unapply_amount = current_unapply_amount + payment_made;
-                                var new_total_outstanding = current_total_outstanding + payment_made;
-                                var new_total_pay = current_total_pay - payment_made;
-
-                                $(this).attr(
-                                    "data-current-payment-made", 0
-                                );
+                //                 $("#update-total_pay").val(new_total_pay.toFixed(2))
+                //                 $("#update-unapply_amount").val(new_unapply_amount.toFixed(2))
+                //                 $("#update-total_outstanding").val(new_total_outstanding.toFixed(2))
 
 
-                                $(`.update-outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
-                                $(`.update-payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
+                //             } else {
 
-                                $("#update-total_pay").val(new_total_pay.toFixed(2))
-                                $("#update-unapply_amount").val(new_unapply_amount.toFixed(2))
-                                $("#update-total_outstanding").val(new_total_outstanding.toFixed(2))
+                //                 var current_unapply_amount = parseFloat($("#update-unapply_amount").val());
+                //                 var current_total_outstanding = parseFloat($("#update-total_outstanding").val());
+                //                 var current_total_pay = parseFloat($("#update-total_pay").val());
 
-                            }
-                        } else {
-                            if ($(this).prop('checked') == true) {
-                                failedMessage("Failed", "Unapply amount currently is 0. Please add some credit in total payment to pay");
-                                return false;
-                            } else {
+                //                 var current_outstanding = parseFloat($(`.update-outstanding-${row_item_id}`).text());
+                //                 var current_payment = parseFloat($(`.update-payment-${row_item_id}`).text());
+                //                 var payment_made = parseFloat($(this).data("current-payment-made"));
 
-                                var current_unapply_amount = parseFloat($("#update-unapply_amount").val());
-                                var current_total_outstanding = parseFloat($("#update-total_outstanding").val());
-                                var current_total_pay = parseFloat($("#update-total_pay").val());
+                //                 var new_outstanding = current_outstanding + payment_made;
+                //                 var new_payment = current_payment - payment_made;
 
-                                var current_outstanding = parseFloat($(`.update-outstanding-${row_item_id}`).text());
-                                var current_payment = parseFloat($(`.update-payment-${row_item_id}`).text());
-                                var payment_made = parseFloat($(this).data("current-payment-made"));
+                //                 var new_unapply_amount = current_unapply_amount + payment_made;
+                //                 var new_total_outstanding = current_total_outstanding + payment_made;
+                //                 var new_total_pay = current_total_pay - payment_made;
 
-                                var new_outstanding = current_outstanding + payment_made;
-                                var new_payment = current_payment - payment_made;
+                //                 $(this).attr(
+                //                     "data-current-payment-made", 0
+                //                 );
 
-                                var new_unapply_amount = current_unapply_amount + payment_made;
-                                var new_total_outstanding = current_total_outstanding + payment_made;
-                                var new_total_pay = current_total_pay - payment_made;
 
-                                $(this).attr(
-                                    "data-current-payment-made", 0
-                                );
+                //                 $(`.update-outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
+                //                 $(`.update-payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
 
-                                $(`.update-outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
-                                $(`.update-payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
+                //                 $("#update-total_pay").val(new_total_pay.toFixed(2))
+                //                 $("#update-unapply_amount").val(new_unapply_amount.toFixed(2))
+                //                 $("#update-total_outstanding").val(new_total_outstanding.toFixed(2))
 
-                                $("#update-total_pay").val(new_total_pay.toFixed(2))
-                                $("#update-unapply_amount").val(new_unapply_amount.toFixed(2))
-                                $("#update-total_outstanding").val(new_total_outstanding.toFixed(2))
+                //             }
+                //         } else {
+                //             if ($(this).prop('checked') == true) {
+                //                 failedMessage("Failed", "Unapply amount currently is 0. Please add some credit in total payment to pay");
+                //                 return false;
+                //             } else {
 
-                            }
-                        }
-                    } else {
-                        failedMessage("Failed", "Total Payment currently is 0. Please add some credit in total payment to pay");
-                        return false;
-                    }
-                    if (parseFloat($(`.update-outstanding-${row_item_id}`).text()) > 0) {
-                        $(`.update-status-${row_item_id}`).removeClass("text-success").addClass("text-danger").empty().text("unpaid");
-                    } else {
-                        $(`.update-status-${row_item_id}`).removeClass("text-danger").addClass("text-success").empty().text("paid");
-                    }
+                //                 var current_unapply_amount = parseFloat($("#update-unapply_amount").val());
+                //                 var current_total_outstanding = parseFloat($("#update-total_outstanding").val());
+                //                 var current_total_pay = parseFloat($("#update-total_pay").val());
 
-                    if (parseFloat($("#update-total_pay").val()) == 0) {
-                        $("#updatePaymentSubmitBtn").prop("disabled", true);
-                    } else {
-                        $("#updatePaymentSubmitBtn").prop("disabled", false);
-                    }
-                });
+                //                 var current_outstanding = parseFloat($(`.update-outstanding-${row_item_id}`).text());
+                //                 var current_payment = parseFloat($(`.update-payment-${row_item_id}`).text());
+                //                 var payment_made = parseFloat($(this).data("current-payment-made"));
+
+                //                 var new_outstanding = current_outstanding + payment_made;
+                //                 var new_payment = current_payment - payment_made;
+
+                //                 var new_unapply_amount = current_unapply_amount + payment_made;
+                //                 var new_total_outstanding = current_total_outstanding + payment_made;
+                //                 var new_total_pay = current_total_pay - payment_made;
+
+                //                 $(this).attr(
+                //                     "data-current-payment-made", 0
+                //                 );
+
+                //                 $(`.update-outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
+                //                 $(`.update-payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
+
+                //                 $("#update-total_pay").val(new_total_pay.toFixed(2))
+                //                 $("#update-unapply_amount").val(new_unapply_amount.toFixed(2))
+                //                 $("#update-total_outstanding").val(new_total_outstanding.toFixed(2))
+
+                //             }
+                //         }
+                //     } else {
+                //         failedMessage("Failed", "Total Payment currently is 0. Please add some credit in total payment to pay");
+                //         return false;
+                //     }
+                //     if (parseFloat($(`.update-outstanding-${row_item_id}`).text()) > 0) {
+                //         $(`.update-status-${row_item_id}`).removeClass("text-success").addClass("text-danger").empty().text("unpaid");
+                //     } else {
+                //         $(`.update-status-${row_item_id}`).removeClass("text-danger").addClass("text-success").empty().text("paid");
+                //     }
+
+                //     if (parseFloat($("#update-total_pay").val()) == 0) {
+                //         $("#updatePaymentSubmitBtn").prop("disabled", true);
+                //     } else {
+                //         $("#updatePaymentSubmitBtn").prop("disabled", false);
+                //     }
+                // });
 
 
                 $("#update-total_payment").on("focusout", function() {
