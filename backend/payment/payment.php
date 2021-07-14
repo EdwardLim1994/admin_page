@@ -8,10 +8,51 @@ error_reporting(-1);
 $postType = $_POST["postType"];
 //var_dump($_POST);
 
-// SQL for view all items data //
-
 switch ($postType) {
 
+	//show invoice data when update payment
+	case("viewPaymentUpdate"):
+		if (isset($_POST["payment_identifier"])) {
+			$countDetailArray = 0;
+			$payment_identifier = $_POST['payment_identifier'];
+
+			//fetch payment detail data from payment detail table
+			$stmt = $mysqli->prepare("SELECT invoice_id, amount_pay FROM payment_detail WHERE payment_identifier = ? ORDER BY invoice_id asc");
+			$stmt->bind_param("s", $payment_identifier);
+			$stmt->execute();
+			$stmt->store_result();
+			if ($stmt->num_rows > 0) {
+				$stmt->bind_result( $invoice_id, $amount_pay);
+				while ($stmt->fetch()) {
+					$detailArray[] = ['invoice_id' => $invoice_id, 'amount_pay' => $amount_pay];
+				}
+				$countDetailArray = count($detailArray);
+				$stmt->close();
+
+			} else {
+				echo "payment detail not found";
+			}	
+
+			for($y = 0; $y < $countDetailArray; $y++){
+				$stmt = $mysqli->prepare("SELECT id, invoice_id, doc_no, creation_date, invoice_num,  invoice_date, due_date, total_amount, outstanding FROM invoice_header WHERE invoice_id = ? ORDER BY invoice_id asc"); 
+				$stmt->bind_param("s", $detailArray[$y]["invoice_id"]);
+				$stmt->execute();
+				$result = $stmt->get_result();
+				if ($result->num_rows > 0) {
+					while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
+						$jsonArray[] = $row;
+					}
+				} else {
+					echo "No result";
+				}
+				$stmt->close();
+			
+			}
+			echo json_encode(array($jsonArray, $detailArray));
+			//echo json_encode($detailArray);
+		}
+		break;
+	
 	//show payment header list for all customer
 	case("viewPaymentHeader"):
 
@@ -38,7 +79,7 @@ switch ($postType) {
 			
 		if (isset($_POST["payment_identifier"])) {
 			
-			$stmt = $mysqli->prepare("SELECT payment_detail_id, invoice_id, amount_pay, payment_status FROM payment_detail WHERE payment_identifier = ? ORDER BY payment_detail_id asc"); 
+			$stmt = $mysqli->prepare("SELECT payment_detail_id, invoice_id, amount_pay FROM payment_detail WHERE payment_identifier = ? ORDER BY payment_detail_id asc"); 
 			$stmt->bind_param("s", $_POST["payment_identifier"]);
 			$stmt->execute();
 			$result = $stmt->get_result();
@@ -64,13 +105,27 @@ switch ($postType) {
 		$stmt->close();
         break;
 
+	//Count total row of selected customer when view payment history by customer
+	case ("countRowSelectedCustomer"):
+
+		if (isset($_POST["customer_account"])) {
+			$customer_name = $_POST['customer_account'];
+			$stmt = $mysqli->prepare("SELECT COUNT(payment_id) FROM payment_header WHERE customer_account = '$customer_name'"); 
+			$row = $stmt->get_result()->fetch_row();
+			$rowTotal = $row[0];
+			echo json_encode($rowTotal);
+			$stmt->close();
+
+		}
+		break;
+
 	// case for view payment history for specific customer
 	case ("paymentHistory"):
 
 		if (isset($_POST["customer_account"])) {
 
 			//$_POST['pageNum'] = 1;// comment this after commit
-			$recordsPerPage= 20;
+			$recordsPerPage= 1;
 			$offsetValue = ($_POST['pageNum']-1) * $recordsPerPage;
 	
 			$stmt = $mysqli->prepare("SELECT payment_id, payment_identifier, customer_account, customer_name, payment_date, payment_mode, payment_salesperson, payment_remark, total_payment_amount FROM payment_header WHERE customer_account = ? ORDER BY payment_id desc limit $recordsPerPage OFFSET $offsetValue"); 
@@ -94,7 +149,7 @@ switch ($postType) {
 	case ("updatePayment"):
 		// check isset for all post variable
 		$countSet = 0;
-		$postVariable = array('payment_identifier', 'customer_account', 'customer_name', 'payment_id', 'payment_mode', 'payment_date', 'payment_remark', 'payment_salesperson','total_payment_amount', 'id', 'invoice_id', 'total_amount', 'outstanding', 'payment', 'payment_status');
+		$postVariable = array('payment_identifier', 'customer_account', 'customer_name', 'payment_id', 'payment_mode', 'payment_date', 'payment_remark', 'payment_salesperson','total_payment_amount', 'id', 'invoice_id', 'total_amount', 'outstanding', 'payment');
 
 		foreach ($postVariable as $variable_name) {
 			if(isset($_POST[$variable_name])){
@@ -114,7 +169,6 @@ switch ($postType) {
 			$total_amount = $_POST['total_amount'];
 			$outstanding = $_POST['outstanding'];
 			$payment = $_POST['payment'];
-			$payment_status = $_POST['payment_status'];
 
 			$payment_identifier = $_POST['payment_identifier'];
 			$customer_account = $_POST['customer_account'];
@@ -137,6 +191,7 @@ switch ($postType) {
 
 			//count how many payment transaction
 			$itemCount = count($payment);
+			$countOldArray = 0;
 
 			//fetch old payment detail data from payment detail table
 			$stmt = $mysqli->prepare("SELECT invoice_id, amount_pay FROM payment_detail WHERE payment_identifier = ?");
@@ -206,8 +261,8 @@ switch ($postType) {
 				$stmt->close();
 
 				//query insert data into payment_detail table - 4 field
-				$stmt = $mysqli->prepare("INSERT INTO payment_detail (payment_identifier, invoice_id, amount_pay, payment_status) VALUES (?, ?, ?, ?)");
-				$stmt->bind_param("ssds", $payment_identifier, $new_invoice_id[$i], $payment[$i], $payment_status[$i]);
+				$stmt = $mysqli->prepare("INSERT INTO payment_detail (payment_identifier, invoice_id, amount_pay) VALUES (?, ?, ?)");
+				$stmt->bind_param("ssd", $payment_identifier, $new_invoice_id[$i], $payment[$i]);
 				$stmt->execute();
 				$stmt->close();
 
@@ -254,6 +309,7 @@ switch ($postType) {
 			$modify_user = $_SESSION["username"];
 			//$modify_user = "admin";
 			$mode = "Delete Payment";
+			$countArray = 0;
 
 			//fetch data from payment_detail table based on payment_identifier
 			$stmt = $mysqli->prepare("SELECT invoice_id, amount_pay FROM payment_detail WHERE payment_identifier = ?");
@@ -368,7 +424,7 @@ switch ($postType) {
 
 		// check isset for all post variable
 		$countSet = 0;
-		$postVariable = array('customer_account', 'customer_name', 'payment_mode', 'payment_date', 'payment_remark', 'payment_salesperson','total_payment_amount', 'id', 'invoice_id', 'total_amount', 'outstanding', 'payment', 'payment_status');
+		$postVariable = array('customer_account', 'customer_name', 'payment_mode', 'payment_date', 'payment_remark', 'payment_salesperson','total_payment_amount', 'id', 'invoice_id', 'total_amount', 'outstanding', 'payment');
 
 		foreach ($postVariable as $variable_name) {
 			if(isset($_POST[$variable_name])){
@@ -388,7 +444,6 @@ switch ($postType) {
 			$total_amount = $_POST['total_amount'];
 			$outstanding = $_POST['outstanding'];
 			$payment = $_POST['payment'];
-			$payment_status = $_POST['payment_status'];
 
 			$customer_account = $_POST['customer_account'];
 			$customer_name = $_POST['customer_name'];
@@ -440,8 +495,8 @@ switch ($postType) {
 				$stmt->close();
 
 				//query insert data into payment_detail table - 4 field
-				$stmt = $mysqli->prepare("INSERT INTO payment_detail (payment_identifier, invoice_id, amount_pay, payment_status) VALUES (?, ?, ?, ?)");
-				$stmt->bind_param("ssds", $payment_identifier[0], $invoice_id[$i], $payment[$i], $payment_status[$i]);
+				$stmt = $mysqli->prepare("INSERT INTO payment_detail (payment_identifier, invoice_id, amount_pay) VALUES (?, ?, ?)");
+				$stmt->bind_param("ssd", $payment_identifier[0], $invoice_id[$i], $payment[$i]);
 				$stmt->execute();
 				$stmt->close();
 
@@ -463,7 +518,7 @@ switch ($postType) {
 
 	case ("viewInvoiceHeader"):
 		if (isset($_POST["selected_id"])) {
-			$stmt = $mysqli->prepare("SELECT invoice_id, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount FROM invoice_header where id = ?"); 
+			$stmt = $mysqli->prepare("SELECT invoice_id, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount FROM invoice_header where invoice_id = ?"); 
 			$stmt->bind_param("i", $_POST["selected_id"]);
 			$stmt->execute();
 			$result = $stmt->get_result();

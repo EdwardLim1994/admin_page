@@ -35,8 +35,7 @@
         <input type="text" placeholder="invoice_id[]" id="invoice_id[]" name="invoice_id[]">
         <input type="number" placeholder="total_amount[]" id="total_amount[]" name="total_amount[]">
         <input type="number" placeholder="outstanding[]" id="outstanding[]" name="outstanding[]">
-        <input type="number" placeholder="payment[]" id="payment[]" name="payment[]">
-        <input type="text" placeholder="payment_status[]" id="payment_status[]" name="payment_status[]">-->
+        <input type="number" placeholder="payment[]" id="payment[]" name="payment[]">-->
 
         <br><br><br>
 
@@ -46,7 +45,6 @@
         <input type="number" placeholder="total_amount[]" id="total_amount[]" name="total_amount[]">
         <input type="number" placeholder="outstanding[]" id="outstanding[]" name="outstanding[]">
         <input type="number" placeholder="payment[]" id="payment[]" name="payment[]">
-        <input type="text" placeholder="payment_status[]" id="payment_status[]" name="payment_status[]">
 
         <br><br><br>
 
@@ -308,7 +306,7 @@
         contentType: 'application/json',
         success: function(data) {
 
-            console.log(data);
+            console.log('data');
         },
         cache: false,
         contentType: false,
@@ -348,10 +346,6 @@
         a_payment = document.getElementsByName("payment[]");
         for (let payment of a_payment) {
             fd.append('payment[]', payment.value);
-        }
-        a_payment_status = document.getElementsByName("payment_status[]");
-        for (let payment_status of a_payment_status) {
-            fd.append('payment_status[]', payment_status.value);
         }
 
         fd.append('postType', 'pay');

@@ -195,11 +195,11 @@ else
                             <div class="row">
                                 <div class="col-6">
                                     <label for="edit-customer_name">Customer Name</label>
-                                    <input type="text" class="form-control" name="customer_account" id="search-customer_name" placeholder="">
+                                    <input type="text" autocomplete="off" class="form-control" name="customer_account" id="search-customer_name" placeholder="">
                                 </div>
                                 <div class="col-6">
                                     <label for="edit-customer_account">Account Number</label>
-                                    <input type="text" class="form-control" name="customer_account" id="search-customer_id" placeholder="">
+                                    <input type="text" autocomplete="off" class="form-control" name="customer_account" id="search-customer_id" placeholder="">
                                 </div>
                             </div>
 
@@ -338,11 +338,11 @@ else
                             <div class="row">
                                 <div class="col-6">
                                     <label for="edit-customer_name">Customer Name</label>
-                                    <input type="text" class="form-control" name="customer_account" id="update-search-customer_name" placeholder="">
+                                    <input type="text" autocomplete="off" class="form-control" name="customer_account" id="update-search-customer_name" placeholder="">
                                 </div>
                                 <div class="col-6">
                                     <label for="edit-customer_account">Account Number</label>
-                                    <input type="text" class="form-control" name="customer_account" id="update-search-customer_id" placeholder="">
+                                    <input type="text" autocomplete="off" class="form-control" name="customer_account" id="update-search-customer_id" placeholder="">
                                 </div>
                             </div>
 

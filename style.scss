@@ -23,6 +23,11 @@ body.modal-open .fixed-bottom {
     width: 100%!important;
 }
 
+.dropdown-menu {
+    max-height: 280px;
+    overflow-y: auto;
+}
+
 // .btn-file {
 //     position: relative;
 //     overflow: hidden;

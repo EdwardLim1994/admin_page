@@ -22,16 +22,16 @@ switch ($postType) {
 				while ($row = mysqli_fetch_assoc($result)) {
 					$paymentHeaderArray[] = $row;
 				};
-				echo json_encode($paymentHeaderArray);
+				//echo json_encode($paymentHeaderArray);
 			
 			} else {
 				echo "No Result";
 			}
 			$stmt->close();
 
-			echo "<br>";
+			//echo "<br>";
 		
-			$stmt = $mysqli->prepare("SELECT payment_detail_id, invoice_id, amount_pay, payment_status FROM payment_detail WHERE payment_identifier = ? ORDER BY payment_detail_id asc"); 
+			$stmt = $mysqli->prepare("SELECT payment_detail_id, invoice_id, amount_pay FROM payment_detail WHERE payment_identifier = ? ORDER BY payment_detail_id asc"); 
 			$stmt->bind_param("s", $_POST["payment_identifier"]);
 			$stmt->execute();
 			$result = $stmt->get_result();
@@ -39,12 +39,13 @@ switch ($postType) {
 				while ($row = mysqli_fetch_assoc($result)) {
 					$paymentBodyArray[] = $row;
 				};
-				echo json_encode($paymentBodyArray);
+				//echo json_encode($paymentBodyArray);
 				
 			} else {
-				echo "No Result";
+				//echo "No Result";
 			}
 			$stmt->close();
+			echo json_encode(array($paymentHeaderArray, $paymentBodyArray));
 		}
 		break;
 
