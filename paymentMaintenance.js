@@ -703,7 +703,7 @@ $(document).ready(function() {
                     total_payment_amount: total_payment_amount
                 },
                 success: function(results) {
-
+                    console.log(results);
                     switch (results) {
                         case ("success update payment"):
                             $("#editModal").modal("hide");
@@ -766,7 +766,7 @@ $(document).ready(function() {
                             <td class="update-due_date-${value.id}">${value.due_date}</td>
                             <td class="update-total_amount-${value.id}">${value.total_amount}</td>
                             <td class="update-outstanding-${value.id}">${value.outstanding}</td>
-                            <td class="update-payment-${value.id}">${value.payment}</td>
+                            <td class="update-payment-${value.id}"><input class="form-control" type="number" /></td>
                             <td class="update-status-${value.id} ${status[0]} text-capitalize font-weight-bold text-center">${status[1]}</td>
                             <td class="update-total_price-${value.id} pay_item text-center">
                                 <input type="checkbox" class="update-select_to_pay" data-current-payment-made="0" data-previous-outstanding="${value.outstanding}" data-previous-payment="${value.payment}" aria-label="${value.outstanding == 0 ? "paid" : "unpaid"}" ${status[2]} ${status[3]}/>
