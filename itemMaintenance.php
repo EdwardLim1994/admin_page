@@ -70,17 +70,17 @@ else
     <header>
         <div class="blue">
             <div class="container-fluid">
-                <div class="row py-2">
-                    <div class="col-4 my-auto ">
+                <div class="py-2 row">
+                    <div class="my-auto col-4 ">
 
                     </div>
-                    <div class="col-4 text-center my-auto">
+                    <div class="my-auto text-center col-4">
                         <a href="https://nightcatdigitalsolutions.com/avenger/menu.php">
-                            <img class="img-fluid rounded logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
+                            <img class="rounded img-fluid logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
                         </a>
                     </div>
-                    <div class="col-4 text-right my-auto">
-                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="my-auto text-right col-4">
+                        <button class="px-3 py-2 btn btn-primary px-sm-4 py-sm-3 dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <h5 class="h5-responsive">Hi, <?= $currentUser ?></h5>
                         </button>
                         <div class="dropdown-menu">
@@ -103,7 +103,7 @@ else
 
 
                 <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb white pl-0">
+                    <ol class="pl-0 breadcrumb white">
                         <li class="breadcrumb-item"><a href="./menu.php">Menu</a></li>
                         <li class="breadcrumb-item active">Item Maintanance</li>
                     </ol>
@@ -112,14 +112,14 @@ else
                     <div class="col-lg-10 col-md-8 col-sm-6">
                         <h1 class="h1-responsive">Item Maintanance</h1>
                     </div>
-                    <div class="col-lg-2 col-md-4 col-sm-6 text-right">
+                    <div class="text-right col-lg-2 col-md-4 col-sm-6">
                         <button class="btn btn-danger py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#addModal">
                             <span class="textBreak">Add Item</span>
                             <span class="iconBreak"><i class="fas fa-user-plus"></i></span>
                         </button>
                     </div>
                 </div>
-                <div class="row py-3">
+                <div class="py-3 row">
 
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
@@ -145,7 +145,7 @@ else
                 </div>
 
                 <div class="row">
-                    <div class="col-12 pt-2">
+                    <div class="pt-2 col-12">
                         <div id="search-input-wrapper">
                             <h6>Searching: <span id="search-input"></span></h6>
                         </div>
@@ -153,8 +153,8 @@ else
                 </div>
                 <div class="row w-100">
                     <div class="col-12 col-lg-6">
-                        <div class="input-group md-form form-sm form-2 pl-0">
-                            <input id="searchRow" class="form-control my-0 py-1" type="text" placeholder="Search" aria-label="Search" value="<?= isset($_SESSION['searchTerm']) ? $_SESSION['searchTerm'] : "" ?>">
+                        <div class="pl-0 input-group md-form form-sm form-2">
+                            <input id="searchRow" class="py-1 my-0 form-control" type="text" placeholder="Search" aria-label="Search" value="<?= isset($_SESSION['searchTerm']) ? $_SESSION['searchTerm'] : "" ?>">
                             <div class="input-group-append" id="searchClear">
                                 <button class="input-group-text lighten-2">
                                     <i class="fas fa-times"></i>
@@ -171,7 +171,7 @@ else
 
                     </div>
                     <div class="col-12 col-lg-6">
-                        <div class="d-flex justify-content-end py-4 rowResults">
+                        <div class="py-4 d-flex justify-content-end rowResults">
                             
                             <h6 class="my-auto">Total rows in database: <span class="font-weight-bold" id="rowTotal"></span></h6>
                         </div>
@@ -179,7 +179,7 @@ else
                 </div>
                 <div class="row">
                     <div class="col-8"></div>
-                    <div class="col-4 py-3 d-flex flex-row justify-content-end">
+                    <div class="flex-row py-3 col-4 d-flex justify-content-end">
                         <div class="pageWrapper">
                             <h5>Page : </h5>
                             <input type="number" id="currentPageNum" class="form-control pageNumInput" min="1" value="<?= isset($_SESSION['currPage']) ? $_SESSION['currPage'] : 1 ?>">
@@ -246,7 +246,7 @@ else
 
                         <!--Body-->
                         <div class="modal-body">
-                            <div class="row py-3">
+                            <div class="py-3 row">
 
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                                     <li class="nav-item">
@@ -541,7 +541,7 @@ else
 
                         <!--Body-->
                         <div class="modal-body">
-                            <div class="row py-3">
+                            <div class="py-3 row">
 
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                                     <li class="nav-item">
@@ -894,29 +894,29 @@ else
 
     </main>
 
-    <footer class="page-footer font-small blue font-small">
-        <div class="col-md-12 text-center">
+    <footer class="page-footer font-small blue">
+        <div class="text-center col-md-12">
 
             <!-- Social Link on Bottom -->
-            <div class="mb-4 pt-4 flex-center">
+            <div class="pt-4 mb-4 flex-center">
                 <a class="whatsappLink">
-                    <i class="fab fa-whatsapp a-lg mr-md-5 mr-3 fa-2x hoverable"></i>
+                    <i class="mr-3 fab fa-whatsapp a-lg mr-md-5 fa-2x hoverable"></i>
                 </a>
                 <!-- Facebook -->
                 <a class="fb-ic" href="https://www.facebook.com/nightcatdigitalsolutions">
-                    <i class="fab fa-facebook fa-lg mr-md-5 mr-3 fa-2x hoverable"> </i>
+                    <i class="mr-3 fab fa-facebook fa-lg mr-md-5 fa-2x hoverable"> </i>
                 </a>
                 <!-- Twitter -->
                 <a class="tw-ic" href="https://twitter.com/nightcatdigital">
-                    <i class="fab fa-twitter fa-lg mr-md-5 mr-3 fa-2x hoverable"> </i>
+                    <i class="mr-3 fab fa-twitter fa-lg mr-md-5 fa-2x hoverable"> </i>
                 </a>
                 <!--Instagram-->
                 <a class="ins-ic" href="https://www.instagram.com/nightcatdigitalsolutions/">
-                    <i class="fab fa-instagram fa-lg mr-md-5 mr-3 fa-2x hoverable"> </i>
+                    <i class="mr-3 fab fa-instagram fa-lg mr-md-5 fa-2x hoverable"> </i>
                 </a>
             </div>
         </div>
-        <div class="footer-copyright text-center py-3">
+        <div class="py-3 text-center footer-copyright">
             <a href="https://www.nightcatdigitalsolutions.com">NIGHTCAT DIGITAL SOLUTIONS © 2013 -
                 <span id="latestYear"></span>. ALL RIGHTS RESERVED</a>
         </div>

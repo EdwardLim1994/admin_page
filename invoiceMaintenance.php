@@ -60,8 +60,8 @@ else
     <script src="./dist/js/script.prod.js"></script>
     <script src="./dist/js/invoiceMaintenance.prod.js"></script> 
     <script src="./dist/js/datatables.min.js"></script>
-
-    <!-- <script src="./invoiceMaintenance.js"></script>-->
+<!-- 
+    <script src="./invoiceMaintenance.js"></script> -->
 
 </head>
 

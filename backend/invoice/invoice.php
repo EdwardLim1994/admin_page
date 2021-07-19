@@ -71,7 +71,7 @@ switch ($postType) {
 	 	$recordsPerPage= 20;
 	 	$offsetValue = ($_POST['pageNum']-1) * $recordsPerPage;
 
-		$stmt = $mysqli->prepare("SELECT invoice_id, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount FROM invoice_header ORDER BY id desc limit $recordsPerPage OFFSET $offsetValue"); 
+		$stmt = $mysqli->prepare("SELECT invoice_id, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount, payment FROM invoice_header ORDER BY id desc limit $recordsPerPage OFFSET $offsetValue"); 
 
 		$stmt->execute();
 		$result = $stmt->get_result();

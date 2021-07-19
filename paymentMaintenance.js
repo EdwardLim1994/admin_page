@@ -2,6 +2,10 @@ $(document).ready(function() {
 
     var totalRow = countRow();
     var totalPage = paginate(totalRow);
+    var timer;
+    var isSpinnerOn = false;
+    var timerGlobal;
+    var isSpinnerOnGlobal = false;
     generateTable();
 
     $("#total_payment").on("keyup", function() {
@@ -22,6 +26,8 @@ $(document).ready(function() {
             $(this).val(parseFloat(total_payment).toFixed(2));
         }
     })
+
+
 
     $("#update-total_payment").on("keyup", function() {
         $("#update-unapply_amount").val($(this).val());
@@ -52,12 +58,62 @@ $(document).ready(function() {
         }
     });
 
-    $("#search-customer_name").on('keyup', function() {
-        customerSearchResults(1);
+    $("#global_search_customer_input").on("keyup", function() {
+        clearTimeout(timerGlobal);
+
+        if (!isSpinnerOnGlobal) {
+            $("#global_search_customer_result").empty().removeClass("bg-white").addClass("border").html(`
+            <div class="d-flex justify-content-center bg-white border search-result-spinner">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            `);
+            isSpinnerOnGlobal = true;
+        }
+
+
+        if ($(this).val()) {
+            timerGlobal = setTimeout(function() {
+                globalCustomerSearchResults(1);
+            }, 1000);
+        } else {
+            generateTable();
+            $("#global_search_customer_result").empty().removeClass("border");
+            isSpinnerOnGlobal = false;
+        }
+
     });
-    $("#search-customer_id").on('keyup', function() {
-        customerSearchResults(1);
+
+
+
+    $("#search-customer_name, #search-customer_id").on('keyup', function() {
+        clearTimeout(timer);
+        if (!isSpinnerOn) {
+            $("#customer-search").empty().removeClass("bg-white").addClass("border").html(`
+            <div class="d-flex justify-content-center bg-white border search-result-spinner">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            `);
+            isSpinnerOn = true;
+        }
+
+
+        if ($(this).val()) {
+            timer = setTimeout(function() {
+                customerSearchResults(1);
+            }, 1000);
+        } else {
+            $("#customer-search").empty().removeClass("border");
+            isSpinnerOn = false;
+        }
+
     });
+
+
+
 
     $("#addModalBtn").click(function() {
         $("#search-customer_name").val("");
@@ -72,7 +128,7 @@ $(document).ready(function() {
         $("#unapply_amount").val("0.00");
         $("#total_outstanding").val("0.00");
         $("#total_pay").val("0.00");
-
+        $("#currentPageNumSelectedCustomerInvoiceList").val(1);
         $("#payment-bucket").empty().html(`
         <tr class="noResultText">
             <td colspan="11" class="text-center">
@@ -105,6 +161,17 @@ $(document).ready(function() {
         `);
     });
 
+
+
+    $("[name='addModalInvoice']").click(function() {
+        addModalSwitchInvoiceList($("[name='addModalInvoice']:checked").val());
+    })
+
+    $("[name='updateModalInvoice']").click(function() {
+        updateModalSwitchInvoiceList($("[name='updateModalInvoice']:checked").val());
+    })
+
+    //createInvoiceListOnUpdateModal
     $("#addPaymentSubmitBtn").click(function() {
         addPayment();
     });
@@ -213,26 +280,156 @@ $(document).ready(function() {
 
     }
 
-    //Add payment modal
-    function customerSearchResults(pageNum) {
+
+    //Global Customer Search
+    function globalCustomerSearchResults(pageNum) {
 
         var timer;
-        var isSpinnerOn;
         var searchResult;
+        if ($("#global_search_customer_input").val() != "") {
 
+            clearTimeout(timer);
+
+            timer = setTimeout(function() {
+                console.log("triggered");
+                $.ajax({
+                    type: "POST",
+                    url: "./backend/invoice/viewCustmrItem.php",
+                    data: {
+                        postType: "searchRowCustomer",
+                        searchCustomerName: $("#global_search_customer_input").val(),
+                        searchCustomerID: "",
+                        pageNum: pageNum
+                    },
+                    success: function(results) {
+                        console.log(results);
+                        if (results == "No result") {
+                            if (isSpinnerOnGlobal == true) {
+                                $("#global_search_customer_result").addClass("customer-search-nothing").empty().html(`
+                                <div class="sticky-top bg-white">
+                                    <div class="row px-3 py-2">
+                                        <div class="col-6">
+                                            <h5>${results}</h5>
+                                        </div>
+                                        <div class="col-6 text-right">
+                                            <a class="btn btn-primary" href="./customerMaintenance.php">Go add new customer</a>
+                                        </div>
+                                    </div>
+                                </div> 
+                                `);
+                                isSpinnerOnGlobal = false;
+                            }
+
+                        } else if (results == "") {
+                            $("#customer-search").empty().removeClass("customer-search-nothing").removeClass("border").removeClass("bg-white");
+                            isSpinnerOnGlobal = false;
+                        } else {
+                            searchResult = `
+                            <div class="sticky-top bg-white">
+                                <div class="row px-3 py-2">
+                                    <div class=" col-6 py-2 py-md-0">
+                                        <p class="my-auto">Search Result: <span class="font-weight-bold" id="customerSearchRowTotal"></span></p>
+                                    </div>
+                                    <div class=" col-6 py-2 py-md-0">
+                                        <div class="d-flex flex-row justify-content-end">
+                                            <p class="my-auto">Page : </p>
+                                            <input type="number" id="globalCustomerSearchCurrentPageNum" class="form-control w-25 mx-2 my-auto px-2 pageInput" min="1" value="${pageNum}">
+                                            <p class="my-auto"> of <span id="globalCustomerSearchPageTotal"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="p-0 m-0">
+                            </div>
+                            <div class="overflow-auto" style="max-height:200px;">
+                            `;
+                            $.each(JSON.parse(results), function(i, value) {
+                                searchResult += `
+                                <a class="global_customer-search-results">
+                                    <div class="view overlay">
+                                        <div class="row px-3 py-2">
+                                            <div class="col-12">
+                                                <h5 class="my-auto customerName">${value.name}</h5>
+                                            </div>
+                                            <div class="mask flex-center rgba-grey-slight"> </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <hr class="p-0 m-0">
+                                `;
+                            });
+                            searchResult += `</div>`;
+                            $("#global_search_customer_result").removeClass("customer-search-nothing").empty().addClass("bg-white").html(searchResult);
+                            isSpinnerOnGlobal = false;
+                            globalCustomerSearchResultsCountRow();
+                            globalCustomerSearchResultsSelect();
+                        }
+                    }
+                });
+            }, 1000);
+        } else {
+            $("#global_search_customer_result").empty().removeClass("border");
+            isSpinnerOnGlobal = false;
+        }
+    }
+
+    function globalCustomerSearchResultsSelect() {
+        $(".global_customer-search-results").click(function() {
+            $("#global_search_customer_input").val($(this).find(".customerName").text());
+            //$("#search-customer_id").val($(this).find(".customerID").text());
+            $("#global_search_customer_result").empty().removeClass("border");
+            //addModalSwitchInvoiceList($("[name='addModalInvoice']:checked").val());
+            generateTable();
+        });
+    }
+
+    function globalCustomerSearchResultsPagination(total) {
+        var rowperpage = 10;
+        var totalPage = Math.ceil(total / rowperpage);
+        $("#globalCustomerSearchPageTotal").empty().text(totalPage);
+        $("#globalCustomerSearchCurrentPageNum").attr("max", totalPage);
+
+        $("#globalCustomerSearchCurrentPageNum").on('input', function() {
+            if ($("#globalCustomerSearchCurrentPageNum").val() == "") {
+                console.log("empty customer search");
+            } else if ($("#globalCustomerSearchCurrentPageNum").val() < totalPage)
+                globalCustomerSearchResults($("#globalCustomerSearchCurrentPageNum").val());
+            else
+                globalCustomerSearchResults(totalPage);
+        })
+    }
+
+    function globalCustomerSearchResultsCountRow() {
+        $.ajax({
+            type: "POST",
+            url: "./backend/invoice/viewCustmrItem.php",
+            data: {
+                postType: "searchRowCountCustomer",
+                searchCustomerName: $("#global_search_customer_input").val(),
+                searchCustomerID: ""
+            },
+            success: function(results) {
+                $("#globalCustomerSearchRowTotal").empty().html(results);
+                globalCustomerSearchResultsPagination(results);
+            }
+        });
+    }
+
+    //Global Customer Search end
+
+
+
+
+    //Add payment modal
+    function customerSearchResults(pageNum, isSpinnerOn) {
+
+        var timer;
+        var searchResult;
         if ($("#search-customer_name").val() != "" || $("#search-customer_id").val() != "") {
 
             clearTimeout(timer);
-            $("#customer-search").empty().removeClass("bg-white").addClass("border").html(`
-            <div class="d-flex justify-content-center bg-white border search-result-spinner">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-            `);
 
-            isSpinnerOn = true;
             timer = setTimeout(function() {
+                console.log("triggered");
                 $.ajax({
                     type: "POST",
                     url: "./backend/invoice/viewCustmrItem.php",
@@ -305,7 +502,6 @@ $(document).ready(function() {
                             isSpinnerOn = false;
                             customerSearchResultsCountRow();
                             customerSearchResultsSelect();
-
                         }
                     }
                 });
@@ -321,249 +517,7 @@ $(document).ready(function() {
             $("#search-customer_name").val($(this).find(".customerName").text());
             $("#search-customer_id").val($(this).find(".customerID").text());
             $("#customer-search").empty().removeClass("border");
-
-            $.ajax({
-                type: "POST",
-                url: "./backend/payment/payment.php",
-                data: {
-                    postType: "viewInvoiceAll",
-                    customer_account: $(this).find(".customerID").text(),
-                    pageNum: 1
-                },
-                success: function(results) {
-
-                    var invoice_results;
-                    var total_outstanding = 0.00;
-                    if (results != "" && results != "No result") {
-                        $.each(JSON.parse(results), function(i, value) {
-                            var status = value.outstanding == 0 ? ["text-success", "paid", "disabled='disabled'", "checked"] : ["text-danger", "unpaid", "", ""];
-                            total_outstanding += parseFloat(value.outstanding);
-                            invoice_results += `
-                            <tr class="item-row" data-id="${value.id}" data-invoice_id=${value.invoice_id}>
-                                <td>
-                                    <button class="btn btn-danger showInvoiceDetailBtn py-md-3 px-md-4 p-sm-3">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                                <td class="doc_no-${value.id}">${value.doc_no}</td>
-                                <td class="doc_date-${value.id}">${value.creation_date}</td>
-                                <td class="invoice_num-${value.id}">${value.invoice_num}</td>
-                                <td class="invoice_date-${value.id}">${value.invoice_date}</td>
-                                <td class="due_date-${value.id}">${value.due_date}</td>
-                                <td class="total_amount-${value.id}">${value.total_amount}</td>
-                                <td class="outstanding-${value.id}">${value.outstanding}</td>
-                                <td class="payment-${value.id}">${value.payment}</td>
-                                <td class="status-${value.id} ${status[0]} text-capitalize font-weight-bold text-center">${status[1]}</td>
-                                <td class="total_price-${value.id} pay_item text-center">
-                                    <input type="checkbox" class="select_to_pay" data-current-payment-made="0" data-previous-outstanding="${value.outstanding}" data-previous-payment="${value.payment}" aria-label="${value.outstanding == 0 ? "paid" : "unpaid"}" ${status[2]} ${status[3]}/>
-                                </td>
-                            </tr>
-                            `;
-                        });
-
-                        $("#total_outstanding").val(total_outstanding.toFixed(2));
-                        $("#payment-bucket").empty().html(invoice_results);
-
-                    }
-
-                    $(".showInvoiceDetailBtn").click(function() {
-                        $.ajax({
-                            type: "POST",
-                            url: "./backend/payment/payment.php",
-                            data: {
-                                postType: "viewInvoiceDetail",
-                                selected_id: $(this).parent().parent().data("invoice_id")
-                            },
-                            success: function(results) {
-
-                                if (results == "No Result") {
-                                    failedMessage("Failed", "Could not find any invoice results");
-                                } else {
-                                    var invoice_results;
-                                    var total_amount = 0;
-                                    var total_discount = 0;
-                                    $.each(JSON.parse(results), function(i, item) {
-                                        total_amount += parseFloat(item.amount);
-                                        total_discount += parseFloat(item.discount);
-                                        invoice_results += `
-                                        <tr>
-                                            <td>${item.item_no}</td>
-                                            <td>${item.description}</td>
-                                            <td>${item.quantity}</td>
-                                            <td>${item.uom}</td>
-                                            <td>${item.price}</td>
-                                            <td>${item.base_cost}</td>
-                                            <td>${item.discount}</td>
-                                            <td>${item.amount}</td>
-                                        </tr>
-                                        `;
-                                    })
-
-                                    $("#item-bucket").empty().html(invoice_results);
-                                    $("#total_discount").empty().text(total_discount.toFixed(2));
-                                    $("#total_cost").empty().text(total_amount.toFixed(2));
-                                    $("#invoiceDetailModal").modal("show");
-                                }
-
-                            }
-                        });
-                    })
-
-                    $(".select_to_pay").click(function() {
-
-                        var row_item_id = $(this).parent().parent().data("id");
-                        if (parseFloat($("#total_payment").val()) > 0) {
-                            if (parseFloat($("#unapply_amount").val()) > 0) {
-                                if ($(this).prop('checked') == true) {
-                                    var current_unapply_amount = parseFloat($("#unapply_amount").val());
-                                    var current_total_outstanding = parseFloat($("#total_outstanding").val());
-                                    var current_total_pay = parseFloat($("#total_pay").val());
-
-                                    var current_outstanding = parseFloat($(`.outstanding-${row_item_id}`).text());
-                                    var current_payment = parseFloat($(`.payment-${row_item_id}`).text());
-
-                                    var new_outstanding = current_unapply_amount < current_outstanding ? current_outstanding - current_unapply_amount : current_outstanding - current_outstanding;
-                                    var new_payment = current_unapply_amount < current_outstanding ? current_payment + current_unapply_amount : current_payment + current_outstanding;
-
-                                    var new_unapply_amount = current_unapply_amount < current_outstanding ? current_unapply_amount - current_unapply_amount : current_unapply_amount - current_outstanding;
-                                    var new_total_outstanding = current_unapply_amount < current_outstanding ? current_total_outstanding - current_unapply_amount : current_total_outstanding - current_outstanding;
-                                    var new_total_pay = current_unapply_amount < current_outstanding ? current_total_pay + current_unapply_amount : current_total_pay + current_outstanding;
-
-                                    var payment_made = current_unapply_amount < current_outstanding ? current_unapply_amount : current_outstanding;
-
-                                    $(this).attr(
-                                        "data-current-payment-made", payment_made
-                                    );
-
-                                    $(`.outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
-                                    $(`.payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
-
-                                    $("#total_pay").val(new_total_pay.toFixed(2))
-                                    $("#unapply_amount").val(new_unapply_amount.toFixed(2))
-                                    $("#total_outstanding").val(new_total_outstanding.toFixed(2))
-
-
-                                } else {
-
-                                    var current_unapply_amount = parseFloat($("#unapply_amount").val());
-                                    var current_total_outstanding = parseFloat($("#total_outstanding").val());
-                                    var current_total_pay = parseFloat($("#total_pay").val());
-
-                                    var current_outstanding = parseFloat($(`.outstanding-${row_item_id}`).text());
-                                    var current_payment = parseFloat($(`.payment-${row_item_id}`).text());
-                                    var payment_made = parseFloat($(this).data("current-payment-made"));
-
-                                    var new_outstanding = current_outstanding + payment_made;
-                                    var new_payment = current_payment - payment_made;
-
-                                    var new_unapply_amount = current_unapply_amount + payment_made;
-                                    var new_total_outstanding = current_total_outstanding + payment_made;
-                                    var new_total_pay = current_total_pay - payment_made;
-
-                                    $(this).attr(
-                                        "data-current-payment-made", 0
-                                    );
-
-
-                                    $(`.outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
-                                    $(`.payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
-
-                                    $("#total_pay").val(new_total_pay.toFixed(2))
-                                    $("#unapply_amount").val(new_unapply_amount.toFixed(2))
-                                    $("#total_outstanding").val(new_total_outstanding.toFixed(2))
-
-
-                                }
-                            } else {
-                                if ($(this).prop('checked') == true) {
-                                    failedMessage("Failed", "Unapply amount currently is 0. Please add some credit in total payment to pay");
-                                    return false;
-                                } else {
-
-                                    var current_unapply_amount = parseFloat($("#unapply_amount").val());
-                                    var current_total_outstanding = parseFloat($("#total_outstanding").val());
-                                    var current_total_pay = parseFloat($("#total_pay").val());
-
-                                    var current_outstanding = parseFloat($(`.outstanding-${row_item_id}`).text());
-                                    var current_payment = parseFloat($(`.payment-${row_item_id}`).text());
-                                    var payment_made = parseFloat($(this).data("current-payment-made"));
-
-                                    var new_outstanding = current_outstanding + payment_made;
-                                    var new_payment = current_payment - payment_made;
-
-                                    var new_unapply_amount = current_unapply_amount + payment_made;
-                                    var new_total_outstanding = current_total_outstanding + payment_made;
-                                    var new_total_pay = current_total_pay - payment_made;
-
-                                    $(this).attr(
-                                        "data-current-payment-made", 0
-                                    );
-
-                                    $(`.outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
-                                    $(`.payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
-
-                                    $("#total_pay").val(new_total_pay.toFixed(2))
-                                    $("#unapply_amount").val(new_unapply_amount.toFixed(2))
-                                    $("#total_outstanding").val(new_total_outstanding.toFixed(2))
-
-                                }
-                            }
-                        } else {
-                            failedMessage("Failed", "Total Payment currently is 0. Please add some credit in total payment to pay");
-                            return false;
-                        }
-                        if (parseFloat($(`.outstanding-${row_item_id}`).text()) > 0) {
-                            $(`.status-${row_item_id}`).removeClass("text-success").addClass("text-danger").empty().text("unpaid");
-                        } else {
-                            $(`.status-${row_item_id}`).removeClass("text-danger").addClass("text-success").empty().text("paid");
-                        }
-
-                        if (parseFloat($("#total_pay").val()) == 0) {
-                            $("#addPaymentSubmitBtn").prop("disabled", true);
-                        } else {
-                            $("#addPaymentSubmitBtn").prop("disabled", false);
-                        }
-                    });
-
-                    $("#search-customer_id,#search-customer_name").on("keyup", function() {
-                        if ($("#search-customer_id").val() == "" && $("#search-customer_name").val() == "") {
-                            var noResult = `                           
-                            <tr class="noResultText">
-                                <td colspan="11" class="text-center">
-                                    <h5>No payment available</h5>
-                                </td>
-                            </tr>`;
-                            $("#payment-bucket").empty().html(noResult);
-                        }
-                    });
-
-                    $("#total_payment").on("focusout", function() {
-                        if (parseFloat($("#total_pay").val()) > 0) {
-                            var total_outstanding_deducted = 0;
-                            $("#total_pay").val("0.00");
-                            $.each($('.item-row'), function(i, item) {
-                                if ($(`.select_to_pay:eq(${i})`).attr('aria-label') === "unpaid") {
-                                    var invoice_id = $(`.item-row:eq(${i})`).data("id");
-
-                                    var original_payment = parseFloat($(`.select_to_pay:eq(${i})`).data("previous-payment"));
-                                    var original_outstanding = parseFloat($(`.select_to_pay:eq(${i})`).data("previous-outstanding"));
-
-                                    total_outstanding_deducted += original_outstanding
-                                    $(`.outstanding-${invoice_id}`).empty().text(original_outstanding.toFixed(2));
-                                    $(`.payment-${invoice_id}`).empty().text(original_payment.toFixed(2));
-                                    $(`.status-${invoice_id}`).removeClass("text-success").addClass("text-danger").empty().text("unpaid");
-                                    $(`.select_to_pay:eq(${i})`).prop("checked", false);
-
-                                }
-                            });
-                            $("#total_outstanding").val(total_outstanding_deducted.toFixed(2))
-                        }
-                    });
-                },
-                error: function(e) {
-                    console.log(e);
-                }
-            });
+            addModalSwitchInvoiceList($("[name='addModalInvoice']:checked").val());
         });
     }
 
@@ -598,6 +552,55 @@ $(document).ready(function() {
             }
         });
     }
+
+    //Add modal invoice pagination
+    function countRowSelectedCustomerInvoice() {
+        var postType = "";
+
+        switch ($("[name='addModalInvoice']:checked").val()) {
+            case ("all-invoice"):
+                postType = "countRowSelectedCustomerInvoiceAll";
+                break;
+
+            case ("outstanding-invoice"):
+                postType = "countRowSelectedCustomerInvoiceOutstanding"
+                break;
+        }
+        $.ajax({
+            type: "POST",
+            url: "./backend/payment/payment.php",
+            data: {
+                postType: postType,
+                customer_account: $("#search-customer_id").val()
+            },
+            success: function(results) {
+
+
+                var rowperpage = 20;
+                var totalPage = Math.ceil(results / rowperpage);
+
+                $("#pageTotalSelectedCustomerInvoiceList").empty().text(totalPage);
+                //$("#currentPageNumSelectedCustomerInvoiceList").attr("max", totalPage);
+                // $("#currentPageNumSelectedCustomerInvoiceList").val(1);
+                $("#currentPageNumSelectedCustomerInvoiceList").on('focusout', function() {
+
+                    if ($("#currentPageNumSelectedCustomerInvoiceList").val() == "") {
+                        console.log("empty invoice search");
+                    } else if ($("#currentPageNumSelectedCustomerInvoiceList").val() < totalPage) {
+                        console.log("current page num < total page");
+                        addModalSwitchInvoiceList($("[name='addModalInvoice']:checked").val());
+                    } else {
+                        $("#currentPageNumSelectedCustomerInvoiceList").val(totalPage);
+                        console.log("current page num > total page");
+                        addModalSwitchInvoiceList($("[name='addModalInvoice']:checked").val());
+                    }
+
+                })
+            }
+        });
+
+    }
+
 
     //Update Payment modal
 
@@ -658,16 +661,13 @@ $(document).ready(function() {
             failedMessage("Failed", "No invoice found");
         } else {
             $.each($(".update-item-row"), function(i, item) {
-                var row_id = $(`.update-item-row:nth-child(${i+1})`).data('id');
-                //if ($(`.select_to_pay:eq(${i})`).data("current-payment-made") > 0 && $(`.status-${row_id}`).text() === "paid") {
-                if ($(`.update-select_to_pay:eq(${i})`).prop("checked") == true && $(`.update-select_to_pay:eq(${i})`).data("current-payment-made") > 0) {
-                    id.push(row_id);
-                    invoice_id.push($(`.update-item-row:nth-child(${i+1})`).data('invoice_id'));
-                    total_amount.push(parseFloat($(`.update-total_amount-${row_id}`).text()));
-                    outstanding.push(parseFloat($(`.update-outstanding-${row_id}`).text()));
-                    payment.push(parseFloat($(`.update-payment-${row_id}`).text()));
-                    payment_status.push($(`.update-status-${row_id}`).text());
-                }
+                var row_id = $(`.update-item-row:eq(${i})`).data('id');
+                id.push(row_id);
+                invoice_id.push($(`.update-item-row:nth-child(${i+1})`).data('invoice_id'));
+                total_amount.push(parseFloat($(`.update-total_amount-${row_id}`).text()));
+                outstanding.push(parseFloat($(`.update-outstanding-${row_id}`).text()));
+                payment.push(parseFloat($(`.update-payment-${row_id}`).find(".update_payment_per_invoice").val()));
+
             })
 
             payment_mode = $("#update-payment_mode").val();
@@ -721,6 +721,564 @@ $(document).ready(function() {
         }
     }
 
+    function addModalSwitchInvoiceList(current_selection) {
+        if ($("#search-customer_name").val() != "") {
+
+            var currentPageNum;
+            if ($("#currentPageNumSelectedCustomerInvoiceList").val() != 0) {
+                if (parseInt($("#currentPageNumSelectedCustomerInvoiceList").val()) > parseInt($("#pageTotalSelectedCustomerInvoiceList").text())) {
+                    currentPageNum = parseInt($("#pageTotalSelectedCustomerInvoiceList").text());
+                } else {
+                    currentPageNum = parseInt($("#currentPageNumSelectedCustomerInvoiceList").val());
+                }
+            } else {
+                currentPageNum = 1;
+            }
+            console.log(currentPageNum);
+            switch (current_selection) {
+                case ('all-invoice'):
+                    $.ajax({
+                        type: "POST",
+                        url: "./backend/payment/payment.php",
+                        data: {
+                            postType: "viewInvoiceAll",
+                            customer_account: $("#search-customer_id").val(),
+                            pageNum: currentPageNum
+                        },
+                        success: function(results) {
+                            createInvoiceListOnAddModal(results);
+                            countRowSelectedCustomerInvoice();
+                            console.log('all-invoice', results);
+                        },
+                        error: function(e) {
+                            console.log(e);
+                        }
+                    });
+                    break;
+
+                case ('outstanding-invoice'):
+                    $.ajax({
+                        type: "POST",
+                        url: "./backend/payment/payment.php",
+                        data: {
+                            postType: "viewInvoiceOutstanding",
+                            customer_account: $("#search-customer_id").val(),
+                            pageNum: currentPageNum
+                        },
+                        success: function(results) {
+                            createInvoiceListOnAddModal(results);
+                            countRowSelectedCustomerInvoice();
+                            console.log('outstanding-invoice', results);
+                        },
+                        error: function(e) {
+                            console.log(e);
+                        }
+                    });
+                    break;
+            }
+        }
+    }
+
+    function updateModalSwitchInvoiceList(current_selection, payment_identifier) {
+        switch (current_selection) {
+            case ("all-invoice"):
+                $.ajax({
+                    type: "POST",
+                    url: "./backend/payment/payment.php",
+                    data: {
+                        postType: "viewPaymentUpdateAll",
+                        payment_identifier: payment_identifier
+                    },
+                    success: function(results) {
+                        createInvoiceListOnUpdateModal(results);
+
+                    },
+                    error: function(e) {
+                        console.log(e);
+                    }
+                });
+                break;
+
+            case ("outstanding-invoice"):
+                $.ajax({
+                    type: "POST",
+                    url: "./backend/payment/payment.php",
+                    data: {
+                        postType: "viewPaymentUpdateOutstanding",
+                        payment_identifier: payment_identifier
+                    },
+                    success: function(results) {
+                        console.log(results);
+                        createInvoiceListOnUpdateModal(results);
+
+
+                    },
+                    error: function(e) {
+                        console.log(e);
+                    }
+                });
+                break;
+        }
+    }
+
+    function createInvoiceListOnAddModal(results) {
+        var invoice_results;
+        var total_outstanding = 0.00;
+        var totalRowInvoiceAll = 0;
+        var totalPageInvoiceAll = 0;
+        var totalRowInvoiceOutstanding = 0;
+        var totalPageInvoiceOutstanding = 0;
+        switch (results) {
+            case ("No result"):
+                $("#payment-bucket").empty().html(`
+                <tr class="noResultText">
+                    <td colspan="11" class="text-center">
+                        <h5>No payment available</h5>
+                    </td>
+                </tr>
+                `);
+                break;
+
+            default:
+                $.each(JSON.parse(results), function(i, value) {
+                    var status = value.outstanding == 0 ? ["text-success", "paid", "disabled='disabled'", "checked"] : ["text-danger", "unpaid", "", ""];
+                    total_outstanding += parseFloat(value.outstanding);
+                    invoice_results += `
+                    <tr class="item-row" data-id="${value.id}" data-invoice_id=${value.invoice_id}>
+                        <td>
+                            <button class="btn btn-danger showInvoiceDetailBtn py-md-3 px-md-4 p-sm-3">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                        <td class="doc_no-${value.id}">${value.doc_no}</td>
+                        <td class="doc_date-${value.id}">${value.creation_date}</td>
+                        <td class="invoice_num-${value.id}">${value.invoice_num}</td>
+                        <td class="invoice_date-${value.id}">${value.invoice_date}</td>
+                        <td class="due_date-${value.id}">${value.due_date}</td>
+                        <td class="total_amount-${value.id}">${value.total_amount}</td>
+                        <td class="outstanding-${value.id}">${value.outstanding}</td>
+                        <td class="payment-${value.id}">${value.payment}</td>
+                        <td class="status-${value.id} ${status[0]} text-capitalize font-weight-bold text-center">${status[1]}</td>
+                        <td class="total_price-${value.id} pay_item text-center">
+                            <input type="checkbox" class="select_to_pay" data-current-payment-made="0" data-previous-outstanding="${value.outstanding}" data-previous-payment="${value.payment}" aria-label="${value.outstanding == 0 ? "paid" : "unpaid"}" ${status[2]} ${status[3]}/>
+                        </td>
+                    </tr>
+                    `;
+                });
+
+                $("#total_outstanding").val(total_outstanding.toFixed(2));
+                $("#payment-bucket").empty().html(invoice_results);
+                break;
+        }
+
+
+        // $("#currentPageNucurrentPageNumSelectedCustomerInvoiceListmInvoiceAll").focusout(function() {
+        //     totalRowInvoiceAll = countRowSelectedCustomerInvoiceAll();
+        //     totalPageInvoiceAll = paginateSelectedCustomerInvoiceAll(totalRowInvoiceAll);
+        // });
+
+
+        $(".showInvoiceDetailBtn").click(function() {
+            $.ajax({
+                type: "POST",
+                url: "./backend/payment/payment.php",
+                data: {
+                    postType: "viewInvoiceDetail",
+                    selected_id: $(this).parent().parent().data("invoice_id")
+                },
+                success: function(results) {
+
+                    if (results == "No Result") {
+                        failedMessage("Failed", "Could not find any invoice results");
+                    } else {
+                        var invoice_results;
+                        var total_amount = 0;
+                        var total_discount = 0;
+                        $.each(JSON.parse(results), function(i, item) {
+                            total_amount += parseFloat(item.amount);
+                            total_discount += parseFloat(item.discount);
+                            invoice_results += `
+                            <tr>
+                                <td>${item.item_no}</td>
+                                <td>${item.description}</td>
+                                <td>${item.quantity}</td>
+                                <td>${item.uom}</td>
+                                <td>${item.price}</td>
+                                <td>${item.base_cost}</td>
+                                <td>${item.discount}</td>
+                                <td>${item.amount}</td>
+                            </tr>
+                            `;
+                        })
+
+                        $("#item-bucket").empty().html(invoice_results);
+                        $("#total_discount").empty().text(total_discount.toFixed(2));
+                        $("#total_cost").empty().text(total_amount.toFixed(2));
+                        $("#invoiceDetailModal").modal("show");
+                    }
+
+                }
+            });
+        })
+
+        $(".select_to_pay").click(function() {
+
+            var row_item_id = $(this).parent().parent().data("id");
+            if (parseFloat($("#total_payment").val()) > 0) {
+                if (parseFloat($("#unapply_amount").val()) > 0) {
+                    if ($(this).prop('checked') == true) {
+                        var current_unapply_amount = parseFloat($("#unapply_amount").val());
+                        var current_total_outstanding = parseFloat($("#total_outstanding").val());
+                        var current_total_pay = parseFloat($("#total_pay").val());
+
+                        var current_outstanding = parseFloat($(`.outstanding-${row_item_id}`).text());
+                        var current_payment = parseFloat($(`.payment-${row_item_id}`).text());
+
+                        var new_outstanding = current_unapply_amount < current_outstanding ? current_outstanding - current_unapply_amount : current_outstanding - current_outstanding;
+                        var new_payment = current_unapply_amount < current_outstanding ? current_payment + current_unapply_amount : current_payment + current_outstanding;
+
+                        var new_unapply_amount = current_unapply_amount < current_outstanding ? current_unapply_amount - current_unapply_amount : current_unapply_amount - current_outstanding;
+                        var new_total_outstanding = current_unapply_amount < current_outstanding ? current_total_outstanding - current_unapply_amount : current_total_outstanding - current_outstanding;
+                        var new_total_pay = current_unapply_amount < current_outstanding ? current_total_pay + current_unapply_amount : current_total_pay + current_outstanding;
+
+                        var payment_made = current_unapply_amount < current_outstanding ? current_unapply_amount : current_outstanding;
+
+                        $(this).attr(
+                            "data-current-payment-made", payment_made
+                        );
+
+                        $(`.outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
+                        $(`.payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
+
+                        $("#total_pay").val(new_total_pay.toFixed(2))
+                        $("#unapply_amount").val(new_unapply_amount.toFixed(2))
+                        $("#total_outstanding").val(new_total_outstanding.toFixed(2))
+
+
+                    } else {
+
+                        var current_unapply_amount = parseFloat($("#unapply_amount").val());
+                        var current_total_outstanding = parseFloat($("#total_outstanding").val());
+                        var current_total_pay = parseFloat($("#total_pay").val());
+
+                        var current_outstanding = parseFloat($(`.outstanding-${row_item_id}`).text());
+                        var current_payment = parseFloat($(`.payment-${row_item_id}`).text());
+                        var payment_made = parseFloat($(this).data("current-payment-made"));
+
+                        var new_outstanding = current_outstanding + payment_made;
+                        var new_payment = current_payment - payment_made;
+
+                        var new_unapply_amount = current_unapply_amount + payment_made;
+                        var new_total_outstanding = current_total_outstanding + payment_made;
+                        var new_total_pay = current_total_pay - payment_made;
+
+                        $(this).attr(
+                            "data-current-payment-made", 0
+                        );
+
+
+                        $(`.outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
+                        $(`.payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
+
+                        $("#total_pay").val(new_total_pay.toFixed(2))
+                        $("#unapply_amount").val(new_unapply_amount.toFixed(2))
+                        $("#total_outstanding").val(new_total_outstanding.toFixed(2))
+
+
+                    }
+                } else {
+                    if ($(this).prop('checked') == true) {
+                        failedMessage("Failed", "Unapply amount currently is 0. Please add some credit in total payment to pay");
+                        return false;
+                    } else {
+
+                        var current_unapply_amount = parseFloat($("#unapply_amount").val());
+                        var current_total_outstanding = parseFloat($("#total_outstanding").val());
+                        var current_total_pay = parseFloat($("#total_pay").val());
+
+                        var current_outstanding = parseFloat($(`.outstanding-${row_item_id}`).text());
+                        var current_payment = parseFloat($(`.payment-${row_item_id}`).text());
+                        var payment_made = parseFloat($(this).data("current-payment-made"));
+
+                        var new_outstanding = current_outstanding + payment_made;
+                        var new_payment = current_payment - payment_made;
+
+                        var new_unapply_amount = current_unapply_amount + payment_made;
+                        var new_total_outstanding = current_total_outstanding + payment_made;
+                        var new_total_pay = current_total_pay - payment_made;
+
+                        $(this).attr(
+                            "data-current-payment-made", 0
+                        );
+
+                        $(`.outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
+                        $(`.payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
+
+                        $("#total_pay").val(new_total_pay.toFixed(2))
+                        $("#unapply_amount").val(new_unapply_amount.toFixed(2))
+                        $("#total_outstanding").val(new_total_outstanding.toFixed(2))
+
+                    }
+                }
+            } else {
+                failedMessage("Failed", "Total Payment currently is 0. Please add some credit in total payment to pay");
+                return false;
+            }
+            if (parseFloat($(`.outstanding-${row_item_id}`).text()) > 0) {
+                $(`.status-${row_item_id}`).removeClass("text-success").addClass("text-danger").empty().text("unpaid");
+            } else {
+                $(`.status-${row_item_id}`).removeClass("text-danger").addClass("text-success").empty().text("paid");
+            }
+
+            if (parseFloat($("#total_pay").val()) == 0) {
+                $("#addPaymentSubmitBtn").prop("disabled", true);
+            } else {
+                $("#addPaymentSubmitBtn").prop("disabled", false);
+            }
+        });
+
+        $("#search-customer_id,#search-customer_name").on("keyup", function() {
+            if ($("#search-customer_id").val() == "" && $("#search-customer_name").val() == "") {
+                var noResult = `                           
+                <tr class="noResultText">
+                    <td colspan="11" class="text-center">
+                        <h5>No payment available</h5>
+                    </td>
+                </tr>`;
+                $("#payment-bucket").empty().html(noResult);
+            }
+        });
+
+        $("#total_payment").on("focusout", function() {
+            if (parseFloat($("#total_pay").val()) > 0) {
+                var total_outstanding_deducted = 0;
+                $("#total_pay").val("0.00");
+                $.each($('.item-row'), function(i, item) {
+                    if ($(`.select_to_pay:eq(${i})`).attr('aria-label') === "unpaid") {
+                        var invoice_id = $(`.item-row:eq(${i})`).data("id");
+
+                        var original_payment = parseFloat($(`.select_to_pay:eq(${i})`).data("previous-payment"));
+                        var original_outstanding = parseFloat($(`.select_to_pay:eq(${i})`).data("previous-outstanding"));
+
+                        total_outstanding_deducted += original_outstanding
+                        $(`.outstanding-${invoice_id}`).empty().text(original_outstanding.toFixed(2));
+                        $(`.payment-${invoice_id}`).empty().text(original_payment.toFixed(2));
+                        $(`.status-${invoice_id}`).removeClass("text-success").addClass("text-danger").empty().text("unpaid");
+                        $(`.select_to_pay:eq(${i})`).prop("checked", false);
+
+                    }
+                });
+                $("#total_outstanding").val(total_outstanding_deducted.toFixed(2))
+            }
+        });
+    }
+
+    function createInvoiceListOnUpdateModal(results) {
+        var invoice_results;
+        var total_outstanding = 0.00;
+        var totalRowInvoiceAll = 0;
+        var totalPageInvoiceAll = 0;
+        var totalRowInvoiceOutstanding = 0;
+        var totalPageInvoiceOutstanding = 0;
+
+        switch (results) {
+            case ("No result"):
+                $("#update-payment-bucket").empty().html(`
+                <tr class="noResultText">
+                    <td colspan="11" class="text-center">
+                        <h5>No payment available</h5>
+                    </td>
+                </tr>
+                `);
+                break;
+
+            default:
+                $.each(JSON.parse(results), function(i, value) {
+                    //var status = value.outstanding == 0 ? ["text-success", "paid", "disabled='disabled'", "checked"] : ["text-danger", "unpaid", "", ""];
+                    total_outstanding += parseFloat(value.outstanding);
+                    invoice_results += `
+                            <tr class="update-item-row" data-id="${value.id}" data-invoice_id=${value.invoice_id}>
+                                <td>
+                                    <button class="btn btn-danger showInvoiceDetailBtn py-md-3 px-md-4 p-sm-3">
+                                        <i class="fas fa-file-invoice"></i>
+                                    </button>
+                                </td>
+                                <td class="update-doc_no-${value.id}">${value.doc_no}</td>
+                                <td class="update-doc_date-${value.id}">${value.creation_date}</td>
+                                <td class="update-invoice_num-${value.id}">${value.invoice_num}</td>
+                                <td class="update-invoice_date-${value.id}">${value.invoice_date}</td>
+                                <td class="update-due_date-${value.id}">${value.due_date}</td>
+                                <td class="update-total_amount-${value.id}">${parseFloat(value.total_amount).toFixed(2)}</td>
+                                <td class="update-outstanding update-outstanding-${value.id}" data-original-outstanding="${value.outstanding}">${parseFloat(value.outstanding).toFixed(2)}</td>
+                                <td class="update-payment-${value.id}">
+                                    <div class="input-group md-form form-sm form-2 pl-0">
+                                        <input value="${parseFloat(value.payment).toFixed(2)}" data-original-payment="${value.payment}" class="form-control update_payment_per_invoice update-payment-amount-${value.id}" type="number" min="0" step="0.01"/>
+                                        <div class="input-group-append">
+                                            <button data-original-payment="${value.payment}" data-new-payment="0.00" class="pageInput input-group-text update_payment_refresh update_payment_refresh-${value.id}">
+                                                <i class="fas fa-sync-alt" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            `;
+                });
+
+                $("#update-total_outstanding").val(total_outstanding.toFixed(2));
+                $("#update-payment-bucket").empty().html(invoice_results);
+                break;
+        }
+        $(".update_payment_per_invoice").on("focusout", function() {
+            var new_payment = parseFloat($(this).val());
+            var current_id = $(this).parent().parent().parent().data("id");
+            var current_amount = parseFloat($(`.update-total_amount-${current_id}`).text());
+            var original_outstanding = parseFloat($(`.update-outstanding-${current_id}`).text());
+            var original_payment = parseFloat($(this).data("original-payment"));
+            var total_outstanding = 0;
+            var total_paid = 0;
+
+            if (new_payment > current_amount) {
+                $(this).val(current_amount.toFixed(2));
+            } else if (new_payment < 0) {
+                $(this).val("0.00");
+            } else {
+                $(this).val(new_payment.toFixed(2));
+            }
+
+            $(`.update-outstanding-${current_id}`).text((original_outstanding - (new_payment - original_payment)).toFixed(2));
+            $(`.update_payment_refresh-${current_id}`).attr("data-new-payment", new_payment);
+
+            $.each($(".update-item-row"), function(i, item) {
+                total_outstanding += parseFloat($(`.update-outstanding:eq(${i})`).text());
+                total_paid += parseFloat($(`.update_payment_per_invoice:eq(${i})`).val());
+            });
+
+            $("#update-total_outstanding").val(total_outstanding.toFixed(2));
+            $("#update-total_pay").val(total_paid.toFixed(2));
+
+        });
+
+        $(".update_payment_refresh").click(function() {
+
+            var total_outstanding = 0;
+            var total_paid = 0;
+            var current_id = $(this).parent().parent().parent().parent().data("id");
+            var original_outstanding = parseFloat($(`.update-outstanding-${current_id}`).data("original-outstanding"));
+            var original_payment = parseFloat($(this).data("original-payment"));
+
+            console.log(original_outstanding);
+
+            $(`.update-outstanding-${current_id}`).text(original_outstanding.toFixed(2));
+            $(`.update-payment-amount-${current_id}`).val(original_payment.toFixed(2));
+
+            $.each($(".update-item-row"), function(i, item) {
+                total_outstanding += parseFloat($(`.update-outstanding:eq(${i})`).text());
+                total_paid += parseFloat($(`.update_payment_per_invoice:eq(${i})`).val());
+            });
+
+            $("#update-total_outstanding").val(total_outstanding.toFixed(2));
+            $("#update-total_pay").val(total_paid.toFixed(2));
+        })
+
+        $(".showInvoiceDetailBtn").click(function() {
+
+            $.ajax({
+                type: "POST",
+                url: "./backend/payment/payment.php",
+                data: {
+                    postType: "viewInvoiceHeader",
+                    selected_id: $(this).parent().parent().data("invoice_id")
+                },
+                success: function(results) {
+
+                    if (results == "No Result") {
+
+                    } else {
+                        $.each(JSON.parse(results), function(i, item) {
+                            $("#detail-invoice_id").text(item.invoice_id);
+                            $("#detail-in_account").text(item.in_account);
+                            $("#detail-in_name").text(item.in_name);
+                            $("#detail-invoice_num").text(item.invoice_num);
+                            $("#detail-invoice_date").text(item.invoice_date);
+                            $("#detail-invoice_date").text(item.invoice_date);
+                            $("#detail-invoice_remark").text(item.invoice_remark);
+                            $("#detail-doc_no").text(item.doc_no);
+                            $("#detail-due_date").text(item.due_date);
+                            $("#detail-subtotal_ex").text(item.subtotal_ex);
+                            $("#detail-discount_header").text(item.discount_header);
+                            $("#detail-total_amount").text(item.total_amount);
+                        });
+                    }
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "./backend/payment/payment.php",
+                data: {
+                    postType: "viewInvoiceDetail",
+                    selected_id: $(this).parent().parent().data("invoice_id")
+                },
+                success: function(results) {
+
+                    if (results == "No Result") {
+                        failedMessage("Failed", "Could not find any invoice results");
+                    } else {
+                        var invoice_results;
+                        var total_amount = 0;
+                        var total_discount = 0;
+                        $.each(JSON.parse(results), function(i, item) {
+                            total_amount += parseFloat(item.amount);
+                            total_discount += parseFloat(item.discount);
+                            invoice_results += `
+                                    <tr>
+                                        <td>${item.item_no}</td>
+                                        <td>${item.description}</td>
+                                        <td>${item.quantity}</td>
+                                        <td>${item.uom}</td>
+                                        <td>${item.price}</td>
+                                        <td>${item.base_cost}</td>
+                                        <td>${item.discount}</td>
+                                        <td>${item.amount}</td>
+                                    </tr>
+                                    `;
+                        })
+
+                        $("#item-bucket").empty().html(invoice_results);
+                        $("#total_discount").empty().text(total_discount.toFixed(2));
+                        $("#total_cost").empty().text(total_amount.toFixed(2));
+                        $("#invoiceDetailModal").modal("show");
+                    }
+
+                }
+            });
+        })
+
+
+        $("#update-total_payment").on("focusout", function() {
+
+            if (parseFloat($("#update-total_pay").val()) > 0) {
+
+                var total_outstanding_deducted = 0;
+                $("#update-total_pay").val($("#update-total_pay").data("original-payment-made"));
+                $.each($('.update-item-row'), function(i, item) {
+                    if ($(`.update-select_to_pay:eq(${i})`).attr('aria-label') === "unpaid") {
+                        var invoice_id = $(`.update-item-row:eq(${i})`).data("id");
+
+                        var original_payment = parseFloat($(`.update-select_to_pay:eq(${i})`).data("previous-payment"));
+                        var original_outstanding = parseFloat($(`.update-select_to_pay:eq(${i})`).data("previous-outstanding"));
+
+                        total_outstanding_deducted += original_outstanding
+                        $(`.update-outstanding-${invoice_id}`).empty().text(original_outstanding.toFixed(2));
+                        $(`.update-payment-${invoice_id}`).empty().text(original_payment.toFixed(2));
+                        $(`.update-status-${invoice_id}`).removeClass("text-success").addClass("text-danger").empty().text("unpaid");
+                        $(`.update-select_to_pay:eq(${i})`).prop("checked", false);
+
+                    }
+                });
+                $("#update-total_outstanding").val(total_outstanding_deducted.toFixed(2))
+            }
+        });
+    }
 
     function fillUpdatePaymentModal(customer_account, customer_name, payment_identifier, payment_id, payment_date, payment_mode, payment_salesperson, payment_remark, total_payment_amount) {
 
@@ -736,266 +1294,8 @@ $(document).ready(function() {
             "data-original-payment-made", total_payment_amount
         );
 
-        $.ajax({
-            type: "POST",
-            url: "./backend/payment/payment.php",
-            data: {
-                postType: "viewPaymentUpdate",
-                payment_identifier: payment_identifier
-            },
-            success: function(results) {
-                console.log(results);
-                var invoice_results;
-                var total_outstanding = 0.00;
-                if (results != "") {
-                    $.each(JSON.parse(results), function(i, value) {
-                        //var status = value.outstanding == 0 ? ["text-success", "paid", "disabled='disabled'", "checked"] : ["text-danger", "unpaid", "", ""];
-                        total_outstanding += parseFloat(value.outstanding);
-                        invoice_results += `
-                        <tr class="update-item-row" data-id="${value.id}" data-invoice_id=${value.invoice_id}>
-                            <td>
-                                <button class="btn btn-danger showInvoiceDetailBtn py-md-3 px-md-4 p-sm-3">
-                                    <i class="fas fa-file-invoice"></i>
-                                </button>
-                            </td>
-                            <td class="update-doc_no-${value.id}">${value.doc_no}</td>
-                            <td class="update-doc_date-${value.id}">${value.creation_date}</td>
-                            <td class="update-invoice_num-${value.id}">${value.invoice_num}</td>
-                            <td class="update-invoice_date-${value.id}">${value.invoice_date}</td>
-                            <td class="update-due_date-${value.id}">${value.due_date}</td>
-                            <td class="update-total_amount-${value.id}">${value.total_amount}</td>
-                            <td class="update-outstanding-${value.id}">${value.outstanding}</td>
-                            <td class="update-payment-${value.id}"><input class="form-control update-payment-amount-${value.id}" type="number" min="0" step="0.01"/></td>
-                            <td class="update-total_price-${value.id} pay_item text-center">
-                                <input type="checkbox" class="update-select_to_pay" data-current-payment-made="0" data-previous-outstanding="${value.outstanding}" data-previous-payment="${value.payment}" aria-label="${value.outstanding == 0 ? "paid" : "unpaid"}" ${status[2]} ${status[3]}/>
-                            </td>
-                        </tr>
-                        `;
-                    });
+        updateModalSwitchInvoiceList("all-invoice", payment_identifier);
 
-                    $("#update-total_outstanding").val(total_outstanding.toFixed(2));
-                    $("#update-payment-bucket").empty().html(invoice_results);
-
-                }
-
-                $(".showInvoiceDetailBtn").click(function() {
-
-                    $.ajax({
-                        type: "POST",
-                        url: "./backend/payment/payment.php",
-                        data: {
-                            postType: "viewInvoiceHeader",
-                            selected_id: $(this).parent().parent().data("invoice_id")
-                        },
-                        success: function(results) {
-
-                            if (results == "No Result") {
-
-                            } else {
-                                $.each(JSON.parse(results), function(i, item) {
-                                    $("#detail-invoice_id").text(item.invoice_id);
-                                    $("#detail-in_account").text(item.in_account);
-                                    $("#detail-in_name").text(item.in_name);
-                                    $("#detail-invoice_num").text(item.invoice_num);
-                                    $("#detail-invoice_date").text(item.invoice_date);
-                                    $("#detail-invoice_date").text(item.invoice_date);
-                                    $("#detail-invoice_remark").text(item.invoice_remark);
-                                    $("#detail-doc_no").text(item.doc_no);
-                                    $("#detail-due_date").text(item.due_date);
-                                    $("#detail-subtotal_ex").text(item.subtotal_ex);
-                                    $("#detail-discount_header").text(item.discount_header);
-                                    $("#detail-total_amount").text(item.total_amount);
-                                });
-                            }
-                        }
-                    });
-                    $.ajax({
-                        type: "POST",
-                        url: "./backend/payment/payment.php",
-                        data: {
-                            postType: "viewInvoiceDetail",
-                            selected_id: $(this).parent().parent().data("invoice_id")
-                        },
-                        success: function(results) {
-
-                            if (results == "No Result") {
-                                failedMessage("Failed", "Could not find any invoice results");
-                            } else {
-                                var invoice_results;
-                                var total_amount = 0;
-                                var total_discount = 0;
-                                $.each(JSON.parse(results), function(i, item) {
-                                    total_amount += parseFloat(item.amount);
-                                    total_discount += parseFloat(item.discount);
-                                    invoice_results += `
-                                    <tr>
-                                        <td>${item.item_no}</td>
-                                        <td>${item.description}</td>
-                                        <td>${item.quantity}</td>
-                                        <td>${item.uom}</td>
-                                        <td>${item.price}</td>
-                                        <td>${item.base_cost}</td>
-                                        <td>${item.discount}</td>
-                                        <td>${item.amount}</td>
-                                    </tr>
-                                    `;
-                                })
-
-                                $("#item-bucket").empty().html(invoice_results);
-                                $("#total_discount").empty().text(total_discount.toFixed(2));
-                                $("#total_cost").empty().text(total_amount.toFixed(2));
-                                $("#invoiceDetailModal").modal("show");
-                            }
-
-                        }
-                    });
-                })
-
-                // $(".update-select_to_pay").click(function() {
-
-                //     var row_item_id = $(this).parent().parent().data("id");
-                //     if (parseFloat($("#update-total_payment").val()) > 0) {
-                //         if (parseFloat($("#update-unapply_amount").val()) > 0) {
-                //             if ($(this).prop('checked') == true) {
-                //                 var current_unapply_amount = parseFloat($("#update-unapply_amount").val());
-                //                 var current_total_outstanding = parseFloat($("#update-total_outstanding").val());
-                //                 var current_total_pay = parseFloat($("#update-total_pay").val());
-
-                //                 var current_outstanding = parseFloat($(`.update-outstanding-${row_item_id}`).text());
-                //                 var current_payment = parseFloat($(`.update-payment-${row_item_id}`).text());
-
-                //                 var new_outstanding = current_unapply_amount < current_outstanding ? current_outstanding - current_unapply_amount : current_outstanding - current_outstanding;
-                //                 var new_payment = current_unapply_amount < current_outstanding ? current_payment + current_unapply_amount : current_payment + current_outstanding;
-
-                //                 var new_unapply_amount = current_unapply_amount < current_outstanding ? current_unapply_amount - current_unapply_amount : current_unapply_amount - current_outstanding;
-                //                 var new_total_outstanding = current_unapply_amount < current_outstanding ? current_total_outstanding - current_unapply_amount : current_total_outstanding - current_outstanding;
-                //                 var new_total_pay = current_unapply_amount < current_outstanding ? current_total_pay + current_unapply_amount : current_total_pay + current_outstanding;
-
-                //                 var payment_made = current_unapply_amount < current_outstanding ? current_unapply_amount : current_outstanding;
-
-                //                 $(this).attr(
-                //                     "data-current-payment-made", payment_made
-                //                 );
-
-                //                 $(`.update-outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
-                //                 $(`.update-payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
-
-                //                 $("#update-total_pay").val(new_total_pay.toFixed(2))
-                //                 $("#update-unapply_amount").val(new_unapply_amount.toFixed(2))
-                //                 $("#update-total_outstanding").val(new_total_outstanding.toFixed(2))
-
-
-                //             } else {
-
-                //                 var current_unapply_amount = parseFloat($("#update-unapply_amount").val());
-                //                 var current_total_outstanding = parseFloat($("#update-total_outstanding").val());
-                //                 var current_total_pay = parseFloat($("#update-total_pay").val());
-
-                //                 var current_outstanding = parseFloat($(`.update-outstanding-${row_item_id}`).text());
-                //                 var current_payment = parseFloat($(`.update-payment-${row_item_id}`).text());
-                //                 var payment_made = parseFloat($(this).data("current-payment-made"));
-
-                //                 var new_outstanding = current_outstanding + payment_made;
-                //                 var new_payment = current_payment - payment_made;
-
-                //                 var new_unapply_amount = current_unapply_amount + payment_made;
-                //                 var new_total_outstanding = current_total_outstanding + payment_made;
-                //                 var new_total_pay = current_total_pay - payment_made;
-
-                //                 $(this).attr(
-                //                     "data-current-payment-made", 0
-                //                 );
-
-
-                //                 $(`.update-outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
-                //                 $(`.update-payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
-
-                //                 $("#update-total_pay").val(new_total_pay.toFixed(2))
-                //                 $("#update-unapply_amount").val(new_unapply_amount.toFixed(2))
-                //                 $("#update-total_outstanding").val(new_total_outstanding.toFixed(2))
-
-                //             }
-                //         } else {
-                //             if ($(this).prop('checked') == true) {
-                //                 failedMessage("Failed", "Unapply amount currently is 0. Please add some credit in total payment to pay");
-                //                 return false;
-                //             } else {
-
-                //                 var current_unapply_amount = parseFloat($("#update-unapply_amount").val());
-                //                 var current_total_outstanding = parseFloat($("#update-total_outstanding").val());
-                //                 var current_total_pay = parseFloat($("#update-total_pay").val());
-
-                //                 var current_outstanding = parseFloat($(`.update-outstanding-${row_item_id}`).text());
-                //                 var current_payment = parseFloat($(`.update-payment-${row_item_id}`).text());
-                //                 var payment_made = parseFloat($(this).data("current-payment-made"));
-
-                //                 var new_outstanding = current_outstanding + payment_made;
-                //                 var new_payment = current_payment - payment_made;
-
-                //                 var new_unapply_amount = current_unapply_amount + payment_made;
-                //                 var new_total_outstanding = current_total_outstanding + payment_made;
-                //                 var new_total_pay = current_total_pay - payment_made;
-
-                //                 $(this).attr(
-                //                     "data-current-payment-made", 0
-                //                 );
-
-                //                 $(`.update-outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
-                //                 $(`.update-payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
-
-                //                 $("#update-total_pay").val(new_total_pay.toFixed(2))
-                //                 $("#update-unapply_amount").val(new_unapply_amount.toFixed(2))
-                //                 $("#update-total_outstanding").val(new_total_outstanding.toFixed(2))
-
-                //             }
-                //         }
-                //     } else {
-                //         failedMessage("Failed", "Total Payment currently is 0. Please add some credit in total payment to pay");
-                //         return false;
-                //     }
-                //     if (parseFloat($(`.update-outstanding-${row_item_id}`).text()) > 0) {
-                //         $(`.update-status-${row_item_id}`).removeClass("text-success").addClass("text-danger").empty().text("unpaid");
-                //     } else {
-                //         $(`.update-status-${row_item_id}`).removeClass("text-danger").addClass("text-success").empty().text("paid");
-                //     }
-
-                //     if (parseFloat($("#update-total_pay").val()) == 0) {
-                //         $("#updatePaymentSubmitBtn").prop("disabled", true);
-                //     } else {
-                //         $("#updatePaymentSubmitBtn").prop("disabled", false);
-                //     }
-                // });
-
-
-                $("#update-total_payment").on("focusout", function() {
-
-                    if (parseFloat($("#update-total_pay").val()) > 0) {
-
-                        var total_outstanding_deducted = 0;
-                        $("#update-total_pay").val($("#update-total_pay").data("original-payment-made"));
-                        $.each($('.update-item-row'), function(i, item) {
-                            if ($(`.update-select_to_pay:eq(${i})`).attr('aria-label') === "unpaid") {
-                                var invoice_id = $(`.update-item-row:eq(${i})`).data("id");
-
-                                var original_payment = parseFloat($(`.update-select_to_pay:eq(${i})`).data("previous-payment"));
-                                var original_outstanding = parseFloat($(`.update-select_to_pay:eq(${i})`).data("previous-outstanding"));
-
-                                total_outstanding_deducted += original_outstanding
-                                $(`.update-outstanding-${invoice_id}`).empty().text(original_outstanding.toFixed(2));
-                                $(`.update-payment-${invoice_id}`).empty().text(original_payment.toFixed(2));
-                                $(`.update-status-${invoice_id}`).removeClass("text-success").addClass("text-danger").empty().text("unpaid");
-                                $(`.update-select_to_pay:eq(${i})`).prop("checked", false);
-
-                            }
-                        });
-                        $("#update-total_outstanding").val(total_outstanding_deducted.toFixed(2))
-                    }
-                });
-            },
-            error: function(e) {
-                console.log(e);
-            }
-        });
     }
 
     function addPayment() {
@@ -1096,6 +1396,7 @@ $(document).ready(function() {
         return totalRowCount;
     }
 
+
     function countRow() {
 
         var totalRowCount;
@@ -1118,7 +1419,7 @@ $(document).ready(function() {
     }
 
     function paginate(total) {
-        var rowperpage = 1;
+        var rowperpage = 20;
         var totalPage = Math.ceil(total / rowperpage);
         $("#pageTotal").empty().text(totalPage);
 
@@ -1133,7 +1434,9 @@ $(document).ready(function() {
     function generateTable() {
         totalRow = countRow();
         totalPage = paginate(totalRow);
-        var currentPageNum;
+        var currentPageNum = 1;
+        var postType = "";
+        var customer_search_input = "";
 
         if ($("#currentPageNum").val() != 0) {
             if ($("#currentPageNum").val() > totalPage) {
@@ -1147,15 +1450,26 @@ $(document).ready(function() {
 
         $("#currentPageNum").val(currentPageNum);
 
+        if ($("#global_search_customer_input").val() != "") {
+            postType = "viewPaymentHeaderByCustomer";
+            customer_search_input = $("#global_search_customer_input").val();
+        } else {
+            postType = "viewPaymentHeader";
+            customer_account = "";
+        }
+        console.log(postType);
+        console.log(customer_search_input);
         $.ajax({
             type: "POST",
             url: "./backend/payment/payment.php",
             data: {
-                postType: "viewPaymentHeader",
+                postType: postType,
+                customer_account: customer_search_input,
                 pageNum: currentPageNum
             },
             success: function(results) {
-                if (results == "0 results" || results == "No Result") {
+                console.log(results);
+                if (results == "0 results" || results == "No Result" || results == "no customer found") {
 
                     renderTable("general");
                     tableSetting("general");
@@ -1302,10 +1616,8 @@ $(document).ready(function() {
                         </tr>
                     `);
                 });
-
                 tableSetting("general");
                 break;
-
         }
     }
 
@@ -1320,5 +1632,4 @@ $(document).ready(function() {
         $("#successModalBody").empty().append(body);
         $('#successToModal').modal('show');
     }
-
 });
