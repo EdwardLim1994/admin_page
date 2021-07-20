@@ -2,7 +2,7 @@
 @import '_footer';
 @import '_roundBtn';
 body.modal-open {
-    overflow: hidden!important;
+    overflow: hidden !important;
 }
 
 body.modal-open .fixed-bottom {
@@ -10,7 +10,7 @@ body.modal-open .fixed-bottom {
 }
 
 .table-responsive {
-    overflow-x: hidden!important;
+    overflow-x: hidden !important;
 }
 
 .break-word {
@@ -20,7 +20,7 @@ body.modal-open .fixed-bottom {
 .dataTables_scrollHeadInner,
 .dataTables_scrollFootInner,
 .table_fullwidth {
-    width: 100%!important;
+    width: 100% !important;
 }
 
 .dropdown-menu {
@@ -108,12 +108,12 @@ body.modal-open .fixed-bottom {
         }
     }
     .container {
-        width: 95%!important;
+        width: 95% !important;
     }
     .rowResults {
         margin: 10px 0;
         .row-input {
-            width: 50%!important;
+            width: 50% !important;
         }
     }
 }

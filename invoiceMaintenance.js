@@ -3,6 +3,14 @@ $(document).ready(function() {
 
     var totalRow = countRow();
     var totalPage = paginate(totalRow);
+    var timerCustomer;
+    var isSpinnerOnCustomer = false;
+    var timerItem;
+    var isSpinnerOnItem = false;
+    var timerCustomerUpdate;
+    var isSpinnerOnCustomerUpdate = false;
+    var timerItemUpdate;
+    var isSpinnerOnItemUpdate = false;
     generateTable();
 
 
@@ -14,82 +22,145 @@ $(document).ready(function() {
         }
     });
 
-    $("#search-customer_name").on('keyup', function() {
-        customerSearchResults(1);
-    });
-    $("#search-customer_id").on('keyup', function() {
-        customerSearchResults(1);
-    });
+    $("#search-customer_name, #search-customer_id").on('keyup', function() {
 
-    $("#search-item").on("keyup", function() {
-        itemSearchResults(1);
-    });
+        clearTimeout(timerCustomer);
+        if (!isSpinnerOnCustomer) {
+            $("#customer-search").empty().addClass("border").html(`
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            `);
+            isSpinnerOnCustomer = true;
 
-    // $("#search-customer_name").focusout(function(){
-    //     $("#customer-search").hide();
-    // })
+        }
 
-    // $("#search-customer_id").focusout(function(){
-    //     $("#customer-search").hide();
-    // })
-
-    // $("#search-item").focusout(function(){
-    //     $("#item-search").hide()
-    // })
-
-    // $("#search-customer_name").focus(function(){
-    //     if($(this).val() != "")
-    //         $("#customer-search").show();
-    // })
-
-    // $("#search-customer_id").focus(function(){
-    //     if($(this).val() != "")
-    //         $("#customer-search").show();
-    // })
-
-    // $("#search-item").focus(function(){
-    //     if($(this).val() != "")
-    //         $("#item-search").show()
-    // })
+        if ($(this).val()) {
+            timerCustomer = setTimeout(function() {
+                customerSearchResults(1);
+            }, 1000);
+        } else {
+            $("#customer-search").empty().removeClass("border");
+            isSpinnerOnCustomer = false;
+        }
 
 
-    $("#update-search-customer_name").on('keyup', function() {
-        updatecustomerSearchResults(1);
-    });
-    $("#update-search-customer_id").on('keyup', function() {
-        updatecustomerSearchResults(1);
     });
 
-    $("#update-search-item").on("keyup", function() {
-        updateitemSearchResults(1);
+
+
+
+    $("#search-item").on('keyup', function() {
+
+        clearTimeout(timerItem);
+        if (!isSpinnerOnItem) {
+            $("#item-search").empty().addClass("border").html(`
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            `);
+            isSpinnerOnItem = true;
+        }
+
+        if ($(this).val()) {
+            timerItem = setTimeout(function() {
+                itemSearchResults(1);
+            }, 1000);
+        } else {
+            $("#item-search").empty().removeClass("border");
+            isSpinnerOnCustomer = false;
+        }
+
     });
 
-    // $("#update-search-customer_name").focusout(function(){
-    //     $("#update-customer-search").hide();
-    // })
+    $("#update-search-customer_name, #update-search-customer_id").on('keyup', function() {
+        clearTimeout(timerCustomerUpdate);
+        if (!isSpinnerOnCustomerUpdate) {
+            $("#update-customer-search").empty().addClass("border").html(`
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            `);
+            isSpinnerOnCustomerUpdate = true;
 
-    // $("#update-search-customer_id").focusout(function(){
-    //     $("#update-customer-search").hide();
-    // })
+        }
 
-    // $("#update-search-item").focusout(function(){
-    //     $("#update-item-search").hide()
-    // })
+        if ($(this).val()) {
+            timerCustomerUpdate = setTimeout(function() {
+                updatecustomerSearchResults(1);
+            }, 1000);
+        } else {
+            $("#update-customer-search").empty().removeClass("border");
+            isSpinnerOn = false;
+        }
+    });
 
-    // $("#update-search-customer_name").focus(function(){
-    //     if($(this).val() != "")
-    //         $("#update-customer-search").show();
-    // })
 
-    // $("#update-search-customer_id").focus(function(){
-    //     if($(this).val() != "")
-    //         $("#update-customer-search").show();
-    // })
+    $("#update-search-item").on('keyup', function() {
+        clearTimeout(timerItemUpdate);
+        if (!isSpinnerOnItemUpdate) {
+            $("#update-item-search").empty().addClass("border").html(`
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            `);
+            isSpinnerOnItemUpdate = true;
 
-    // $("#update-search-item").focus(function(){
-    //     if($(this).val() != "")
-    //         $("#update-item-search").show()
-    // })
+        }
+
+        if ($(this).val()) {
+            timerItemUpdate = setTimeout(function() {
+                updateitemSearchResults(1);
+            }, 1000);
+        } else {
+            $("#item-search").empty().removeClass("border");
+            isSpinnerOnItemUpdate = false;
+        }
+
+
+    });
+
+    $("#update-search-item").on('keydown', function() {
+        if ($(this).val() != "") {
+            if (!isSpinnerOnItemUpdate) {
+                $("#update-item-search").empty().addClass("border").html(`
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            `);
+                isSpinnerOnItemUpdate = true;
+            }
+            clearTimeout(timerItemUpdate);
+        } else {
+            $("#item-search").empty().removeClass("border");
+            isSpinnerOnItemUpdate = false;
+        }
+    });
+
+
+
+    // $("#update-search-customer_name, #update-search-customer_id").on('keyup', function() {
+    //     updatecustomerSearchResults(1);
+    // });
+    // $("#update-search-customer_id").on('keyup', function() {
+    //     updatecustomerSearchResults(1);
+    // });
+
+    // $("#update-search-item").on("keyup", function() {
+    //     updateitemSearchResults(1);
+    // });
+
+
 
     $("#addModalBtn").click(function() {
         $("#search-customer_name").val("");
@@ -133,21 +204,13 @@ $(document).ready(function() {
     function customerSearchResults(pageNum) {
 
         var timer;
-        var isSpinnerOn;
+
         var searchResult;
 
         if ($("#search-customer_name").val() != "" || $("#search-customer_id").val() != "") {
 
             clearTimeout(timer);
-            $("#customer-search").empty().addClass("border").html(`
-            <div class="d-flex justify-content-center">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-            `);
 
-            isSpinnerOn = true;
             timer = setTimeout(function() {
                 $.ajax({
                     type: "POST",
@@ -160,7 +223,7 @@ $(document).ready(function() {
                     },
                     success: function(results) {
                         if (results == "No result") {
-                            if (isSpinnerOn == true) {
+                            if (isSpinnerOnCustomer == true) {
                                 $("#customer-search").empty().html(`
                                 <div class="row">
                                     <div class="col-6">
@@ -172,12 +235,12 @@ $(document).ready(function() {
                                 </div>
                                     
                                 `);
-                                isSpinnerOn = false;
+                                isSpinnerOnCustomer = false;
                             }
 
                         } else if (results == "") {
                             $("#customer-search").empty().removeClass("border");
-                            isSpinnerOn = false;
+                            isSpinnerOnCustomer = false;
                         } else {
                             searchResult = `
                             <div class="sticky-top bg-white">
@@ -217,16 +280,20 @@ $(document).ready(function() {
                             });
                             searchResult += `</div>`;
                             $("#customer-search").empty().html(searchResult);
-                            isSpinnerOn = false;
+                            isSpinnerOnCustomer = false;
                             customerSearchResultsCountRow();
                             customerSearchResultsSelect();
+
+                            $("#itemSearchCurrentPageNum").focusout(function() {
+                                customerSearchResults(parseInt($(this).val()));
+                            })
                         }
                     }
                 });
             }, 1000);
         } else {
             $("#customer-search").empty().removeClass("border");
-            isSpinnerOn = false;
+            isSpinnerOnCustomer = false;
         }
     }
 
@@ -278,20 +345,12 @@ $(document).ready(function() {
     function itemSearchResults(pageNum) {
 
         var timer;
-        var isSpinnerOn;
+
         var searchResult;
 
         if ($("#search-item").val() != "") {
             clearTimeout(timer);
-            $("#item-search").empty().addClass("border").html(`
-            <div class="d-flex justify-content-center">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-            `);
 
-            isSpinnerOn = true;
 
             timer = setTimeout(function() {
                 $.ajax({
@@ -304,7 +363,7 @@ $(document).ready(function() {
                     },
                     success: function(results) {
                         if (results == "No result") {
-                            if (isSpinnerOn == true) {
+                            if (isSpinnerOnItem == true) {
                                 $("#item-search").empty().html(`
                                 <div class="row">
                                     <div class="col-6">
@@ -315,12 +374,12 @@ $(document).ready(function() {
                                     </div>
                                 </div>
                                 `);
-                                isSpinnerOn = false;
+                                isSpinnerOnItem = false;
                             }
 
                         } else if (results == "") {
                             $("#item-search").empty().removeClass("border");
-                            isSpinnerOn = false;
+                            isSpinnerOnItem = false;
                         } else {
                             searchResult = `
                             <div class="sticky-top bg-white">
@@ -368,10 +427,13 @@ $(document).ready(function() {
                             });
                             searchResult += `</div>`;
                             $("#item-search").empty().html(searchResult);
-                            isSpinnerOn = false;
+                            isSpinnerOnItem = false;
                             itemSearchResultsCountRow();
                             itemSearchResultsSelect();
 
+                            $("#updateitemSearchCurrentPageNum").focusout(function() {
+                                updateCustomerSearchResults(parseInt($(this).val()));
+                            })
                         }
                     }
                 });
@@ -379,7 +441,7 @@ $(document).ready(function() {
 
         } else {
             $("#item-search").empty().removeClass("border");
-            isSpinnerOn = false;
+            isSpinnerOnItem = false;
         }
     }
 
@@ -582,21 +644,12 @@ $(document).ready(function() {
     function updatecustomerSearchResults(pageNum) {
 
         var timer;
-        var isSpinnerOn;
+        //var isSpinnerOn;
         var searchResult;
 
         if ($("#update-search-customer_name").val() != "" || $("#update-search-customer_id").val() != "") {
 
-            clearTimeout(timer);
-            $("#update-customer-search").empty().addClass("border").html(`
-            <div class="d-flex justify-content-center">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-            `);
 
-            isSpinnerOn = true;
             timer = setTimeout(function() {
                 $.ajax({
                     type: "POST",
@@ -609,7 +662,7 @@ $(document).ready(function() {
                     },
                     success: function(results) {
                         if (results == "No result") {
-                            if (isSpinnerOn == true) {
+                            if (isSpinnerOnCustomerUpdate == true) {
                                 $("#update-customer-search").empty().html(`
                                 <div class="row">
                                     <div class="col-6">
@@ -620,12 +673,12 @@ $(document).ready(function() {
                                     </div>
                                 </div>
                                 `);
-                                isSpinnerOn = false;
+                                isSpinnerOnCustomerUpdate = false;
                             }
 
                         } else if (results == "") {
                             $("#update-customer-search").empty().removeClass("border");
-                            isSpinnerOn = false;
+                            isSpinnerOnCustomerUpdate = false;
                         } else {
                             searchResult = `
                             <div class="sticky-top bg-white">
@@ -665,7 +718,7 @@ $(document).ready(function() {
                             });
                             searchResult += `</div>`;
                             $("#update-customer-search").empty().html(searchResult);
-                            isSpinnerOn = false;
+                            isSpinnerOnCustomerUpdate = false;
                             updatecustomerSearchResultsCountRow();
                             updatecustomerSearchResultsSelect();
                         }
@@ -674,7 +727,7 @@ $(document).ready(function() {
             }, 1000);
         } else {
             $("#update-customer-search").empty().removeClass("border");
-            isSpinnerOn = false;
+            isSpinnerOnCustomerUpdate = false;
         }
     }
 
@@ -726,20 +779,20 @@ $(document).ready(function() {
     function updateitemSearchResults(pageNum) {
 
         var timer;
-        var isSpinnerOn;
+        //var isSpinnerOn;
         var searchResult;
 
         if ($("#update-search-item").val() != "") {
             clearTimeout(timer);
-            $("#update-item-search").empty().addClass("border").html(`
-            <div class="d-flex justify-content-center">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-            `);
+            // $("#update-item-search").empty().addClass("border").html(`
+            // <div class="d-flex justify-content-center">
+            //     <div class="spinner-border" role="status">
+            //         <span class="sr-only">Loading...</span>
+            //     </div>
+            // </div>
+            // `);
 
-            isSpinnerOn = true;
+            // isSpinnerOn = true;
 
             timer = setTimeout(function() {
                 $.ajax({
@@ -752,7 +805,7 @@ $(document).ready(function() {
                     },
                     success: function(results) {
                         if (results == "No result") {
-                            if (isSpinnerOn == true) {
+                            if (isSpinnerOnItemUpdate == true) {
                                 $("#update-item-search").empty().html(`
                                 <div class="row">
                                     <div class="col-6">
@@ -763,12 +816,12 @@ $(document).ready(function() {
                                     </div>
                                 </div>
                                 `);
-                                isSpinnerOn = false;
+                                isSpinnerOnItemUpdate = false;
                             }
 
                         } else if (results == "") {
                             $("#update-item-search").empty().removeClass("border");
-                            isSpinnerOn = false;
+                            isSpinnerOnItemUpdate = false;
                         } else {
                             searchResult = `
                             <div class="sticky-top bg-white">
@@ -817,7 +870,7 @@ $(document).ready(function() {
                             searchResult += `</div>`;
                             $("#update-item-search").empty().html(searchResult);
 
-                            isSpinnerOn = false;
+                            isSpinnerOnItemUpdate = false;
                             updateitemSearchResultsCountRow();
                             updateitemSearchResultsSelect();
 
@@ -828,7 +881,7 @@ $(document).ready(function() {
 
         } else {
             $("#update-item-search").empty().removeClass("border");
-            isSpinnerOn = false;
+            isSpinnerOnItemUpdate = false;
         }
     }
 
@@ -1340,6 +1393,7 @@ $(document).ready(function() {
                         var current_index_edit = $(this).attr('id');
                         var current_index = current_index_edit.split('-');
 
+                        var invoice_paid = parseFloat($(`#payment-${current_index[1]}`).text()) < parseFloat($(`#total_amount-${current_index[1]}`).text()) ? "" : "readonly";
 
                         $("#update-invoice_id").val(current_index[1]);
                         $("#update-search-customer_name").val($("#in_name-" + current_index[1]).text());
@@ -1379,15 +1433,15 @@ $(document).ready(function() {
                                         <td class="update-item_no">${value.item_no}</td>
                                         <td class="update-description">${value.description}</td>
                                         <td>
-                                            <input type="number" class="form-control update-itemQuantity" min="1" value="${value.quantity}">
+                                            <input type="number" ${invoice_paid} class="form-control update-itemQuantity" min="1" value="${value.quantity}">
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control update-itemUnit" placeholder="unit" val="${value.uom}">
+                                            <input type="text" ${invoice_paid} class="form-control update-itemUnit" placeholder="unit" val="${value.uom}">
                                         </td>
                                         <td class="update-selling_price">${value.price}</td>
                                         <td class="update-unit_cost">${value.base_cost}</td>
                                         <td>
-                                            <input type="number" class="form-control update-itemDiscount" value="${value.discount}" min="0" max="100" step="1">
+                                            <input type="number" ${invoice_paid} class="form-control update-itemDiscount" value="${value.discount}" min="0" max="100" step="1">
                                         </td>
                                         <td class="update-total_price">${ newPrice.toFixed(2) }</td>
                                     </tr>
@@ -1512,6 +1566,7 @@ $(document).ready(function() {
                     ' <th scope="col" class="th-lg">Subtotal Exclude Discount</th> ' +
                     ' <th scope="col" class="th-lg">Total Discount</th> ' +
                     ' <th scope="col" class="th-lg">Total Cost</th> ' +
+                    ' <th scope="col" class="th-lg">Payment Made</th> ' +
                     ' <th scope="col" class="th-lg">Remark</th> ' +
                     ' </tr> ' +
                     ' </thead> ' +
@@ -1531,6 +1586,7 @@ $(document).ready(function() {
                     ' <th scope="col" class="th-lg">Subtotal Exclude Discount</th> ' +
                     ' <th scope="col" class="th-lg">Total Discount</th> ' +
                     ' <th scope="col" class="th-lg">Total Cost</th> ' +
+                    ' <th scope="col" class="th-lg">Payment Made</th> ' +
                     ' <th scope="col" class="th-lg">Remark</th> ' +
                     ' </tr> ' +
                     ' </tfoot> ' +
@@ -1574,6 +1630,7 @@ $(document).ready(function() {
                         " <td id='subtotal_ex-" + invoice.invoice_id + "'>" + invoice.subtotal_ex + '</td>' +
                         " <td id='discount_header-" + invoice.invoice_id + "'>" + invoice.discount_header + '</td>' +
                         " <td id='total_amount-" + invoice.invoice_id + "'>" + invoice.total_amount + '</td>' +
+                        " <td id='payment-" + invoice.invoice_id + "'>" + invoice.payment + '</td>' +
                         " <td id='invoice_remark-" + invoice.invoice_id + "'>" + invoice.invoice_remark + '</td>' +
                         '</tr>'
                     );
