@@ -128,24 +128,24 @@ $(document).ready(function() {
 
     });
 
-    $("#update-search-item").on('keydown', function() {
-        if ($(this).val() != "") {
-            if (!isSpinnerOnItemUpdate) {
-                $("#update-item-search").empty().addClass("border").html(`
-            <div class="d-flex justify-content-center">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-            `);
-                isSpinnerOnItemUpdate = true;
-            }
-            clearTimeout(timerItemUpdate);
-        } else {
-            $("#item-search").empty().removeClass("border");
-            isSpinnerOnItemUpdate = false;
-        }
-    });
+    // $("#update-search-item").on('keydown', function() {
+    //     if ($(this).val() != "") {
+    //         if (!isSpinnerOnItemUpdate) {
+    //             $("#update-item-search").empty().addClass("border").html(`
+    //         <div class="d-flex justify-content-center">
+    //             <div class="spinner-border" role="status">
+    //                 <span class="sr-only">Loading...</span>
+    //             </div>
+    //         </div>
+    //         `);
+    //             isSpinnerOnItemUpdate = true;
+    //         }
+    //         clearTimeout(timerItemUpdate);
+    //     } else {
+    //         $("#item-search").empty().removeClass("border");
+    //         isSpinnerOnItemUpdate = false;
+    //     }
+    // });
 
 
 
@@ -1393,7 +1393,7 @@ $(document).ready(function() {
                         var current_index_edit = $(this).attr('id');
                         var current_index = current_index_edit.split('-');
 
-                        var invoice_paid = parseFloat($(`#payment-${current_index[1]}`).text()) < parseFloat($(`#total_amount-${current_index[1]}`).text()) ? "" : "readonly";
+                        var invoice_paid = parseFloat($(`#payment-${current_index[1]}`).text()) == 0 ? "" : "readonly";
 
                         $("#update-invoice_id").val(current_index[1]);
                         $("#update-search-customer_name").val($("#in_name-" + current_index[1]).text());
