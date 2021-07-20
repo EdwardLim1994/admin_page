@@ -1,6 +1,6 @@
 <?php
 
-require_once "../login/dbConfig.php";
+require_once ("../login/dbConfig.php");
 session_start();
 
 ini_set('display_errors', 1);
@@ -41,7 +41,7 @@ switch ($postType) {
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
                         $jsonArray[] = $row;
-                        echo json_encode($jsonArray);
+                        //echo json_encode($jsonArray);
                     }
                 } else {
                     echo "No result";
@@ -49,6 +49,7 @@ switch ($postType) {
                 $stmt->close();
 
             }
+            echo json_encode($jsonArray);
             //echo json_encode(array($jsonArray, $detailArray));
            
             //echo json_encode($detailArray);
@@ -86,7 +87,7 @@ switch ($postType) {
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
                         $jsonArray[] = $row;
-                        echo json_encode($jsonArray);
+                        //echo json_encode($jsonArray);
                     }
                 } else {
                     echo "No result";
@@ -94,6 +95,7 @@ switch ($postType) {
                 $stmt->close();
 
             }
+            echo json_encode($jsonArray);
             //echo json_encode(array($jsonArray, $detailArray));
            
             //echo json_encode($detailArray);
@@ -628,7 +630,7 @@ switch ($postType) {
     case ("viewInvoiceHeader"):
         if (isset($_POST["selected_id"])) {
             $stmt = $mysqli->prepare("SELECT invoice_id, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount FROM invoice_header where invoice_id = ?");
-            $stmt->bind_param("i", $_POST["selected_id"]);
+            $stmt->bind_param("s", $_POST["selected_id"]);
             $stmt->execute();
             $result = $stmt->get_result();
 

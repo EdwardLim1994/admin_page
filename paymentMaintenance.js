@@ -113,12 +113,10 @@ $(document).ready(function() {
     });
 
 
-
-
     $("#addModalBtn").click(function() {
         $("#search-customer_name").val("");
         $("#search-customer_id").val("");
-
+        $("#addModalOutstandingInvoiceList").prop("checked", true)
         $("#customer-search").removeClass("border").empty();
         $("#total_payment").val("0.00");
         $("#payment_mode").val("");
@@ -167,9 +165,9 @@ $(document).ready(function() {
         addModalSwitchInvoiceList($("[name='addModalInvoice']:checked").val());
     })
 
-    $("[name='updateModalInvoice']").click(function() {
-        updateModalSwitchInvoiceList($("[name='updateModalInvoice']:checked").val());
-    })
+    // $("[name='updateModalInvoice']").click(function() {
+    //     updateModalSwitchInvoiceList($("[name='updateModalInvoice']:checked").val());
+    // })
 
     //createInvoiceListOnUpdateModal
     $("#addPaymentSubmitBtn").click(function() {
@@ -643,7 +641,6 @@ $(document).ready(function() {
         var total_amount = [];
         var outstanding = [];
         var payment = [];
-        var payment_status = [];
 
         var payment_id = ""
         var payment_identifier = "";
@@ -694,7 +691,6 @@ $(document).ready(function() {
                     payment: payment,
                     payment_identifier: payment_identifier,
                     payment_id: payment_id,
-                    payment_status: payment_status,
                     payment_date: payment_date,
                     payment_remark: payment_remark,
                     payment_salesperson: payment_salesperson,
@@ -746,9 +742,21 @@ $(document).ready(function() {
                             pageNum: currentPageNum
                         },
                         success: function(results) {
-                            createInvoiceListOnAddModal(results);
-                            countRowSelectedCustomerInvoice();
-                            console.log('all-invoice', results);
+
+                            switch (results) {
+
+                                case ("No result"):
+
+                                    break;
+                                case (""):
+
+                                    break;
+
+                                default:
+                                    createInvoiceListOnAddModal(results);
+                                    countRowSelectedCustomerInvoice();
+                                    break;
+                            }
                         },
                         error: function(e) {
                             console.log(e);
@@ -766,9 +774,20 @@ $(document).ready(function() {
                             pageNum: currentPageNum
                         },
                         success: function(results) {
-                            createInvoiceListOnAddModal(results);
-                            countRowSelectedCustomerInvoice();
-                            console.log('outstanding-invoice', results);
+                            switch (results) {
+
+                                case ("No result"):
+
+                                    break;
+                                case (""):
+
+                                    break;
+
+                                default:
+                                    createInvoiceListOnAddModal(results);
+                                    countRowSelectedCustomerInvoice();
+                                    break;
+                            }
                         },
                         error: function(e) {
                             console.log(e);
@@ -779,46 +798,114 @@ $(document).ready(function() {
         }
     }
 
-    function updateModalSwitchInvoiceList(current_selection, payment_identifier) {
-        switch (current_selection) {
-            case ("all-invoice"):
-                $.ajax({
-                    type: "POST",
-                    url: "./backend/payment/payment.php",
-                    data: {
-                        postType: "viewPaymentUpdateAll",
-                        payment_identifier: payment_identifier
-                    },
-                    success: function(results) {
+    function updateModalSwitchInvoiceList(payment_identifier) {
+        $.ajax({
+            type: "POST",
+            url: "./backend/payment/payment.php",
+            data: {
+                postType: "viewPaymentUpdateAll",
+                payment_identifier: payment_identifier
+            },
+            success: function(results) {
+                console.log(results);
+                console.log(payment_identifier);
+                switch (results) {
+                    case ("payment detail not found"):
+
+                        break;
+
+                    case ("No result"):
+
+                        break;
+
+                    case (""):
+
+                        break;
+
+                    default:
                         createInvoiceListOnUpdateModal(results);
-
-                    },
-                    error: function(e) {
-                        console.log(e);
-                    }
-                });
-                break;
-
-            case ("outstanding-invoice"):
-                $.ajax({
-                    type: "POST",
-                    url: "./backend/payment/payment.php",
-                    data: {
-                        postType: "viewPaymentUpdateOutstanding",
-                        payment_identifier: payment_identifier
-                    },
-                    success: function(results) {
-                        console.log(results);
-                        createInvoiceListOnUpdateModal(results);
+                        break;
+                }
 
 
-                    },
-                    error: function(e) {
-                        console.log(e);
-                    }
-                });
-                break;
-        }
+            },
+            error: function(e) {
+                console.log(e);
+            }
+        });
+        // switch (current_selection) {
+        //     case ("all-invoice"):
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "./backend/payment/payment.php",
+        //             data: {
+        //                 postType: "viewPaymentUpdateAll",
+        //                 payment_identifier: payment_identifier
+        //             },
+        //             success: function(results) {
+        //                 console.log(results);
+        //                 console.log(payment_identifier);
+        //                 switch (results) {
+        //                     case ("payment detail not found"):
+
+        //                         break;
+
+        //                     case ("No result"):
+
+        //                         break;
+
+        //                     case (""):
+
+        //                         break;
+
+        //                     default:
+        //                         createInvoiceListOnUpdateModal(results);
+        //                         break;
+        //                 }
+
+
+        //             },
+        //             error: function(e) {
+        //                 console.log(e);
+        //             }
+        //         });
+        //         break;
+
+        //     case ("outstanding-invoice"):
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "./backend/payment/payment.php",
+        //             data: {
+        //                 postType: "viewPaymentUpdateOutstanding",
+        //                 payment_identifier: payment_identifier
+        //             },
+        //             success: function(results) {
+        //                 console.log(results);
+        //                 console.log(payment_identifier);
+        //                 switch (results) {
+        //                     case ("payment detail not found"):
+
+        //                         break;
+
+        //                     case ("No result"):
+
+        //                         break;
+
+        //                     case (""):
+
+        //                         break;
+
+        //                     default:
+        //                         createInvoiceListOnUpdateModal(results);
+        //                         break;
+        //                 }
+        //             },
+        //             error: function(e) {
+        //                 console.log(e);
+        //             }
+        //         });
+        //         break;
+        // }
     }
 
     function createInvoiceListOnAddModal(results) {
@@ -847,7 +934,7 @@ $(document).ready(function() {
                     <tr class="item-row" data-id="${value.id}" data-invoice_id=${value.invoice_id}>
                         <td>
                             <button class="btn btn-danger showInvoiceDetailBtn py-md-3 px-md-4 p-sm-3">
-                                <i class="fas fa-trash-alt"></i>
+                                <i class="fas fa-file-invoice"></i>
                             </button>
                         </td>
                         <td class="doc_no-${value.id}">${value.doc_no}</td>
@@ -1093,6 +1180,7 @@ $(document).ready(function() {
                 break;
 
             default:
+                console.log(results);
                 $.each(JSON.parse(results), function(i, value) {
                     //var status = value.outstanding == 0 ? ["text-success", "paid", "disabled='disabled'", "checked"] : ["text-danger", "unpaid", "", ""];
                     total_outstanding += parseFloat(value.outstanding);
@@ -1294,7 +1382,7 @@ $(document).ready(function() {
             "data-original-payment-made", total_payment_amount
         );
 
-        updateModalSwitchInvoiceList("all-invoice", payment_identifier);
+        updateModalSwitchInvoiceList(payment_identifier);
 
     }
 
@@ -1358,7 +1446,7 @@ $(document).ready(function() {
                     customer_name: customer_name
                 },
                 success: function(results) {
-
+                    console.log(results);
                     switch (results) {
                         case ("success pay"):
                             $("#addModal").modal("hide");
@@ -1437,6 +1525,7 @@ $(document).ready(function() {
         var currentPageNum = 1;
         var postType = "";
         var customer_search_input = "";
+        var customer_account = "";
 
         if ($("#currentPageNum").val() != 0) {
             if ($("#currentPageNum").val() > totalPage) {
