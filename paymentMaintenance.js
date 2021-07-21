@@ -162,6 +162,7 @@ $(document).ready(function() {
 
 
     $("[name='addModalInvoice']").click(function() {
+        console.log($("[name='addModalInvoice']:checked").val())
         addModalSwitchInvoiceList($("[name='addModalInvoice']:checked").val());
     })
 
@@ -718,6 +719,7 @@ $(document).ready(function() {
     }
 
     function addModalSwitchInvoiceList(current_selection) {
+        console.log(current_selection);
         if ($("#search-customer_name").val() != "") {
 
             var currentPageNum;
@@ -730,7 +732,6 @@ $(document).ready(function() {
             } else {
                 currentPageNum = 1;
             }
-            console.log(currentPageNum);
             switch (current_selection) {
                 case ('all-invoice'):
                     $.ajax({
@@ -746,10 +747,22 @@ $(document).ready(function() {
                             switch (results) {
 
                                 case ("No result"):
-
+                                    $("#payment-bucket").empty().html(`
+                                    <tr class="noResultText">
+                                        <td colspan="11" class="text-center">
+                                            <h5>No payment available</h5>
+                                        </td>
+                                    </tr>
+                                    `);
                                     break;
                                 case (""):
-
+                                    $("#payment-bucket").empty().html(`
+                                    <tr class="noResultText">
+                                        <td colspan="11" class="text-center">
+                                            <h5>No payment available</h5>
+                                        </td>
+                                    </tr>
+                                    `);
                                     break;
 
                                 default:
@@ -777,10 +790,22 @@ $(document).ready(function() {
                             switch (results) {
 
                                 case ("No result"):
-
+                                    $("#payment-bucket").empty().html(`
+                                    <tr class="noResultText">
+                                        <td colspan="11" class="text-center">
+                                            <h5>No payment available</h5>
+                                        </td>
+                                    </tr>
+                                    `);
                                     break;
                                 case (""):
-
+                                    $("#payment-bucket").empty().html(`
+                                    <tr class="noResultText">
+                                        <td colspan="11" class="text-center">
+                                            <h5>No payment available</h5>
+                                        </td>
+                                    </tr>
+                                    `);
                                     break;
 
                                 default:
@@ -811,15 +836,33 @@ $(document).ready(function() {
                 console.log(payment_identifier);
                 switch (results) {
                     case ("payment detail not found"):
-
+                        $("#update-payment-bucket").empty().html(`
+                        <tr class="noResultText">
+                            <td colspan="11" class="text-center">
+                                <h5>No payment available</h5>
+                            </td>
+                        </tr>
+                        `);
                         break;
 
                     case ("No result"):
-
+                        $("#update-payment-bucket").empty().html(`
+                        <tr class="noResultText">
+                            <td colspan="11" class="text-center">
+                                <h5>No payment available</h5>
+                            </td>
+                        </tr>
+                        `);
                         break;
 
                     case (""):
-
+                        $("#update-payment-bucket").empty().html(`
+                        <tr class="noResultText">
+                            <td colspan="11" class="text-center">
+                                <h5>No payment available</h5>
+                            </td>
+                        </tr>
+                        `);
                         break;
 
                     default:
