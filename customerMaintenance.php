@@ -69,17 +69,17 @@ else
     <header>
         <div class="blue">
             <div class="container-fluid">
-                <div class="row py-2">
-                    <div class="col-4 my-auto ">
+                <div class="py-2 row">
+                    <div class="my-auto col-4 ">
 
                     </div>
-                    <div class="col-4 text-center my-auto">
+                    <div class="my-auto text-center col-4">
                         <a href="https://nightcatdigitalsolutions.com/avenger/menu.php">
-                            <img class="img-fluid rounded logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
+                            <img class="rounded img-fluid logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
                         </a>
                     </div>
-                    <div class="col-4 text-right my-auto">
-                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="my-auto text-right col-4">
+                        <button class="px-3 py-2 btn btn-primary px-sm-4 py-sm-3 dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <h5 class="h5-responsive">Hi, <?= $currentUser ?></h5>
                         </button>
                         <div class="dropdown-menu">
@@ -102,7 +102,7 @@ else
 
 
                 <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb white pl-0">
+                    <ol class="pl-0 breadcrumb white">
                         <li class="breadcrumb-item"><a href="./menu.php">Menu</a></li>
                         <li class="breadcrumb-item active">Invoice Maintanance</li>
                     </ol>
@@ -111,7 +111,7 @@ else
                     <div class="col-lg-10 col-md-8 col-sm-6">
                         <h1 class="h1-responsive">Invoice Maintanance</h1>
                     </div>
-                    <div class="col-lg-2 col-md-4 col-sm-6 text-right">
+                    <div class="text-right col-lg-2 col-md-4 col-sm-6">
                         <button class="btn btn-danger py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#addModal">
                             <span class="textBreak">Add Invoice</span>
                             <span class="iconBreak"><i class="fas fa-file-invoice"></i></span>
@@ -121,7 +121,7 @@ else
 
 
                 <!-- <div class="row">
-                    <div class="col-12 pt-2">
+                    <div class="pt-2 col-12">
                         <div id="search-input-wrapper">
                             <h6>Searching: <span id="search-input"></span></h6>
                         </div>
@@ -129,8 +129,8 @@ else
                 </div> -->
                 <div class="row w-100">
                     <!-- <div class="col-12 col-lg-6">
-                        <div class="input-group md-form form-sm form-2 pl-0">
-                            <input id="searchRow" class="form-control my-0 py-1" type="text" placeholder="Search" aria-label="Search" value="<?= isset($_SESSION['searchTerm']) ? $_SESSION['searchTerm'] : "" ?>">
+                        <div class="pl-0 input-group md-form form-sm form-2">
+                            <input id="searchRow" class="py-1 my-0 form-control" type="text" placeholder="Search" aria-label="Search" value="<?= isset($_SESSION['searchTerm']) ? $_SESSION['searchTerm'] : "" ?>">
                             <div class="input-group-append" id="searchClear">
                                 <button class="input-group-text lighten-2">
                                     <i class="fas fa-times"></i>
@@ -145,7 +145,7 @@ else
                         </div>
                     </div> -->
                     <div class="col-12 col-lg-6">
-                        <div class="d-flex justify-content-end py-4 rowResults">
+                        <div class="py-4 d-flex justify-content-end rowResults">
 
                             <h6 class="my-auto">Total rows in database: <span class="font-weight-bold" id="rowTotal"></span></h6>
                         </div>
@@ -153,7 +153,7 @@ else
                 </div>
                 <div class="row">
                     <div class="col-md-6 "></div>
-                    <div class="col-12 col-md-6 py-3 d-flex flex-row justify-content-end">
+                    <div class="flex-row py-3 col-12 col-md-6 d-flex justify-content-end">
                         <div class="pageWrapper">
                             <h5>Page : </h5>
                             <input type="number" id="currentPageNum" class="form-control pageNumInput" min="1" value="<?= isset($_SESSION['currPage']) ? $_SESSION['currPage'] : 1 ?>">
@@ -167,10 +167,10 @@ else
         </div>
         </div>
         <!-- Central Modal Medium Info -->
-        <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
                 <div class="modal-content">
-                    <div class="bg-white sticky-top p-0 m-0 border-bottom">
+                    <div class="p-0 m-0 bg-white sticky-top border-bottom">
                         <!--Header-->
                         
                         <div class="modal-header">
@@ -204,7 +204,7 @@ else
                             </div>
 
                             <!-- Customer search result -->
-                            <div id="customer-search" class="w-100 m-0 bg-white position-absolute" style="z-index:5;"></div>
+                            <div id="customer-search" class="m-0 bg-white w-100 position-absolute" style="z-index:5;"></div>
                         </div>
                         <hr>
                         <div class="form-group">
@@ -248,14 +248,14 @@ else
 
                             <h3>Item Information</h3>
 
-                            <div class="row pb-5 ">
+                            <div class="pb-5 row ">
                                 <div class="col-12">
                                     <div class="position-relative">
                                         <label for="edit-customer_account">Item Name or Barcode:</label>
                                         <input type="text" class="form-control" id="search-item" placeholder="">
 
                                         <!-- Item search result -->
-                                        <div id="item-search" class="w-100 m-0 bg-white position-absolute" style="z-index:5;">
+                                        <div id="item-search" class="m-0 bg-white w-100 position-absolute" style="z-index:5;">
                                         </div>
                                     </div>
                                 </div>
@@ -264,22 +264,22 @@ else
                                 <table class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead class="grey white-text">
                                         <tr>
-                                            <th class="th-sm text-center">Action</th>
-                                            <th class="th-sm text-center">Barcode
+                                            <th class="text-center th-sm">Action</th>
+                                            <th class="text-center th-sm">Barcode
                                             </th>
-                                            <th class="th-sm text-center">Description
+                                            <th class="text-center th-sm">Description
                                             </th>
-                                            <th class="th-sm text-center">Qty
+                                            <th class="text-center th-sm">Qty
                                             </th>
-                                            <th class="th-sm text-center">UOM
+                                            <th class="text-center th-sm">UOM
                                             </th>
-                                            <th class="th-sm text-center">Selling Price(RM)
+                                            <th class="text-center th-sm">Selling Price(RM)
                                             </th>
-                                            <th class="th-sm text-center">Base Cost(RM)
+                                            <th class="text-center th-sm">Base Cost(RM)
                                             </th>
-                                            <th class="th-sm text-center">Discount(%)
+                                            <th class="text-center th-sm">Discount(%)
                                             </th>
-                                            <th class="th-sm text-center">Amount(RM)
+                                            <th class="text-center th-sm">Amount(RM)
                                             </th>
                                         </tr>
                                     </thead>
@@ -308,12 +308,12 @@ else
             </div>
         </div>
 
-        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
                 <!--Content-->
                 <input hidden="true" type="text" id="update-invoice_id">
                 <div class="modal-content">
-                    <div class="bg-white sticky-top p-0 m-0 border-bottom">
+                    <div class="p-0 m-0 bg-white sticky-top border-bottom">
                         <!--Header-->
                         <input hidden="true" type="text" name="postType" value="add">
                         <div class="modal-header">
@@ -347,7 +347,7 @@ else
                             </div>
 
                             <!-- Customer search result -->
-                            <div id="update-customer-search" class="w-100 m-0 bg-white position-absolute" style="z-index:5;"></div>
+                            <div id="update-customer-search" class="m-0 bg-white w-100 position-absolute" style="z-index:5;"></div>
                         </div>
                         <hr>
                         <div class="form-group">
@@ -391,14 +391,14 @@ else
 
                             <h3>Item Information</h3>
 
-                            <div class="row pb-5 ">
+                            <div class="pb-5 row ">
                                 <div class="col-12">
                                     <div class="position-relative">
                                         <label for="edit-customer_account">Item Name or Barcode:</label>
                                         <input type="text" class="form-control" id="update-search-item" placeholder="">
 
                                         <!-- Item search result -->
-                                        <div id="update-item-search" class="w-100 m-0 bg-white position-absolute" style="z-index:5;">
+                                        <div id="update-item-search" class="m-0 bg-white w-100 position-absolute" style="z-index:5;">
                                         </div>
                                     </div>
                                 </div>
@@ -407,22 +407,22 @@ else
                                 <table class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead class="grey white-text">
                                         <tr>
-                                            <th class="th-sm text-center">Action</th>
-                                            <th class="th-sm text-center">Barcode
+                                            <th class="text-center th-sm">Action</th>
+                                            <th class="text-center th-sm">Barcode
                                             </th>
-                                            <th class="th-sm text-center">Description
+                                            <th class="text-center th-sm">Description
                                             </th>
-                                            <th class="th-sm text-center">Qty
+                                            <th class="text-center th-sm">Qty
                                             </th>
-                                            <th class="th-sm text-center">UOM
+                                            <th class="text-center th-sm">UOM
                                             </th>
-                                            <th class="th-sm text-center">Selling Price(RM)
+                                            <th class="text-center th-sm">Selling Price(RM)
                                             </th>
-                                            <th class="th-sm text-center">Base Cost(RM)
+                                            <th class="text-center th-sm">Base Cost(RM)
                                             </th>
-                                            <th class="th-sm text-center">Discount(%)
+                                            <th class="text-center th-sm">Discount(%)
                                             </th>
-                                            <th class="th-sm text-center">Amount(RM)
+                                            <th class="text-center th-sm">Amount(RM)
                                             </th>
                                         </tr>
                                     </thead>
@@ -453,7 +453,7 @@ else
         <!-- Central Modal Medium Info-->
 
         <!-- Central Modal Warning Demo-->
-        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-notify modal-warning" role="document">
                 <!--Content-->
                 <!-- <form action="./backend/invoice/invoice.php" method="POST"> -->
@@ -487,7 +487,7 @@ else
         <!-- Central Modal Warning Demo-->
 
         <!-- Central Modal Warning Demo-->
-        <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-notify modal-warning" role="document">
                 <!--Content-->
                 <form action="./backend/invoice/printInvoice.php" method="POST">
@@ -521,7 +521,7 @@ else
         <!-- Central Modal Warning Demo-->
 
         <!-- Success Alert -->
-        <div class="modal fade" id="successToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="successToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-notify modal-success" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -543,7 +543,7 @@ else
         </div>
 
         <!-- Failed Alert -->
-        <div class="modal fade" id="failedToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="failedToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-notify modal-danger" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -566,29 +566,29 @@ else
 
     </main>
 
-    <footer class="page-footer font-small blue font-small">
-        <div class="col-md-12 text-center">
+    <footer class="page-footer font-small blue">
+        <div class="text-center col-md-12">
 
             <!-- Social Link on Bottom -->
-            <div class="mb-4 pt-4 flex-center">
+            <div class="pt-4 mb-4 flex-center">
                 <a class="whatsappLink">
-                    <i class="fab fa-whatsapp a-lg mr-md-5 mr-3 fa-2x hoverable"></i>
+                    <i class="mr-3 fab fa-whatsapp a-lg mr-md-5 fa-2x hoverable"></i>
                 </a>
                 <!-- Facebook -->
                 <a class="fb-ic" href="https://www.facebook.com/nightcatdigitalsolutions">
-                    <i class="fab fa-facebook fa-lg mr-md-5 mr-3 fa-2x hoverable"> </i>
+                    <i class="mr-3 fab fa-facebook fa-lg mr-md-5 fa-2x hoverable"> </i>
                 </a>
                 <!-- Twitter -->
                 <a class="tw-ic" href="https://twitter.com/nightcatdigital">
-                    <i class="fab fa-twitter fa-lg mr-md-5 mr-3 fa-2x hoverable"> </i>
+                    <i class="mr-3 fab fa-twitter fa-lg mr-md-5 fa-2x hoverable"> </i>
                 </a>
                 <!--Instagram-->
                 <a class="ins-ic" href="https://www.instagram.com/nightcatdigitalsolutions/">
-                    <i class="fab fa-instagram fa-lg mr-md-5 mr-3 fa-2x hoverable"> </i>
+                    <i class="mr-3 fab fa-instagram fa-lg mr-md-5 fa-2x hoverable"> </i>
                 </a>
             </div>
         </div>
-        <div class="footer-copyright text-center py-3">
+        <div class="py-3 text-center footer-copyright">
             <a href="https://www.nightcatdigitalsolutions.com">NIGHTCAT DIGITAL SOLUTIONS © 2013 -
                 <span id="latestYear"></span>. ALL RIGHTS RESERVED</a>
         </div>
