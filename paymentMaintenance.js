@@ -1183,6 +1183,7 @@ $(document).ready(function() {
             if (parseFloat($("#total_pay").val()) > 0) {
                 var total_outstanding_deducted = 0;
                 $("#total_pay").val("0.00");
+                $("#unapply_amount").val($("#total_payment").val());
                 $.each($('.item-row'), function(i, item) {
                     if ($(`.select_to_pay:eq(${i})`).attr('aria-label') === "unpaid") {
                         var invoice_id = $(`.item-row:eq(${i})`).data("id");
