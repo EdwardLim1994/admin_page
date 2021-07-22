@@ -111,7 +111,7 @@
     var fd = new FormData();
     fd.append('payment_identifier', $('#payment_identifier').val());
 
-    fd.append('postType', 'viewPaymentUpdate');
+    fd.append('postType', 'viewPaymentUpdateAll');
 
     $.ajax({
         url: 'payment.php',

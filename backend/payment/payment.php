@@ -34,7 +34,7 @@ switch ($postType) {
             }
 
             for ($y = 0; $y < $countDetailArray; $y++) {
-                $stmt = $mysqli->prepare("SELECT id, invoice_id, doc_no, creation_date, invoice_num,  invoice_date, due_date, total_amount, outstanding, payment FROM invoice_header WHERE invoice_id = ? ORDER BY invoice_id asc");
+                $stmt = $mysqli->prepare("SELECT id, invoice_id, doc_no, creation_date, invoice_num,  invoice_date, due_date, total_amount, outstanding FROM invoice_header WHERE invoice_id = ? ORDER BY invoice_id asc");
                 $stmt->bind_param("s", $detailArray[$y]["invoice_id"]);
                 $stmt->execute();
                 $result = $stmt->get_result();
@@ -49,8 +49,8 @@ switch ($postType) {
                 $stmt->close();
 
             }
-            echo json_encode($jsonArray);
-            //echo json_encode(array($jsonArray, $detailArray));
+            //echo json_encode($jsonArray);
+            echo json_encode(array($jsonArray, $detailArray));
            
             //echo json_encode($detailArray);
         }
