@@ -49,8 +49,8 @@ switch ($postType) {
                 $stmt->close();
 
             }
-            echo json_encode($jsonArray);
-            //echo json_encode(array($jsonArray, $detailArray));
+            // echo json_encode($jsonArray);
+            echo json_encode(array($jsonArray, $detailArray));
            
             //echo json_encode($detailArray);
         }

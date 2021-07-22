@@ -1224,29 +1224,33 @@ $(document).ready(function() {
                 break;
 
             default:
-                console.log(results);
-                $.each(JSON.parse(results), function(i, value) {
-                    //var status = value.outstanding == 0 ? ["text-success", "paid", "disabled='disabled'", "checked"] : ["text-danger", "unpaid", "", ""];
-                    total_outstanding += parseFloat(value.outstanding);
-                    invoice_results += `
-                            <tr class="update-item-row" data-id="${value.id}" data-invoice_id=${value.invoice_id}>
+                var invoice_detail = (JSON.parse(results)[0])[0];
+                var payment_detail = (JSON.parse(results)[1])[0];
+                console.log(invoice_detail);
+                console.log(payment_detail)
+                    // $.each(JSON.parse(results), function(i, value) {
+                    //     console.log(value)
+                    //         //var status = value.outstanding == 0 ? ["text-success", "paid", "disabled='disabled'", "checked"] : ["text-danger", "unpaid", "", ""];
+                    //     total_outstanding += parseFloat(value.outstanding);
+                invoice_results += `
+                            <tr class="update-item-row" data-id="${invoice_detail.id}" data-invoice_id=${invoice_detail.invoice_id}>
                                 <td>
                                     <button class="btn btn-danger showInvoiceDetailBtn py-md-3 px-md-4 p-sm-3">
                                         <i class="fas fa-file-invoice"></i>
                                     </button>
                                 </td>
-                                <td class="update-doc_no-${value.id}">${value.doc_no}</td>
-                                <td class="update-doc_date-${value.id}">${value.creation_date}</td>
-                                <td class="update-invoice_num-${value.id}">${value.invoice_num}</td>
-                                <td class="update-invoice_date-${value.id}">${value.invoice_date}</td>
-                                <td class="update-due_date-${value.id}">${value.due_date}</td>
-                                <td class="update-total_amount-${value.id}">${parseFloat(value.total_amount).toFixed(2)}</td>
-                                <td class="update-outstanding update-outstanding-${value.id}" data-original-outstanding="${value.outstanding}">${parseFloat(value.outstanding).toFixed(2)}</td>
-                                <td class="update-payment-${value.id}">
+                                <td class="update-doc_no-${invoice_detail.id}">${invoice_detail.doc_no}</td>
+                                <td class="update-doc_date-${invoice_detail.id}">${invoice_detail.creation_date}</td>
+                                <td class="update-invoice_num-${invoice_detail.id}">${invoice_detail.invoice_num}</td>
+                                <td class="update-invoice_date-${invoice_detail.id}">${invoice_detail.invoice_date}</td>
+                                <td class="update-due_date-${invoice_detail.id}">${invoice_detail.due_date}</td>
+                                <td class="update-total_amount-${invoice_detail.id}">${parseFloat(invoice_detail.total_amount).toFixed(2)}</td>
+                                <td class="update-outstanding update-outstanding-${invoice_detail.id}" data-original-outstanding="${invoice_detail.outstanding}">${parseFloat(invoice_detail.outstanding).toFixed(2)}</td>
+                                <td class="update-payment-${invoice_detail.id}">
                                     <div class="input-group md-form form-sm form-2 pl-0">
-                                        <input value="${parseFloat(value.payment).toFixed(2)}" data-original-payment="${value.payment}" class="form-control update_payment_per_invoice update-payment-amount-${value.id}" type="number" min="0" step="0.01"/>
+                                        <input invoice_detail="${parseFloat(payment_detail.amount_pay).toFixed(2)}" data-original-payment="${payment_detail.amount_pay}" class="form-control update_payment_per_invoice update-payment-amount-${invoice_detail.id}" type="number" min="0" step="0.01"/>
                                         <div class="input-group-append">
-                                            <button data-original-payment="${value.payment}" data-new-payment="0.00" class="pageInput input-group-text update_payment_refresh update_payment_refresh-${value.id}">
+                                            <button data-original-payment="${payment_detail.amount_pay}" data-new-payment="0.00" class="pageInput input-group-text update_payment_refresh update_payment_refresh-${invoice_detail.id}">
                                                 <i class="fas fa-sync-alt" aria-hidden="true"></i>
                                             </button>
                                         </div>
@@ -1254,9 +1258,9 @@ $(document).ready(function() {
                                 </td>
                             </tr>
                             `;
-                });
+                //});
 
-                $("#update-total_outstanding").val(total_outstanding.toFixed(2));
+                $("#update-total_outstanding").val(parseFloat(invoice_detail.outstanding).toFixed(2));
                 $("#update-payment-bucket").empty().html(invoice_results);
                 break;
         }

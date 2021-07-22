@@ -339,7 +339,7 @@ else
                                             </div>
                                             <div class="col-12 col-md-6">
                                                 <label for="add-reg_date">Reg Date</label>
-                                                <input type="text" class="form-control" name="reg_date" id="add-reg_date" placeholder="">
+                                                <input type="date" class="form-control" name="reg_date" id="add-reg_date" placeholder="">
                                             </div>
                                         </div>
                                     </div>
@@ -351,7 +351,7 @@ else
                                             </div>
                                             <div class="col-12 col-md-6">
                                                 <label for="add-expiry_date">Expiry Date</label>
-                                                <input type="text" class="form-control" name="expiry_date" id="add-expiry_date" placeholder="">
+                                                <input type="date" class="form-control" name="expiry_date" id="add-expiry_date" placeholder="">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -669,7 +669,7 @@ else
                                             </div>
                                             <div class="col-12 col-md-6">
                                                 <label for="edit-reg_date">Reg Date</label>
-                                                <input type="text" class="form-control" name="reg_date" id="edit-reg_date" placeholder="">
+                                                <input type="date" class="form-control" name="reg_date" id="edit-reg_date" placeholder="">
                                             </div>
                                         </div>
                                     </div>
@@ -681,7 +681,7 @@ else
                                             </div>
                                             <div class="col-12 col-md-6">
                                                 <label for="edit-expiry_date">Expiry Date</label>
-                                                <input type="text" class="form-control" name="expiry_date" id="edit-expiry_date" placeholder="">
+                                                <input type="date" class="form-control" name="expiry_date" id="edit-expiry_date" placeholder="">
                                             </div>
                                         </div>
                                         <div class="row">
