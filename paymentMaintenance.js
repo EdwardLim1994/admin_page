@@ -1224,15 +1224,12 @@ $(document).ready(function() {
                 break;
 
             default:
-                var invoice_detail = (JSON.parse(results)[0])[0];
-                var payment_detail = (JSON.parse(results)[1])[0];
-                console.log(invoice_detail);
-                console.log(payment_detail)
-                    // $.each(JSON.parse(results), function(i, value) {
-                    //     console.log(value)
-                    //         //var status = value.outstanding == 0 ? ["text-success", "paid", "disabled='disabled'", "checked"] : ["text-danger", "unpaid", "", ""];
-                    //     total_outstanding += parseFloat(value.outstanding);
-                invoice_results += `
+                var invoice_details = (JSON.parse(results)[0]);
+                var payment_detail = (JSON.parse(results)[1]);
+                $.each(invoice_details, function(i, invoice_detail) {
+                    total_outstanding += parseFloat(invoice_detail.outstanding);
+
+                    invoice_results += `
                             <tr class="update-item-row" data-id="${invoice_detail.id}" data-invoice_id=${invoice_detail.invoice_id}>
                                 <td>
                                     <button class="btn btn-danger showInvoiceDetailBtn py-md-3 px-md-4 p-sm-3">
@@ -1248,9 +1245,9 @@ $(document).ready(function() {
                                 <td class="update-outstanding update-outstanding-${invoice_detail.id}" data-original-outstanding="${invoice_detail.outstanding}">${parseFloat(invoice_detail.outstanding).toFixed(2)}</td>
                                 <td class="update-payment-${invoice_detail.id}">
                                     <div class="input-group md-form form-sm form-2 pl-0">
-                                        <input invoice_detail="${parseFloat(payment_detail.amount_pay).toFixed(2)}" data-original-payment="${payment_detail.amount_pay}" class="form-control update_payment_per_invoice update-payment-amount-${invoice_detail.id}" type="number" min="0" step="0.01"/>
+                                        <input value="${parseFloat(payment_detail[i].amount_pay).toFixed(2)}" data-original-payment="${payment_detail[i].amount_pay}" class="form-control update_payment_per_invoice update-payment-amount-${invoice_detail.id}" type="number" min="0" step="0.01"/>
                                         <div class="input-group-append">
-                                            <button data-original-payment="${payment_detail.amount_pay}" data-new-payment="0.00" class="pageInput input-group-text update_payment_refresh update_payment_refresh-${invoice_detail.id}">
+                                            <button data-original-payment="${payment_detail[i].amount_pay}" data-new-payment="0.00" class="pageInput input-group-text update_payment_refresh update_payment_refresh-${invoice_detail.id}">
                                                 <i class="fas fa-sync-alt" aria-hidden="true"></i>
                                             </button>
                                         </div>
@@ -1258,9 +1255,10 @@ $(document).ready(function() {
                                 </td>
                             </tr>
                             `;
-                //});
+                });
 
-                $("#update-total_outstanding").val(parseFloat(invoice_detail.outstanding).toFixed(2));
+
+                $("#update-total_outstanding").val(total_outstanding.toFixed(2));
                 $("#update-payment-bucket").empty().html(invoice_results);
                 break;
         }
