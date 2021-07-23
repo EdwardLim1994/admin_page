@@ -904,6 +904,7 @@ $(document).ready(function() {
                             //isItemSoldOut = false;
                             if (value.item_id == $(".update-item-row").data("id")) {
                                 var itemQty = $('[data-id=' + value.item_id + ']').find(".update-itemQuantity").val();
+
                                 $('[data-id=' + value.item_id + ']').find(".update-itemQuantity").val((parseInt(itemQty) + 1));
                             } else {
                                 item_results += `
@@ -1419,7 +1420,7 @@ $(document).ready(function() {
 
                                     var discount = (value.discount == 0 ? 100 : value.discount) / 100;
                                     var discountPrice = discount == 1 ? 0 : value.price * discount;
-                                    var newPrice = value.price - discountPrice;
+                                    var newPrice = (value.price - discountPrice) * value.quantity;
                                     totalCost += newPrice;
                                     totalDiscount += discountPrice;
 
