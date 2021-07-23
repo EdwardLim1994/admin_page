@@ -800,10 +800,10 @@ if (isset($_SESSION["loggedin"])) {
         </div>
     </footer>
     <script src="./dist/js/script.prod.js"></script>
-    <script src="./dist/js/paymentMaintenance.prod.js"></script>
+    <!-- <script src="./dist/js/paymentMaintenance.prod.js"></script> -->
     <script src="./dist/js/datatables.min.js"></script>
 
-    <!-- <script src="./paymentMaintenance.js"></script> -->
+    <script src="./paymentMaintenance.js"></script>
 </body>
 
 <script type="text/javascript">

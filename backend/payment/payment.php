@@ -49,7 +49,7 @@ switch ($postType) {
                 $stmt->close();
 
             }
-            //echo json_encode($jsonArray);
+            // echo json_encode($jsonArray);
             echo json_encode(array($jsonArray, $detailArray));
            
             //echo json_encode($detailArray);
@@ -558,7 +558,8 @@ switch ($postType) {
 
             $customer_account = $_POST['customer_account'];
             $customer_name = $_POST['customer_name'];
-            $payment_date = $_POST['payment_date'];
+
+            $payment_date = $_POST['payment_date']? $_POST['payment_date' ] : "1990-01-01";
             $payment_mode = $_POST['payment_mode'];
             $payment_remark = $_POST['payment_remark'];
             $payment_salesperson = $_POST['payment_salesperson'];
