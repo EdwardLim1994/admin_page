@@ -17,7 +17,7 @@ switch ($postType) {
             $payment_identifier = $_POST['payment_identifier'];
 
             //fetch payment detail data from payment detail table
-            $stmt = $mysqli->prepare("SELECT invoice_id, amount_pay FROM payment_detail WHERE payment_identifier = ? ORDER BY invoice_id asc");
+            $stmt = $mysqli->prepare("SELECT invoice_id, amount_pay FROM payment_detail WHERE payment_identifier = ? ORDER BY invoice_id desc");
             $stmt->bind_param("s", $payment_identifier);
             $stmt->execute();
             $stmt->store_result();
@@ -34,7 +34,7 @@ switch ($postType) {
             }
 
             for ($y = 0; $y < $countDetailArray; $y++) {
-                $stmt = $mysqli->prepare("SELECT id, invoice_id, doc_no, creation_date, invoice_num,  invoice_date, due_date, total_amount, outstanding FROM invoice_header WHERE invoice_id = ? ORDER BY invoice_id asc");
+                $stmt = $mysqli->prepare("SELECT id, invoice_id, doc_no, creation_date, invoice_num,  invoice_date, due_date, total_amount, outstanding FROM invoice_header WHERE invoice_id = ? ORDER BY invoice_id desc");
                 $stmt->bind_param("s", $detailArray[$y]["invoice_id"]);
                 $stmt->execute();
                 $result = $stmt->get_result();
@@ -57,7 +57,7 @@ switch ($postType) {
         break;
 
     //show invoice data when update payment
-    case ("viewPaymentUpdateOutstanding"):
+    /*case ("viewPaymentUpdateOutstanding"):
         if (isset($_POST["payment_identifier"])) {
             $countDetailArray = 0;
             $payment_identifier = $_POST['payment_identifier'];
@@ -100,7 +100,7 @@ switch ($postType) {
            
             //echo json_encode($detailArray);
         }
-        break;
+        break;*/
 
     //show payment header list for all customer
     case ("viewPaymentHeader"):
@@ -592,6 +592,52 @@ switch ($postType) {
 
             //query to update invoice header when payment is done
             for ($i = 0; $i < $itemCount; $i++) {
+
+                //check data from invoice_header table based on invoice_id
+                $stmt = $mysqli->prepare("SELECT payment FROM invoice_header WHERE id = ?");
+                $stmt->bind_param("i", $id[$i]);
+                $stmt->execute();
+                $stmt->store_result();
+                if ($stmt->num_rows > 0) {
+                    $stmt->bind_result($prev_amount_pay);
+                    $stmt->fetch();
+                    $stmt->close();
+
+                } else {
+                    echo "No result";
+                    $prev_amount_pay = 0.00;
+                }
+
+                $newPayment = (double) $payment[$i] + (double) $prev_amount_pay;
+
+                $stmt = $mysqli->prepare("UPDATE invoice_header SET outstanding = ?, payment = ?, modified_date = ?, modified_time = ?, modified_user = ? WHERE id = ?");
+                $stmt->bind_param("ddsssi", $outstanding[$i], $newPayment, $modify_date, $modify_time, $modify_user, $id[$i]);
+                $stmt->execute();
+                $stmt->close();
+
+                //query to fetch  data from invoice_header table
+                $stmt = $mysqli->prepare("SELECT creation_date, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, creation_time, creation_user FROM invoice_header WHERE id = ?");
+                $stmt->bind_param("i", $id[$i]);
+                $stmt->execute();
+                $stmt->store_result();
+                $stmt->bind_result($header_creation_date, $header_in_account, $header_in_name, $header_invoice_num, $header_invoice_date, $header_invoice_remark, $header_doc_no, $header_due_date, $header_subtotal_ex, $discount_header, $header_creation_time, $header_creation_user);
+                $stmt->fetch();
+                $stmt->close();
+
+                //query insert data into payment_detail table - 4 field
+                $stmt = $mysqli->prepare("INSERT INTO payment_detail (payment_identifier, invoice_id, amount_pay) VALUES (?, ?, ?)");
+                $stmt->bind_param("ssd", $payment_identifier[0], $invoice_id[$i], $payment[$i]);
+                $stmt->execute();
+                $stmt->close();
+
+                //query insert data into invoice_header_log table - 20 field
+                $stmt = $mysqli->prepare("INSERT INTO invoice_header_log (invoice_id_log, mode, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount, outstanding, payment, creation_date, creation_time, creation_user, modified_date, modified_time, modified_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->bind_param("sssssssssdddddssssss", $invoice_id[$i], $mode, $header_in_account, $header_in_name, $header_invoice_num, $header_invoice_date, $header_invoice_remark, $header_doc_no, $header_due_date, $header_subtotal_ex, $discount_header, $total_amount[$i], $outstanding[$i], $newPayment, $header_creation_date, $header_creation_time, $header_creation_user, $modify_date, $modify_time, $modify_user);
+                $stmt->execute();
+                $stmt->close();
+
+
+                /*
                 $stmt = $mysqli->prepare("UPDATE invoice_header SET outstanding = ?, payment = ?, modified_date = ?, modified_time = ?, modified_user = ? WHERE id = ?");
                 $stmt->bind_param("ddsssi", $outstanding[$i], $payment[$i], $modify_date, $modify_time, $modify_user, $id[$i]);
                 $stmt->execute();
@@ -616,7 +662,7 @@ switch ($postType) {
                 $stmt = $mysqli->prepare("INSERT INTO invoice_header_log (invoice_id_log, mode, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount, outstanding, payment, creation_date, creation_time, creation_user, modified_date, modified_time, modified_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->bind_param("sssssssssdddddssssss", $invoice_id[$i], $mode, $header_in_account, $header_in_name, $header_invoice_num, $header_invoice_date, $header_invoice_remark, $header_doc_no, $header_due_date, $header_subtotal_ex, $discount_header, $total_amount[$i], $outstanding[$i], $payment[$i], $header_creation_date, $header_creation_time, $header_creation_user, $modify_date, $modify_time, $modify_user);
                 $stmt->execute();
-                $stmt->close();
+                $stmt->close();*/
 
             }
 

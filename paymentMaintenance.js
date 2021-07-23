@@ -1460,7 +1460,7 @@ $(document).ready(function() {
                     invoice_id.push($(`.item-row:nth-child(${i+1})`).data('invoice_id'));
                     total_amount.push(parseFloat($(`.total_amount-${row_id}`).text()));
                     outstanding.push(parseFloat($(`.outstanding-${row_id}`).text()));
-                    payment.push(parseFloat($(`.payment-${row_id}`).text()));
+                    payment.push(parseFloat($(`.select_to_pay:eq(${i})`).data("current-payment-made")));
                     payment_status.push($(`.status-${row_id}`).text());
                 }
             })
