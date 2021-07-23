@@ -34,7 +34,7 @@ switch ($postType) {
             }
 
             for ($y = 0; $y < $countDetailArray; $y++) {
-                $stmt = $mysqli->prepare("SELECT id, invoice_id, doc_no, creation_date, invoice_num,  invoice_date, due_date, total_amount, outstanding, payment FROM invoice_header WHERE invoice_id = ? ORDER BY invoice_id asc");
+                $stmt = $mysqli->prepare("SELECT id, invoice_id, doc_no, creation_date, invoice_num,  invoice_date, due_date, total_amount, outstanding FROM invoice_header WHERE invoice_id = ? ORDER BY invoice_id asc");
                 $stmt->bind_param("s", $detailArray[$y]["invoice_id"]);
                 $stmt->execute();
                 $result = $stmt->get_result();
@@ -558,7 +558,8 @@ switch ($postType) {
 
             $customer_account = $_POST['customer_account'];
             $customer_name = $_POST['customer_name'];
-            $payment_date = $_POST['payment_date'];
+
+            $payment_date = $_POST['payment_date']? $_POST['payment_date' ] : "1990-01-01";
             $payment_mode = $_POST['payment_mode'];
             $payment_remark = $_POST['payment_remark'];
             $payment_salesperson = $_POST['payment_salesperson'];
