@@ -1270,39 +1270,47 @@ $(document).ready(function() {
 
     function deleteInvoice() {
 
-        $.ajax({
-            type: "POST",
-            url: "./backend/invoice/invoice.php",
-            data: {
-                postType: "deleteHeader",
-                invoice_id: $("#delete_id").val()
-            },
-            success: function(results) {
-                console.log(results);
-                switch (results) {
+        var delete_id = $("#delete_id").val();
 
-                    case ("success delete"):
-                        $("#deleteModal").modal("hide");
-                        successMessage("Success", "Invoice is successfully updated");
-                        $("#general-table").empty();
-                        $("#currentPageNum").val(1);
-                        totalPage = paginate(totalRow);
-                        generateTable();
-                        break;
-                    case ("Some input field is not set."):
-                        $("#deleteModal").modal("hide");
-                        failedMessage("Failed", results);
-                        break;
-                    case ("id not found"):
-                        $("#deleteModal").modal("hide");
-                        failedMessage("Failed", results);
-                        break;
+        if (parseFloat($(`#payment-${delete_id}`).text()) > 0) {
+            $("#deleteModal").modal("hide");
+            failedMessage("Failed to Delete Invoice", "This invoice has been paid therefore delete is impossible");
+        } else {
+
+            $.ajax({
+                type: "POST",
+                url: "./backend/invoice/invoice.php",
+                data: {
+                    postType: "deleteHeader",
+                    invoice_id: delete_id
+                },
+                success: function(results) {
+                    console.log(results);
+                    switch (results) {
+
+                        case ("success delete"):
+                            $("#deleteModal").modal("hide");
+                            successMessage("Success", "Invoice is successfully updated");
+                            $("#general-table").empty();
+                            $("#currentPageNum").val(1);
+                            totalPage = paginate(totalRow);
+                            generateTable();
+                            break;
+                        case ("Some input field is not set."):
+                            $("#deleteModal").modal("hide");
+                            failedMessage("Failed", results);
+                            break;
+                        case ("id not found"):
+                            $("#deleteModal").modal("hide");
+                            failedMessage("Failed", results);
+                            break;
+                    }
+                },
+                error: function(e) {
+                    console.log(e);
                 }
-            },
-            error: function(e) {
-                console.log(e);
-            }
-        })
+            })
+        }
 
     }
 
@@ -1558,16 +1566,16 @@ $(document).ready(function() {
                     ' <th scope="col">#</th> ' +
                     ' <th scope="col" class="text-center th-lg">Action</th> ' +
                     ' <th scope="col" class="th-lg">Invoice ID</th> ' +
+                    ' <th scope="col" class="th-lg">Subtotal Exclude Discount</th> ' +
+                    ' <th scope="col" class="th-lg">Total Discount</th> ' +
+                    ' <th scope="col" class="th-lg">Total Cost</th> ' +
+                    ' <th scope="col" class="th-lg">Payment Made</th> ' +
                     ' <th scope="col" class="th-lg">Customer ID</th> ' +
                     ' <th scope="col" class="th-lg">Customer Name</th> ' +
                     ' <th scope="col" class="th-lg">Invoice Number</th> ' +
                     ' <th scope="col" class="th-lg">Doc No</th> ' +
                     ' <th scope="col" class="th-lg">Issue Date</th> ' +
                     ' <th scope="col" class="th-lg">Due Date</th> ' +
-                    ' <th scope="col" class="th-lg">Subtotal Exclude Discount</th> ' +
-                    ' <th scope="col" class="th-lg">Total Discount</th> ' +
-                    ' <th scope="col" class="th-lg">Total Cost</th> ' +
-                    ' <th scope="col" class="th-lg">Payment Made</th> ' +
                     ' <th scope="col" class="th-lg">Remark</th> ' +
                     ' </tr> ' +
                     ' </thead> ' +
@@ -1578,16 +1586,16 @@ $(document).ready(function() {
                     ' <th scope="col">#</th> ' +
                     ' <th scope="col" class="text-center th-lg">Action</th> ' +
                     ' <th scope="col" class="th-lg">Invoice ID</th> ' +
+                    ' <th scope="col" class="th-lg">Subtotal Exclude Discount</th> ' +
+                    ' <th scope="col" class="th-lg">Total Discount</th> ' +
+                    ' <th scope="col" class="th-lg">Total Cost</th> ' +
+                    ' <th scope="col" class="th-lg">Payment Made</th> ' +
                     ' <th scope="col" class="th-lg">Customer ID</th> ' +
                     ' <th scope="col" class="th-lg">Customer Name</th> ' +
                     ' <th scope="col" class="th-lg">Invoice Number</th> ' +
                     ' <th scope="col" class="th-lg">Doc No</th> ' +
                     ' <th scope="col" class="th-lg">Issue Date</th> ' +
                     ' <th scope="col" class="th-lg">Due Date</th> ' +
-                    ' <th scope="col" class="th-lg">Subtotal Exclude Discount</th> ' +
-                    ' <th scope="col" class="th-lg">Total Discount</th> ' +
-                    ' <th scope="col" class="th-lg">Total Cost</th> ' +
-                    ' <th scope="col" class="th-lg">Payment Made</th> ' +
                     ' <th scope="col" class="th-lg">Remark</th> ' +
                     ' </tr> ' +
                     ' </tfoot> ' +
@@ -1622,16 +1630,16 @@ $(document).ready(function() {
                         ' </td>' +
 
                         " <td id='invoice_id-" + invoice.invoice_id + "'>" + invoice.invoice_id + '</td>' +
+                        " <td id='subtotal_ex-" + invoice.invoice_id + "'>" + invoice.subtotal_ex + '</td>' +
+                        " <td id='discount_header-" + invoice.invoice_id + "'>" + invoice.discount_header + '</td>' +
+                        " <td id='total_amount-" + invoice.invoice_id + "'>" + invoice.total_amount + '</td>' +
+                        " <td id='payment-" + invoice.invoice_id + "'>" + invoice.payment + '</td>' +
                         " <td id='in_account-" + invoice.invoice_id + "'>" + invoice.in_account + '</td>' +
                         " <td id='in_name-" + invoice.invoice_id + "'>" + invoice.in_name + '</td>' +
                         " <td id='invoice_num-" + invoice.invoice_id + "'>" + invoice.invoice_num + '</td>' +
                         " <td id='doc_no-" + invoice.invoice_id + "'>" + invoice.doc_no + '</td>' +
                         " <td id='invoice_date-" + invoice.invoice_id + "'>" + invoice.invoice_date + '</td>' +
                         " <td id='due_date-" + invoice.invoice_id + "'>" + invoice.due_date + '</td>' +
-                        " <td id='subtotal_ex-" + invoice.invoice_id + "'>" + invoice.subtotal_ex + '</td>' +
-                        " <td id='discount_header-" + invoice.invoice_id + "'>" + invoice.discount_header + '</td>' +
-                        " <td id='total_amount-" + invoice.invoice_id + "'>" + invoice.total_amount + '</td>' +
-                        " <td id='payment-" + invoice.invoice_id + "'>" + invoice.payment + '</td>' +
                         " <td id='invoice_remark-" + invoice.invoice_id + "'>" + invoice.invoice_remark + '</td>' +
                         '</tr>'
                     );

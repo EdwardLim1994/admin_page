@@ -201,7 +201,7 @@ switch ($postType) {
 
 		// check isset for all post variable
 		$countSetUpdate = 0;
-		$postVariable = array('in_account','in_name','invoice_num','invoice_date','invoice_remark','doc_no','due_date','subtotal_ex','discount_header','total_amount',
+		$postVariable = array('invoice_id', 'in_account','in_name','invoice_num','invoice_date','invoice_remark','doc_no','due_date','subtotal_ex','discount_header','total_amount',
         'item_id','item_no','description','quantity','uom','price','discount','amount','base_cost');
 
 		foreach ($postVariable as $variable_name) {
@@ -226,9 +226,6 @@ switch ($postType) {
 			$amount = $_POST['amount'];
 			$base_cost = $_POST['base_cost'];
 
-			$outstanding = $_POST['total_amount'];
-			$payment = 0.00;
-
 			date_default_timezone_set("Asia/Kuala_Lumpur");
 			$modify_date = date("Y-m-d");
 			$modify_time = date("H:i:s");
@@ -244,11 +241,26 @@ switch ($postType) {
 			$itemCount = count($item_no);
 
 			//create outstanding variable
-			$outstanding = $_POST['total_amount'];
+			//$outstanding = $_POST['total_amount'];
+
+			//fetch old invoice_header data 
+			$stmt = $mysqli->prepare("SELECT payment FROM invoice_header WHERE invoice_id = ?");
+			$stmt->bind_param("s", $_POST['invoice_id']);
+			$stmt->execute();
+			$stmt->store_result();
+			if ($stmt->num_rows == 1) {
+				$stmt->bind_result( $old_payment);
+				$stmt->fetch();
+				$stmt->close();
+			} else {
+				echo "invoice_id not found";
+			}
+
+			$newOutstanding = (double)$_POST['total_amount'] - (double)$old_payment;
 
 			//update query for invoice_header tabel - 17 fields
 			$stmt = $mysqli->prepare("UPDATE invoice_header SET invoice_id = ?, in_account = ?, in_name = ?, invoice_num = ?, invoice_date = ?, invoice_remark = ?, doc_no = ?, due_date = ?, subtotal_ex = ?, discount_header = ?, total_amount = ?, outstanding = ?, payment = ?, modified_date = ?, modified_time = ?, modified_user = ? WHERE invoice_id = ?");
-			$stmt->bind_param("ssssssssdddddssss", $_POST['invoice_id'], $_POST['in_account'], $_POST['in_name'], $_POST['invoice_num'], $_POST['invoice_date'], $_POST['invoice_remark'], $_POST['doc_no'], $_POST['due_date'], $_POST['subtotal_ex'], $_POST['discount_header'], $_POST['total_amount'], $outstanding, $payment, $modify_date, $modify_time, $modify_user, $_POST['invoice_id']);
+			$stmt->bind_param("ssssssssdddddssss", $_POST['invoice_id'], $_POST['in_account'], $_POST['in_name'], $_POST['invoice_num'], $_POST['invoice_date'], $_POST['invoice_remark'], $_POST['doc_no'], $_POST['due_date'], $_POST['subtotal_ex'], $_POST['discount_header'], $_POST['total_amount'], $newOutstanding, $old_payment, $modify_date, $modify_time, $modify_user, $_POST['invoice_id']);
 			$stmt->execute();
 			$stmt->close();
 
@@ -277,7 +289,7 @@ switch ($postType) {
 
 			//query insert data into invoice_header_log table - 19 field
 			$stmt = $mysqli->prepare("INSERT INTO invoice_header_log (invoice_id_log, mode, in_account, in_name, invoice_num, invoice_date, invoice_remark, doc_no, due_date, subtotal_ex, discount_header, total_amount, outstanding, payment, creation_date, creation_time, creation_user, modified_date, modified_time, modified_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			$stmt->bind_param("sssssssssdddddssssss", $_POST['invoice_id'], $mode, $_POST['in_account'], $_POST['in_name'], $_POST['invoice_num'], $_POST['invoice_date'], $_POST['invoice_remark'], $_POST['doc_no'], $_POST['due_date'], $_POST['subtotal_ex'], $_POST['discount_header'], $_POST['total_amount'], $outstanding, $payment, $header_creation_date, $header_creation_time, $header_creation_user, $modify_date, $modify_time, $modify_user);
+			$stmt->bind_param("sssssssssdddddssssss", $_POST['invoice_id'], $mode, $_POST['in_account'], $_POST['in_name'], $_POST['invoice_num'], $_POST['invoice_date'], $_POST['invoice_remark'], $_POST['doc_no'], $_POST['due_date'], $_POST['subtotal_ex'], $_POST['discount_header'], $_POST['total_amount'], $newOutstanding, $old_payment, $header_creation_date, $header_creation_time, $header_creation_user, $modify_date, $modify_time, $modify_user);
 			$stmt->execute();
 			$stmt->close();
 

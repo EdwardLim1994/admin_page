@@ -75,7 +75,7 @@ $(document).ready(function() {
 
         if ($(this).val()) {
             timerGlobal = setTimeout(function() {
-                globalCustomerSearchResults(1);
+                globalCustomerSearchResults(1, isSpinnerOnGlobal);
             }, 1000);
         } else {
             generateTable();
@@ -103,7 +103,7 @@ $(document).ready(function() {
 
         if ($(this).val()) {
             timer = setTimeout(function() {
-                customerSearchResults(1);
+                customerSearchResults(1, isSpinnerOn);
             }, 1000);
         } else {
             $("#customer-search").empty().removeClass("border");
@@ -439,6 +439,8 @@ $(document).ready(function() {
                         pageNum: pageNum
                     },
                     success: function(results) {
+                        console.log(results)
+                        console.log(isSpinnerOn)
                         if (results == "No result") {
                             if (isSpinnerOn == true) {
                                 $("#customer-search").addClass("customer-search-nothing").empty().html(`
@@ -1056,7 +1058,7 @@ $(document).ready(function() {
             var row_item_id = $(this).parent().parent().data("id");
             if (parseFloat($("#total_payment").val()) > 0) {
                 if (parseFloat($("#unapply_amount").val()) > 0) {
-                    if ($(this).prop('checked') == true) {
+                    if ($(this).prop('checked') === true) {
                         var current_unapply_amount = parseFloat($("#unapply_amount").val());
                         var current_total_outstanding = parseFloat($("#total_outstanding").val());
                         var current_total_pay = parseFloat($("#total_pay").val());
@@ -1073,9 +1075,10 @@ $(document).ready(function() {
 
                         var payment_made = current_unapply_amount < current_outstanding ? current_unapply_amount : current_outstanding;
 
-                        $(this).attr(
-                            "data-current-payment-made", payment_made
+                        $(this).data(
+                            "current-payment-made", payment_made
                         );
+
 
                         $(`.outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
                         $(`.payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
@@ -1086,7 +1089,6 @@ $(document).ready(function() {
 
 
                     } else {
-
                         var current_unapply_amount = parseFloat($("#unapply_amount").val());
                         var current_total_outstanding = parseFloat($("#total_outstanding").val());
                         var current_total_pay = parseFloat($("#total_pay").val());
@@ -1102,10 +1104,9 @@ $(document).ready(function() {
                         var new_total_outstanding = current_total_outstanding + payment_made;
                         var new_total_pay = current_total_pay - payment_made;
 
-                        $(this).attr(
-                            "data-current-payment-made", 0
+                        $(this).data(
+                            "current-payment-made", 0
                         );
-
 
                         $(`.outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
                         $(`.payment-${row_item_id}`).empty().text(new_payment.toFixed(2))
@@ -1117,7 +1118,7 @@ $(document).ready(function() {
 
                     }
                 } else {
-                    if ($(this).prop('checked') == true) {
+                    if ($(this).prop('checked') === true) {
                         failedMessage("Failed", "Unapply amount currently is 0. Please add some credit in total payment to pay");
                         return false;
                     } else {
@@ -1137,8 +1138,8 @@ $(document).ready(function() {
                         var new_total_outstanding = current_total_outstanding + payment_made;
                         var new_total_pay = current_total_pay - payment_made;
 
-                        $(this).attr(
-                            "data-current-payment-made", 0
+                        $(this).data(
+                            "current-payment-made", 0
                         );
 
                         $(`.outstanding-${row_item_id}`).empty().text(new_outstanding.toFixed(2))
