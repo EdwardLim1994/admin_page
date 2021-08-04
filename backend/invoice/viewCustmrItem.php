@@ -108,7 +108,6 @@ switch ($postType) {
 
 		if (isset($_POST["searchCustomerName"]) || isset($_POST['searchCustomerID'])) {
 
-
 			if ($_POST["searchCustomerName"] != "" && $_POST["searchCustomerID"] == "") {
 				$stmt = $mysqli->prepare("SELECT COUNT(customer_id) FROM customers WHERE customer_account REGEXP ? ");
 				$stmt->bind_param("s", $_POST["searchCustomerName"]);

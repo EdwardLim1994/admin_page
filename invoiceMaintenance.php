@@ -159,7 +159,6 @@ else
                             <input type="number" id="currentPageNum" class="form-control pageNumInput" min="1" value="<?= isset($_SESSION['currPage']) ? $_SESSION['currPage'] : 1 ?>">
                             <h5> of <span id="pageTotal"></span></h5>
                         </div>
-
                     </div>
                 </div>
                 <div id="general-table" class='table-responsive'></div>

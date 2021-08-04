@@ -284,7 +284,7 @@ $(document).ready(function() {
                             customerSearchResultsCountRow();
                             customerSearchResultsSelect();
 
-                            $("#itemSearchCurrentPageNum").focusout(function() {
+                            $("#customerSearchCurrentPageNum").focusout(function() {
                                 customerSearchResults(parseInt($(this).val()));
                             })
                         }
