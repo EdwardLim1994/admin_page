@@ -535,7 +535,7 @@ else
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <a type="button" class="btn btn-outline-success waves-effect" data-dismiss="modal">OK</a>
+                        <a type="button" class="btn btn-outline-success btnSuccess waves-effect" data-dismiss="modal">OK</a>
                     </div>
                 </div>
             </div>

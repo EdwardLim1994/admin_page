@@ -710,9 +710,32 @@ function salesOrderMainFunction() {
             url: "./backend/sale/saleOrder.php",
             data: {
                 postType: "deleteHeader",
-                sales_id: $("#delete_id").val()
+                sale_id: $("#delete_id").val()
             },
             success: function(results) {
+                console.log(results);
+
+                switch (results) {
+                    case ("success delete"):
+                        $("#deleteSalesOrderModal").modal("hide");
+                        successMessage("Success", "Sale Order is successfully added");
+                        $(".btnSuccess").click(function() {
+                            location.reload();
+                        })
+                        break;
+
+                    case ("id not found"):
+                        $("#deleteSalesOrderModal").modal("hide");
+                        failedMessage("Failed", results);
+                        break;
+
+                    case ("Some input field is not set."):
+                        $("#deleteSalesOrderModal").modal("hide");
+                        failedMessage("Failed", results);
+                        break;
+                }
+
+
 
             },
             error: function(e) {
@@ -792,7 +815,6 @@ function salesOrderMainFunction() {
                 pageNum: currentPageNum
             },
             success: function(results) {
-                console.log(results);
 
                 if (results == "0 results" || results == "No Result") {
                     renderTable("salesorder");
@@ -803,13 +825,15 @@ function salesOrderMainFunction() {
 
 
                     //TODO: Update Sales Order Button
-                    $("#editSalesOrderBtn").click(function() {
+                    $(".editSalesOrderBtn").click(function() {
 
                     })
 
                     //TODO: Delete Sales Order Button
-                    $("#deleteSalesOrderBtn").click(function() {
-
+                    $(".deleteSalesOrderBtn").click(function() {
+                        var salesorder_id = $(this).parent().parent().data("salesorder-id");
+                        $("#delete_id").val(salesorder_id);
+                        $("#deleteSalesOrderName").text(salesorder_id)
                     })
                 }
             },
@@ -893,13 +917,13 @@ function salesOrderMainFunction() {
                 renderTable("salesorder");
                 $.each(results, function(i, salesorder) {
                     $("#salesorderContent").append(`
-                        <tr class="salesorder-${salesorder.sale_id}">
+                        <tr class="salesorder-row" data-salesorder-id="${salesorder.sale_id}">
                             <th>${++i}</th>
                             <td>
-                                <button class="btn btn-warning editBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#editSalesOrderModal">
+                                <button class="btn btn-warning editSalesOrderBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#editSalesOrderModal">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger deleteBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#deleteSalesOrderModal">
+                                <button class="btn btn-danger deleteSalesOrderBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#deleteSalesOrderModal">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </td>

@@ -123,7 +123,7 @@ else
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div>  
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="salesorder" role="tabpanel" aria-labelledby="salesorder-tab">
                         <?php include "./salesOrderPage.html"; ?>
@@ -136,15 +136,15 @@ else
         </div>
 
 
-        <!-- Success Alert -->
-        <div class="modal fade" id="successToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal fade" id="successToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-notify modal-success" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <p class="heading lead" id="successModalHeadline"></p>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true" class="white-text">&times;</span>
-                        </button>
+                        </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="text-center">
@@ -152,14 +152,16 @@ else
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <a type="button" class="btn btn-outline-success waves-effect" data-dismiss="modal">OK</a>
+                        <a type="button" class="btn btn-outline-success btnSuccess waves-effect"
+                            data-dismiss="modal">OK</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Failed Alert -->
-        <div class="modal fade" id="failedToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal fade" id="failedToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-notify modal-danger" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
