@@ -55,9 +55,13 @@
                 <div class="modal-body">
                     <div class="form-group position-relative">
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-6">
                                 <label for="salesorder-search-customer_name">Customer Name</label>
                                 <input type="text" autocomplete="off" class="form-control" name="customer_account" id="salesorder-search-customer_name" placeholder="">
+                            </div>
+                            <div class="col-6">
+                                <label for="edit-customer_account">Account Number</label>
+                                <input type="text" autocomplete="off" class="form-control" name="customer_account" id="salesorder-search-customer_id" placeholder="" readonly>
                             </div>
                         </div>
 
@@ -117,8 +121,6 @@
                                         </th>
                                         <th class="text-center th-sm">Selling Price(RM)
                                         </th>
-                                        <th class="text-center th-sm">Base Cost(RM)
-                                        </th>
                                         <th class="text-center th-sm">Discount(%)
                                         </th>
                                         <th class="text-center th-sm">Amount(RM)
@@ -134,11 +136,11 @@
                                 </tbody>
                                 <tfoot class="grey white-text">
                                     <tr>
-                                        <th colspan="8" class="text-right"><strong>Discount : </strong></th>
+                                        <th colspan="7" class="text-right"><strong>Discount : </strong></th>
                                         <th id="salesorder-total_discount"></th>
                                     </tr>
                                     <tr>
-                                        <th colspan="8" class="text-right"><strong>Total Amount : </strong></th>
+                                        <th colspan="7" class="text-right"><strong>Total Amount : </strong></th>
                                         <th id="salesorder-total_cost"></th>
                                     </tr>
                                 </tfoot>
@@ -154,7 +156,7 @@
     <div class="modal fade" id="editSalesOrderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
             <!--Content-->
-            <input hidden="true" type="text" id="update-invoice_id">
+            <input hidden="true" type="text" id="update-salesorder_id">
             <div class="modal-content">
                 <div class="p-0 m-0 bg-white sticky-top border-bottom">
 
@@ -179,8 +181,8 @@
                                 <input type="text" autocomplete="off" class="form-control" name="customer_account" id="salesorder-update-search-customer_name" placeholder="">
                             </div>
                             <div class="col-6">
-                                <label for="edit-customer_account">Account Number</label>
-                                <input type="text" autocomplete="off" class="form-control" name="customer_account" id="salesorder-update-search-customer_id" placeholder="">
+                                <label for="salesorder-update-search-customer_id">Account Number</label>
+                                <input type="text" autocomplete="off" class="form-control" name="customer_account" id="salesorder-update-search-customer_id" placeholder="" readonly>
                             </div>
                         </div>
 
@@ -241,8 +243,6 @@
                                         </th>
                                         <th class="text-center th-sm">Selling Price(RM)
                                         </th>
-                                        <th class="text-center th-sm">Base Cost(RM)
-                                        </th>
                                         <th class="text-center th-sm">Discount(%)
                                         </th>
                                         <th class="text-center th-sm">Amount(RM)
@@ -258,11 +258,11 @@
                                 </tbody>
                                 <tfoot class="grey white-text">
                                     <tr>
-                                        <th colspan="8" class="text-right"><strong>Discount : </strong></th>
+                                        <th colspan="7" class="text-right"><strong>Discount : </strong></th>
                                         <th id="salesorder-update-total_discount"></th>
                                     </tr>
                                     <tr>
-                                        <th colspan="8" class="text-right"><strong>Total Amount : </strong></th>
+                                        <th colspan="7" class="text-right"><strong>Total Amount : </strong></th>
                                         <th id="salesorder-update-total_cost"></th>
                                     </tr>
                                 </tfoot>
