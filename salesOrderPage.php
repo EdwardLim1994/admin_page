@@ -12,13 +12,19 @@
     <!-- Total row -->
     <!-- Pagination -->
     <div class="row">
-        <div class="text-right col-12">
-            <div class="py-4 d-flex justify-content-end rowResults">
+        <div class="col-4 d-flex flex-column align-items-end">
+            <label class="text-left w-100 h5-responsive" for="salesorder_filter_select">Showing by Payment Status: </label>
+            <select class="browser-default custom-select mt-2" id="salesorder_filter_select">
+                <option value="all" selected>All</option>
+                <option value="unpaid">Unpaid</option>
+                <option value="paid">Paid</option>
+            </select>
+        </div>
+        <div class="text-right col-8 d-flex flex-column justify-content-end ">
+            <div class="pb-4 rowResults">
                 <h6 class="my-auto">Total rows in database: <span class="font-weight-bold" id="salesorder-rowTotal"></span></h6>
             </div>
-        </div>
-        <div class="flex-row col-12 d-flex justify-content-end">
-            <div class="pageWrapper">
+            <div class="pageWrapper mt-4">
                 <h5>Page : </h5>
                 <input type="number" id="salesorder-currentPageNum" class="form-control pageNumInput" min="1" value="<?= isset($_SESSION['currPage']) ? $_SESSION['currPage'] : 1 ?>">
                 <h5> of <span id="salesorder-pageTotal"></span></h5>

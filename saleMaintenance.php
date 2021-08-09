@@ -126,10 +126,10 @@ else
                 </div>  
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="salesorder" role="tabpanel" aria-labelledby="salesorder-tab">
-                        <?php include "./salesOrderPage.html"; ?>
+                        <?php include "./salesOrderPage.php"; ?>
                     </div>
                     <div class="tab-pane fade" id="salespayment" role="tabpanel" aria-labelledby="salespayment-tab">
-                        <?php include "./salesPaymentPage.html"; ?>
+                        <?php include "./salesPaymentPage.php"; ?>
                     </div>
                 </div>
             </div>

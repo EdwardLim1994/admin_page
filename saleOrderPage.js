@@ -15,12 +15,16 @@ function salesOrderMainFunction() {
     generateTable();
 
     //Pagination Input
-    $("#salesorder-currentPageNum").focusout(function() {
+    $("#salesorder-currentPageNum").focusout(function () {
         generateTable();
     });
 
+    $("#salesorder_filter_select").change(function(){
+        generateTable();
+    })
+
     //Search Customer Input for Add Modal
-    $("#salesorder-search-customer_name").on("keyup", function() {
+    $("#salesorder-search-customer_name").on("keyup", function () {
         clearTimeout(timerCustomer);
         if (!isSpinnerOnCustomer) {
             $("#salesorder-customer-search").empty().addClass("border").html(`
@@ -35,7 +39,7 @@ function salesOrderMainFunction() {
         }
 
         if ($(this).val()) {
-            timerCustomer = setTimeout(function() {
+            timerCustomer = setTimeout(function () {
                 customerSearchResults(1);
             }, 1000);
         } else {
@@ -45,7 +49,7 @@ function salesOrderMainFunction() {
     })
 
     //Search Item Input for Add Modal
-    $("#salesorder-search-item").on("keyup", function() {
+    $("#salesorder-search-item").on("keyup", function () {
         clearTimeout(timerItem);
         if (!isSpinnerOnItem) {
             $("#salesorder-item-search").empty().addClass("border").html(`
@@ -59,7 +63,7 @@ function salesOrderMainFunction() {
         }
 
         if ($(this).val()) {
-            timerItem = setTimeout(function() {
+            timerItem = setTimeout(function () {
                 itemSearchResults(1);
             }, 1000);
         } else {
@@ -70,7 +74,7 @@ function salesOrderMainFunction() {
     })
 
     //Search Customer Input for Update Modal
-    $("#salesorder-update-search-customer_name").on("keyup", function() {
+    $("#salesorder-update-search-customer_name").on("keyup", function () {
         clearTimeout(timerCustomerUpdate);
         if (!isSpinnerOnCustomerUpdate) {
             $("#salesorder-update-customer-search").empty().addClass("border").html(`
@@ -85,7 +89,7 @@ function salesOrderMainFunction() {
         }
 
         if ($(this).val()) {
-            timerCustomerUpdate = setTimeout(function() {
+            timerCustomerUpdate = setTimeout(function () {
                 updateCustomerSearchResults(1);
             }, 1000);
         } else {
@@ -95,7 +99,7 @@ function salesOrderMainFunction() {
     })
 
     //Search Item Input for Update Modal
-    $("#salesorder-update-search-item").on("keyup", function() {
+    $("#salesorder-update-search-item").on("keyup", function () {
         clearTimeout(timerItemUpdate);
         if (!isSpinnerOnItemUpdate) {
             $("#salesorder-update-item-search").empty().addClass("border").html(`
@@ -110,7 +114,7 @@ function salesOrderMainFunction() {
         }
 
         if ($(this).val()) {
-            timerItemUpdate = setTimeout(function() {
+            timerItemUpdate = setTimeout(function () {
                 updateItemSearchResults(1);
             }, 1000);
         } else {
@@ -121,7 +125,7 @@ function salesOrderMainFunction() {
 
 
     //Add Sales Order Button
-    $("#addSalesOrderModalBtn").click(function() {
+    $("#addSalesOrderModalBtn").click(function () {
         $("#salesorder-salesperson, #salesorder-search-item, #salesorder-search-customer_id").val("");
         $("#salesorder-payment_mode").val("cash");
         $("#salesorder-total_discount, #salesorder-total_cost").empty();
@@ -136,17 +140,17 @@ function salesOrderMainFunction() {
 
 
     //Submit Sales Order on add
-    $("#addSalesOrderSubmitBtn").click(function() {
+    $("#addSalesOrderSubmitBtn").click(function () {
         addSalesOrder();
     })
 
     //Submit Sales Order on update
-    $("#editSalesOrderSubmitBtn").click(function() {
+    $("#editSalesOrderSubmitBtn").click(function () {
         editSalesOrder();
     })
 
     //Submit Sales Order on delete
-    $("#deleteSalesOrderSubmitButton").click(function() {
+    $("#deleteSalesOrderSubmitButton").click(function () {
         deleteSalesOrder();
     })
 
@@ -158,7 +162,7 @@ function salesOrderMainFunction() {
 
         if ($("#salesorder-search-customer_name").val() != "") {
             clearTimeout(timer);
-            timer = setTimeout(function() {
+            timer = setTimeout(function () {
                 $.ajax({
                     type: "POST",
                     url: "./backend/invoice/viewCustmrItem.php",
@@ -168,7 +172,7 @@ function salesOrderMainFunction() {
                         searchCustomerID: $("#salesorder-search-customer_id").val(),
                         pageNum: pageNum
                     },
-                    success: function(results) {
+                    success: function (results) {
                         if (results == "No result") {
                             if (isSpinnerOnCustomer == true) {
                                 $("#salesorder-customer-search").empty().html(`
@@ -208,7 +212,7 @@ function salesOrderMainFunction() {
                             </div>
                             <div class="overflow-auto" style="max-height:200px;">
                             `;
-                            $.each(JSON.parse(results), function(i, value) {
+                            $.each(JSON.parse(results), function (i, value) {
                                 searchResult += `
                                 <a class="customer-search-results">
                                     <div class="view overlay">
@@ -232,12 +236,12 @@ function salesOrderMainFunction() {
                             customerSearchCountRow();
                             customerSearchSelect();
 
-                            $("#customerSearchCurrentPageNum").focusout(function() {
+                            $("#customerSearchCurrentPageNum").focusout(function () {
                                 customerSearchResults(parseInt($(this).val()));
                             })
                         }
                     },
-                    error: function(e) {
+                    error: function (e) {
                         failedMessage("Failed", "Unexpected error occur : " + e);
                     }
                 });
@@ -250,7 +254,7 @@ function salesOrderMainFunction() {
 
 
     function customerSearchSelect() {
-        $(".customer-search-results").click(function() {
+        $(".customer-search-results").click(function () {
             $("#salesorder-search-customer_name").val($(this).find(".customerName").text());
             $("#salesorder-search-customer_id").val($(this).find(".customerID").text());
             $("#salesorder-customer-search").empty().removeClass("border");
@@ -263,7 +267,7 @@ function salesOrderMainFunction() {
         $("#customerSearchPageTotal").empty().text(totalPage);
         $("#customerSearchCurrentPageNum").attr("max", totalPage);
 
-        $("#customerSearchCurrentPageNum").on('input', function() {
+        $("#customerSearchCurrentPageNum").on('input', function () {
             if ($("#customerSearchCurrentPageNum").val() == "") {
                 console.log("empty customer search");
             } else if ($("#customerSearchCurrentPageNum").val() < totalPage)
@@ -282,7 +286,7 @@ function salesOrderMainFunction() {
                 searchCustomerName: $("#salesorder-search-customer_name").val(),
                 searchCustomerID: ""
             },
-            success: function(results) {
+            success: function (results) {
                 $("#customerSearchRowTotal").empty().html(results);
                 customerSearchPagination(results);
             }
@@ -297,7 +301,7 @@ function salesOrderMainFunction() {
 
         if ($("#salesorder-search-item").val() != "") {
             clearTimeout(timer);
-            timer = setTimeout(function() {
+            timer = setTimeout(function () {
                 $.ajax({
                     type: "POST",
                     url: "./backend/invoice/viewCustmrItem.php",
@@ -306,7 +310,7 @@ function salesOrderMainFunction() {
                         search: $("#salesorder-search-item").val(),
                         pageNum: pageNum
                     },
-                    success: function(results) {
+                    success: function (results) {
                         if (results == "No result") {
                             if (isSpinnerOnItem == true) {
                                 $("#salesorder-item-search").empty().html(`
@@ -343,7 +347,7 @@ function salesOrderMainFunction() {
                             </div>
                             <div class="overflow-auto" style="max-height:200px;">
                             `;
-                            $.each(JSON.parse(results), function(i, value) {
+                            $.each(JSON.parse(results), function (i, value) {
                                 var isItemSoldOut = false;
                                 if (value.qty_available == 0) {
                                     isItemSoldOut = true
@@ -375,12 +379,12 @@ function salesOrderMainFunction() {
                             itemSearchCountRow();
                             itemSearchSelect();
 
-                            $("#itemSearchCurrentPageNum").focusout(function() {
+                            $("#itemSearchCurrentPageNum").focusout(function () {
                                 itemSearchResults(parseInt($(this).val()));
                             })
                         }
                     },
-                    error: function(e) {
+                    error: function (e) {
                         failedMessage("Failed", "Unexpected error occur : " + e);
                     }
                 });
@@ -393,7 +397,7 @@ function salesOrderMainFunction() {
     }
 
     function itemSearchSelect() {
-        $(".item-search-results").click(function() {
+        $(".item-search-results").click(function () {
             $.ajax({
                 type: "POST",
                 url: "./backend/invoice/viewCustmrItem.php",
@@ -401,19 +405,19 @@ function salesOrderMainFunction() {
                     postType: "searchRowItemAdd",
                     itemID: $(this).data("id")
                 },
-                success: function(results) {
+                success: function (results) {
                     var item_results;
                     var isItemSoldOut = false;
                     var itemID;
-                    $.each(JSON.parse(results), function(i, value) {
-                            itemID = value.item_id;
-                            //if (value.qty_available > 0) {
-                            //   isItemSoldOut = false;
-                            if (value.item_id == $(".item-row").data("id")) {
-                                var itemQty = $('[data-id=' + value.item_id + ']').find(".itemQuantity").val();
-                                $('[data-id=' + value.item_id + ']').find(".itemQuantity").val((parseInt(itemQty) + 1));
-                            } else {
-                                item_results += `
+                    $.each(JSON.parse(results), function (i, value) {
+                        itemID = value.item_id;
+                        //if (value.qty_available > 0) {
+                        //   isItemSoldOut = false;
+                        if (value.item_id == $(".item-row").data("id")) {
+                            var itemQty = $('[data-id=' + value.item_id + ']').find(".itemQuantity").val();
+                            $('[data-id=' + value.item_id + ']').find(".itemQuantity").val((parseInt(itemQty) + 1));
+                        } else {
+                            item_results += `
                                 <tr class="item-row" data-id="${value.item_id}">
                                     <td>
                                         <button class="btn btn-danger deleteItemBtn py-md-3 px-md-4 p-sm-3">
@@ -435,12 +439,12 @@ function salesOrderMainFunction() {
                                     <td class="total_price"></td>
                                 </tr>
                                 `;
-                            }
-                            //} else {
-                            //    isItemSoldOut = true;
-                            //}
-                        })
-                        //if (isItemSoldOut == false) {
+                        }
+                        //} else {
+                        //    isItemSoldOut = true;
+                        //}
+                    })
+                    //if (isItemSoldOut == false) {
                     if ($("#salesorder-item-bucket").find(".salesorder-noResultText").length > 0) {
                         $("#salesorder-item-bucket").empty();
                     }
@@ -454,7 +458,7 @@ function salesOrderMainFunction() {
                     itemBucketTotalCost();
 
 
-                    $(".itemQuantity").change(function() {
+                    $(".itemQuantity").change(function () {
                         if ($(this).val() > parseInt($(this).attr("max"))) {
                             $(this).val($(this).attr("max"));
                         }
@@ -468,7 +472,7 @@ function salesOrderMainFunction() {
 
                     })
 
-                    $(".itemDiscount").change(function() {
+                    $(".itemDiscount").change(function () {
                         if ($(this).val() > parseInt($(this).attr("max"))) {
                             $(this).val($(this).attr("max"));
                         }
@@ -485,7 +489,7 @@ function salesOrderMainFunction() {
                     //}
                     itemBucketRemoveItem();
                 },
-                error: function(e) {
+                error: function (e) {
                     failedMessage("Failed", "Unexpected error occur : " + e);
                 }
             });
@@ -505,7 +509,7 @@ function salesOrderMainFunction() {
 
     function itemBucketTotalCost() {
         var totalCost = 0.0;
-        $.each($(".item-row"), function(i, value) {
+        $.each($(".item-row"), function (i, value) {
             var totalPrice = $(".item-row:nth-child(" + (i + 1) + ")").find(".total_price").text();
             totalCost += parseFloat(totalPrice);
         })
@@ -514,7 +518,7 @@ function salesOrderMainFunction() {
 
     function itemBucketTotalDiscount() {
         var totalDiscount = 0.0;
-        $.each($(".item-row"), function(i, value) {
+        $.each($(".item-row"), function (i, value) {
             var unit_price = $(".item-row:nth-child(" + (i + 1) + ")").find(".selling_price").text();
             var quantity = $(".item-row:nth-child(" + (i + 1) + ")").find(".itemQuantity").val();
             var discount = $(".item-row:nth-child(" + (i + 1) + ")").find(".itemDiscount").val();
@@ -527,7 +531,7 @@ function salesOrderMainFunction() {
 
     function itemBucketRemoveItem() {
 
-        $(".deleteItemBtn").click(function() {
+        $(".deleteItemBtn").click(function () {
             $(this).closest("tr").remove();
 
             if ($.trim($("#salesorder-item-bucket").html()).length == 0) {
@@ -548,7 +552,7 @@ function salesOrderMainFunction() {
         $("#itemSearchPageTotal").empty().text(totalPage);
         $("#itemSearchCurrentPageNum").attr("max", totalPage);
 
-        $("#itemSearchCurrentPageNum").on('input', function() {
+        $("#itemSearchCurrentPageNum").on('input', function () {
             if ($("#itemSearchCurrentPageNum").val() == "") {
                 console.log("empty item search");
             } else if ($("#itemSearchCurrentPageNum").val() < totalPage)
@@ -566,11 +570,11 @@ function salesOrderMainFunction() {
                 postType: "searchRowCountItem",
                 search: $("#salesorder-search-item").val()
             },
-            success: function(results) {
+            success: function (results) {
                 $("#itemSearchRowTotal").empty().html(results);
                 itemSearchPagination(results);
             },
-            error: function(e) {
+            error: function (e) {
                 failedMessage("Failed", "Unexpected error occur : " + e);
             }
         });
@@ -584,7 +588,7 @@ function salesOrderMainFunction() {
 
         if ($("#salesorder-update-search-customer_name").val() != "") {
             clearTimeout(timer);
-            timer = setTimeout(function() {
+            timer = setTimeout(function () {
                 $.ajax({
                     type: "POST",
                     url: "./backend/invoice/viewCustmrItem.php",
@@ -594,7 +598,7 @@ function salesOrderMainFunction() {
                         searchCustomerID: $("#salesorder-updatesearch-customer_id").val(),
                         pageNum: pageNum
                     },
-                    success: function(results) {
+                    success: function (results) {
                         if (results == "No result") {
                             if (isSpinnerOnCustomerUpdate == true) {
                                 $("#salesorder-update-customer-search").empty().html(`
@@ -631,7 +635,7 @@ function salesOrderMainFunction() {
                             </div>
                             <div class="overflow-auto" style="max-height:200px;">
                             `;
-                            $.each(JSON.parse(results), function(i, value) {
+                            $.each(JSON.parse(results), function (i, value) {
                                 searchResult += `
                                 <a class="update-customer-search-results">
                                     <div class="view overlay">
@@ -656,7 +660,7 @@ function salesOrderMainFunction() {
                             updateCustomerSearchSelect();
                         }
                     },
-                    error: function(e) {
+                    error: function (e) {
                         failedMessage("Failed", "Unexpected error occur : " + e);
                     }
                 });
@@ -668,7 +672,7 @@ function salesOrderMainFunction() {
     }
 
     function updateCustomerSearchSelect() {
-        $(".update-customer-search-results").click(function() {
+        $(".update-customer-search-results").click(function () {
             $("#salesorder-update-search-customer_name").val($(this).find(".customerName").text());
             $("#salesorder-update-search-customer_id").val($(this).find(".customerID").text());
             $("#salesorder-update-customer-search").empty().removeClass("border");
@@ -681,7 +685,7 @@ function salesOrderMainFunction() {
         $("#updatecustomerSearchPageTotal").empty().text(totalPage);
         $("#updatecustomerSearchCurrentPageNum").attr("max", totalPage);
 
-        $("#updatecustomerSearchCurrentPageNum").on('input', function() {
+        $("#updatecustomerSearchCurrentPageNum").on('input', function () {
             if ($("#updatecustomerSearchCurrentPageNum").val() == "") {
                 console.log("Empty update customer search");
             } else if ($("#updatecustomerSearchCurrentPageNum").val() < totalPage)
@@ -700,7 +704,7 @@ function salesOrderMainFunction() {
                 searchCustomerName: $("#salesorder-update-search-customer_name").val(),
                 searchCustomerID: ""
             },
-            success: function(results) {
+            success: function (results) {
                 $("#updateCustomerSearchRowTotal").empty().html(results);
                 updateCustomerSearchPagination(results);
             }
@@ -715,7 +719,7 @@ function salesOrderMainFunction() {
 
         if ($("#salesorder-update-search-item").val() != "") {
             clearTimeout(timer);
-            timer = setTimeout(function() {
+            timer = setTimeout(function () {
                 $.ajax({
                     type: "POST",
                     url: "./backend/invoice/viewCustmrItem.php",
@@ -724,7 +728,7 @@ function salesOrderMainFunction() {
                         search: $("#salesorder-update-search-item").val(),
                         pageNum: pageNum
                     },
-                    success: function(results) {
+                    success: function (results) {
                         if (results == "No result") {
                             if (isSpinnerOnItemUpdate == true) {
                                 $("#salesorder-update-item-search").empty().html(`
@@ -761,7 +765,7 @@ function salesOrderMainFunction() {
                             </div>
                             <div class="overflow-auto" style="max-height:200px;">
                             `;
-                            $.each(JSON.parse(results), function(i, value) {
+                            $.each(JSON.parse(results), function (i, value) {
                                 var isItemSoldOut = false;
                                 searchResult += `
                                 <a class="update-item-search-results" data-id="${value.item_id}">
@@ -790,7 +794,7 @@ function salesOrderMainFunction() {
                             updateItemSearchSelect();
                         }
                     },
-                    error: function(e) {
+                    error: function (e) {
                         failedMessage("Failed", "Unexpected error occur : " + e);
                     }
                 });
@@ -802,7 +806,7 @@ function salesOrderMainFunction() {
     }
 
     function updateItemSearchSelect() {
-        $(".update-item-search-results").click(function() {
+        $(".update-item-search-results").click(function () {
             $.ajax({
                 type: "POST",
                 url: "./backend/invoice/viewCustmrItem.php",
@@ -810,20 +814,20 @@ function salesOrderMainFunction() {
                     postType: "searchRowItemAdd",
                     itemID: $(this).data("id")
                 },
-                success: function(results) {
+                success: function (results) {
                     var item_results;
                     var isItemSoldOut = false;
                     var itemID;
-                    $.each(JSON.parse(results), function(i, value) {
-                            itemID = value.item_id;
-                            //if (value.qty_available > 0) {
-                            //isItemSoldOut = false;
-                            if (value.item_id == $(".update-item-row").data("id")) {
-                                var itemQty = $('[data-id=' + value.item_id + ']').find(".update-itemQuantity").val();
+                    $.each(JSON.parse(results), function (i, value) {
+                        itemID = value.item_id;
+                        //if (value.qty_available > 0) {
+                        //isItemSoldOut = false;
+                        if (value.item_id == $(".update-item-row").data("id")) {
+                            var itemQty = $('[data-id=' + value.item_id + ']').find(".update-itemQuantity").val();
 
-                                $('[data-id=' + value.item_id + ']').find(".update-itemQuantity").val((parseInt(itemQty) + 1));
-                            } else {
-                                item_results += `
+                            $('[data-id=' + value.item_id + ']').find(".update-itemQuantity").val((parseInt(itemQty) + 1));
+                        } else {
+                            item_results += `
                                 <tr class="update-item-row" data-id="${value.item_id}">
                                     <td>
                                         <button class="btn btn-danger update-deleteItemBtn py-md-3 px-md-4 p-sm-3">
@@ -845,12 +849,12 @@ function salesOrderMainFunction() {
                                     <td class="update-total_price"></td>
                                 </tr>
                                 `;
-                            }
-                            //} else {
-                            //    isItemSoldOut = true;
-                            //}
-                        })
-                        //if (isItemSoldOut == false) {
+                        }
+                        //} else {
+                        //    isItemSoldOut = true;
+                        //}
+                    })
+                    //if (isItemSoldOut == false) {
                     if ($("#salesorder-update-item-bucket").find(".salesorder-update-noResultText").length > 0) {
                         $("#salesorder-update-item-bucket").empty();
                     }
@@ -864,7 +868,7 @@ function salesOrderMainFunction() {
                     updateitemBucketTotalCost();
 
 
-                    $(".update-itemQuantity").change(function() {
+                    $(".update-itemQuantity").change(function () {
                         if ($(this).val() > parseInt($(this).attr("max"))) {
                             $(this).val($(this).attr("max"));
                         }
@@ -878,7 +882,7 @@ function salesOrderMainFunction() {
 
                     });
 
-                    $(".update-itemDiscount").change(function() {
+                    $(".update-itemDiscount").change(function () {
                         if ($(this).val() > parseInt($(this).attr("max"))) {
                             $(this).val($(this).attr("max"));
                         }
@@ -912,7 +916,7 @@ function salesOrderMainFunction() {
     function updateitemBucketTotalCost() {
         var totalCost = 0.0;
 
-        $.each($(".update-item-row"), function(i, value) {
+        $.each($(".update-item-row"), function (i, value) {
             var totalPrice = $(".update-item-row:nth-child(" + (i + 1) + ")").find(".update-total_price").text();
             totalCost += parseFloat(totalPrice);
         })
@@ -923,7 +927,7 @@ function salesOrderMainFunction() {
     function updateitemBucketTotalDiscount() {
         var totalDiscount = 0.0;
 
-        $.each($(".update-item-row"), function(i, value) {
+        $.each($(".update-item-row"), function (i, value) {
             var unit_price = $(".update-item-row:nth-child(" + (i + 1) + ")").find(".update-selling_price").text();
             var quantity = $(".update-item-row:nth-child(" + (i + 1) + ")").find(".update-itemQuantity").val();
             var discount = $(".update-item-row:nth-child(" + (i + 1) + ")").find(".update-itemDiscount").val();
@@ -940,7 +944,7 @@ function salesOrderMainFunction() {
 
     function updateitemBucketRemoveItem() {
 
-        $(".update-deleteItemBtn").click(function() {
+        $(".update-deleteItemBtn").click(function () {
             $(this).closest("tr").remove();
 
             if ($.trim($("#salesorder-update-item-bucket").html()).length == 0) {
@@ -962,7 +966,7 @@ function salesOrderMainFunction() {
         $("#updateitemSearchPageTotal").empty().text(totalPage);
         $("#updateitemSearchCurrentPageNum").attr("max", totalPage);
 
-        $("#updateitemSearchCurrentPageNum").on('input', function() {
+        $("#updateitemSearchCurrentPageNum").on('input', function () {
             if ($("#updateitemSearchCurrentPageNum").val() == "") {
                 console.log("empty update item search");
             } else if ($("#updateitemSearchCurrentPageNum").val() < totalPage)
@@ -980,7 +984,7 @@ function salesOrderMainFunction() {
                 postType: "searchRowCountItem",
                 search: $("#salesorder-update-search-item").val()
             },
-            success: function(results) {
+            success: function (results) {
                 $("#updateitemSearchRowTotal").empty().html(results);
                 updateItemSearchPagination(results);
             }
@@ -1014,7 +1018,7 @@ function salesOrderMainFunction() {
             sale_discount_header = $("#salesorder-total_discount").text();
             sale_total_amount = $("#salesorder-total_cost").text();
 
-            $.each($(".item-row"), function(i, value) {
+            $.each($(".item-row"), function (i, value) {
                 item_id.push($(".item-row:nth-child(" + (i + 1) + ")").data("id"));
                 item_no.push($(".item-row:nth-child(" + (i + 1) + ")").find(".item_no").text());
                 description.push($(".item-row:nth-child(" + (i + 1) + ")").find(".description").text());
@@ -1044,7 +1048,7 @@ function salesOrderMainFunction() {
                     discount: discount,
                     amount: amount,
                 },
-                success: function(results) {
+                success: function (results) {
                     switch (results) {
                         case ("Some input field is not set."):
                             $("#addSalesOrderModal").modal("hide");
@@ -1062,7 +1066,7 @@ function salesOrderMainFunction() {
                     }
 
                 },
-                error: function(e) {
+                error: function (e) {
                     failedMessage("Failed", "Unexpected error occur : " + e);
                 }
             });
@@ -1099,7 +1103,7 @@ function salesOrderMainFunction() {
             customer_name = $("#salesorder-update-search-customer_name").val();
             customer_account = $("#salesorder-update-search-customer_id").val();
 
-            $.each($(".update-item-row"), function(i, value) {
+            $.each($(".update-item-row"), function (i, value) {
                 item_id.push($(".update-item-row:nth-child(" + (i + 1) + ")").data("id"));
                 item_no.push($(".update-item-row:nth-child(" + (i + 1) + ")").find(".update-item_no").text());
                 description.push($(".update-item-row:nth-child(" + (i + 1) + ")").find(".update-description").text());
@@ -1132,7 +1136,7 @@ function salesOrderMainFunction() {
                     discount: discount,
                     amount: amount,
                 },
-                success: function(results) {
+                success: function (results) {
                     switch (results) {
                         case ("Some input field is not set."):
                             $("#addSalesOrderModal").modal("hide");
@@ -1149,7 +1153,7 @@ function salesOrderMainFunction() {
                             break;
                     }
                 },
-                error: function(e) {
+                error: function (e) {
                     failedMessage("Failed", "Unexpected error occur : " + e);
                 }
             });
@@ -1165,12 +1169,12 @@ function salesOrderMainFunction() {
                 postType: "deleteHeader",
                 sale_id: $("#delete_id").val()
             },
-            success: function(results) {
+            success: function (results) {
                 switch (results) {
                     case ("success delete"):
                         $("#deleteSalesOrderModal").modal("hide");
                         successMessage("Success", "Sale Order is successfully added");
-                        $(".btnSuccess").click(function() {
+                        $(".btnSuccess").click(function () {
                             location.reload();
                         })
                         break;
@@ -1186,7 +1190,7 @@ function salesOrderMainFunction() {
                         break;
                 }
             },
-            error: function(e) {
+            error: function (e) {
                 failedMessage("Failed", "Unexpected error occur : " + e);
             }
         });
@@ -1215,11 +1219,11 @@ function salesOrderMainFunction() {
                 postType: "countRow",
             },
             async: false,
-            success: function(results) {
+            success: function (results) {
                 $("#salesorder-rowTotal").empty().append(results);
                 totalRowCount = results;
             },
-            error: function(e) {
+            error: function (e) {
                 failedMessage("Failed", "Unexpected error occur : " + e);
             }
         });
@@ -1242,6 +1246,20 @@ function salesOrderMainFunction() {
         salesordertotalRow = countRow();
         salesordertotalPage = paginate(salesordertotalRow);
         var currentPageNum;
+        var postType = "viewSaleHeader";
+        var current_filter = $("#salesorder_filter_select").val();
+
+        switch (current_filter) {
+            case ("all"):
+                postType = "viewSaleHeader";
+                break;
+            case ("unpaid"):
+                postType = "viewSaleHeaderUnpaid"
+                break;
+            case ("paid"):
+                postType = "viewSaleHeaderPaid"
+                break;
+        }
 
         if ($("#salesorder-currentPageNum").val() != 0) {
             if ($("#salesorder-currentPageNum").val() > salesordertotalPage) {
@@ -1255,14 +1273,16 @@ function salesOrderMainFunction() {
 
         $("#salesorder-currentPageNum").val(currentPageNum);
 
+
+
         $.ajax({
             type: "POST",
             url: "./backend/sale/saleOrder.php",
             data: {
-                postType: 'viewSaleHeaderUnpaid',
+                postType: postType,
                 pageNum: currentPageNum
             },
-            success: function(results) {
+            success: function (results) {
 
                 if (results == "0 results" || results == "No Result") {
                     renderTable("salesorder");
@@ -1273,7 +1293,7 @@ function salesOrderMainFunction() {
 
 
                     //Update Sales Order Button
-                    $(".editSalesOrderBtn").click(function() {
+                    $(".editSalesOrderBtn").click(function () {
                         var salesorder = $(this).parent().parent().data("salesorder-id");
                         var tag = $(this).parent().parent();
                         $("#update-salesorder_id").val(salesorder);
@@ -1289,11 +1309,11 @@ function salesOrderMainFunction() {
                                 postType: "viewDetail",
                                 search: salesorder
                             },
-                            success: function(results) {
+                            success: function (results) {
                                 var item_results;
                                 var totalCost = 0;
                                 var totalDiscount = 0;
-                                $.each(JSON.parse(results), function(i, value) {
+                                $.each(JSON.parse(results), function (i, value) {
 
                                     var discount = (value.discount == 0 ? 100 : value.discount) / 100;
                                     var discountPrice = discount == 1 ? 0 : (value.amount * discount) * value.qty;
@@ -1329,7 +1349,7 @@ function salesOrderMainFunction() {
                                 $("#salesorder-update-item-bucket").empty().append(item_results);
                                 $("#salesorder-update-total_discount").empty().text(totalDiscount.toFixed(2));
                                 $("#salesorder-update-total_cost").empty().text(totalCost.toFixed(2));
-                                $(".update-deleteItemBtn").click(function() {
+                                $(".update-deleteItemBtn").click(function () {
                                     $(this).closest("tr").remove();
 
                                     if ($.trim($("#salesorder-update-item-bucket").html()).length == 0) {
@@ -1343,7 +1363,7 @@ function salesOrderMainFunction() {
                                     }
                                 });
 
-                                $(".update-itemQuantity").change(function() {
+                                $(".update-itemQuantity").change(function () {
                                     if ($(this).val() > parseInt($(this).attr("max"))) {
                                         $(this).val($(this).attr("max"));
                                     }
@@ -1357,7 +1377,7 @@ function salesOrderMainFunction() {
 
                                 });
 
-                                $(".update-itemDiscount").change(function() {
+                                $(".update-itemDiscount").change(function () {
 
                                     if ($(this).val() > parseInt($(this).attr("max"))) {
                                         $(this).val($(this).attr("max"));
@@ -1373,21 +1393,21 @@ function salesOrderMainFunction() {
 
                                 });
                             },
-                            error: function(e) {
+                            error: function (e) {
                                 failedMessage("Failed", "Unexpected error occur : " + e);
                             }
                         });
                     })
 
                     //Delete Sales Order Button
-                    $(".deleteSalesOrderBtn").click(function() {
+                    $(".deleteSalesOrderBtn").click(function () {
                         var salesorder_id = $(this).parent().parent().data("salesorder-id");
                         $("#delete_id").val(salesorder_id);
                         $("#deleteSalesOrderName").text(salesorder_id)
                     })
                 }
             },
-            error: function(e) {
+            error: function (e) {
                 failedMessage("Failed", "Unexpected error occur : " + e);
             }
         })
@@ -1465,7 +1485,7 @@ function salesOrderMainFunction() {
             case ("salesorder"):
 
                 renderTable("salesorder");
-                $.each(results, function(i, salesorder) {
+                $.each(results, function (i, salesorder) {
                     $("#salesorderContent").append(`
                         <tr class="salesorder-row" data-salesorder-id="${salesorder.sale_id}">
                             <th>${++i}</th>
@@ -1486,7 +1506,7 @@ function salesOrderMainFunction() {
                             <td class="sale_subtotal">${salesorder.sale_subtotal}</td>
                             <td class="sale_discount_header">${salesorder.sale_discount_header}</td>
                             <td class="sale_total_amount">${salesorder.sale_total_amount}</td>
-                            <td class="payment_status">${salesorder.payment_status}</td>
+                            <td class="payment_status capitalize font-weight-bold ${salesorder.payment_status == "Unpaid" ? "text-danger" : "text-success"}">${salesorder.payment_status}</td>
                         </tr>
                     `);
                 });
