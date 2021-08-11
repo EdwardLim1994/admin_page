@@ -260,11 +260,10 @@
     <div class="modal fade" id="printSalesPaymentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-notify modal-warning" role="document">
             <!--Content-->
-            <form action="./backend/payment/printPayment.php" method="POST">
+            <form action="./backend/sale/printPayment.php" method="POST">
                 <!--Header-->
-                <input hidden type="text" name="postType" value="printPayment">
-                <input hidden type="text" name="payment_identifier" id="print_id">
-                <input hidden type="text" name="customer_account" id="customer_name">
+                <input hidden type="text" name="postType" value="print">
+                <input hidden type="text" name="sale_payment_id" id="print_salepayment_id" value="" />
                 <div class="modal-content">
                     <!--Header-->
                     <div class="modal-header">

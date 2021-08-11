@@ -86,10 +86,11 @@ $(document).ready(function () {
         }
     })
 
-    //print sale payment modal
-    $("#printSalesPaymentModal").click(function () {
-        printSalesPayment();
-    })
+    // //print sale payment modal
+    // $("#printPaymentSubmitButton").click(function () {
+    //     console.log($("#print_salepayment_id").val())
+    //     return false;
+    // })
 
     $("#salespayment-amount_apply").change(function () {
         var amount = (parseFloat($(this).val())).toFixed(2);
@@ -411,12 +412,6 @@ $(document).ready(function () {
 
     }
 
-    //TODO: print sale payment
-    function printSalesPayment() {
-
-    }
-
-
     function failedMessage(headline, body) {
         $("#failedToModal").modal("show");
         $("#failedModalHeadline").empty().append(headline);
@@ -499,6 +494,9 @@ $(document).ready(function () {
                     //TODO: update button modal
 
                     //TODO: print button modal
+                    $(".printSalesPaymentBtn").click(function(){
+                        $("#print_salepayment_id").val($(this).parent().parent().data("salespayment-id"));
+                    })
                 }
 
             },
@@ -580,13 +578,13 @@ $(document).ready(function () {
                 renderTable("salespayment");
                 $.each(results, function (i, salespayment) {
                     $("#salespaymentContent").append(`
-                        <tr class="salespayment-row" data-salespayment-id="${salespayment.sale_id}">
+                        <tr class="salespayment-row" data-salespayment-id="${salespayment.sale_payment_id}">
                             <th>${++i}</th>
                             <td>
                                 <button class="btn btn-warning editSalesPaymentBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#editSalesOrderModal">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-secondary printSalesPaymentBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#deleteSalesOrderModal">
+                                <button class="btn btn-secondary printSalesPaymentBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#printSalesPaymentModal">
                                     <i class="fas fa-print"></i>
                                 </button>
                             </td>
