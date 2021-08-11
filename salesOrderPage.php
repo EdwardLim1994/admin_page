@@ -79,13 +79,13 @@
 
                         <h3>Receive Information</h3>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-12">
                                 <label for="salesorder-salesperson">Salesperson:</label>
                                 <input type="text" class="form-control" name="customer_account" id="salesorder-salesperson" placeholder="">
 
                             </div>
 
-                            <div class="col-6">
+                            <!-- <div class="col-6">
                                 <label for="salesorder-payment_mode">Payment Mode</label>
                                 <select class="browser-default custom-select" name="customer_account" id="salesorder-payment_mode">
                                     <option value="cash" selected="selected">Cash</option>
@@ -93,7 +93,7 @@
                                     <option value="transfer">Transfer</option>
                                 </select>
 
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="form-group ">
@@ -200,13 +200,13 @@
 
                         <h3>Receive Information</h3>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-12">
                                 <label for="salesorder-update-salesperson">Salesperson:</label>
                                 <input type="text" class="form-control" name="customer_account" id="salesorder-update-salesperson" placeholder="">
 
                             </div>
 
-                            <div class="col-6">
+                            <!-- <div class="col-6">
                                 <label for="salesorder-update-payment_mode">Payment Mode</label>
                                 <select class="browser-default custom-select" name="customer_account" id="salesorder-update-payment_mode">
                                     <option value="cash" selected="selected">Cash</option>
@@ -214,7 +214,7 @@
                                     <option value="transfer">Transfer</option>
                                 </select>
 
-                            </div>
+                            </div> -->
                         </div>
 
                     </div>

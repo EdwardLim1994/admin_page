@@ -112,7 +112,7 @@ else
                         <h1 class="h1-responsive">Sales Maintanance</h1>
                     </div>
                 </div>
-                <div class="row">
+                <div class="mt-3 row">
                     <div class="col-12">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item">

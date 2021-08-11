@@ -374,14 +374,14 @@ function salesOrderMainFunction() {
                                 `;
                             });
                             searchResult += `</div>`;
-                            $("#salesorder-item-search").empty().html(searchResult);
-                            isSpinnerOnItem = false;
-                            itemSearchCountRow();
-                            itemSearchSelect();
+                                $("#salesorder-item-search").empty().html(searchResult);
+                                isSpinnerOnItem = false;
+                                itemSearchCountRow();
+                                itemSearchSelect();
 
-                            $("#itemSearchCurrentPageNum").focusout(function () {
-                                itemSearchResults(parseInt($(this).val()));
-                            })
+                                $("#itemSearchCurrentPageNum").focusout(function () {
+                                    itemSearchResults(parseInt($(this).val()));
+                                })
                         }
                     },
                     error: function (e) {
@@ -1074,7 +1074,7 @@ function salesOrderMainFunction() {
 
     }
 
-    //TODO: Edit function
+    //Edit function
     function editSalesOrder() {
 
         var salesperson = "";
@@ -1148,7 +1148,7 @@ function salesOrderMainFunction() {
                             successMessage("Success", "Sale Order is successfully updated");
                             $("#salesorder-table").empty();
                             $("#salesorder-currentPageNum").val(1);
-                            totalPage = paginate(salesordertotalRow);
+                            salesordertotalPage = paginate(salesordertotalRow);
                             generateTable();
                             break;
                     }
