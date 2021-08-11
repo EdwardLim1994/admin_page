@@ -32,6 +32,7 @@ if (isset($_SESSION["loggedin"]))
     <link rel="apple-touch-icon" href="./assets/favicon/apple-touch-icon.png">
     <link rel="shortcut icon" href="./assets/favicon/favicon.ico">
 
+    <link rel="stylesheet" href="normalize.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
@@ -40,17 +41,6 @@ if (isset($_SESSION["loggedin"]))
 
     <link rel="stylesheet" href="./dist/css/style.min.css">
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js">
-    </script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js">
-    </script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js">
-    </script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.0.0/mdb.min.js">
-    </script>
-
-    <script src="./dist/js/script.prod.js"></script>
 
 </head>
 
@@ -58,16 +48,16 @@ if (isset($_SESSION["loggedin"]))
     <header>
         <div class="blue">
             <div class="container">
-                <div class="row py-2">
-                    <div class="col-4 my-auto">
+                <div class="py-2 row">
+                    <div class="my-auto col-4">
 
                     </div>
-                    <div class="col-4 text-center">
+                    <div class="text-center col-4">
                         <a href="https://www.nightcatdigitalsolutions.com">
-                            <img class="img-fluid rounded logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
+                            <img class="rounded img-fluid logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
                         </a>
                     </div>
-                    <div class="col-4 text-right my-auto">
+                    <div class="my-auto text-right col-4">
 
                     </div>
                 </div>
@@ -76,30 +66,30 @@ if (isset($_SESSION["loggedin"]))
     </header>
 
     <main>
-        <div class="container py-md-5 py-4 my-md-5 my-4">
+        <div class="container py-4 my-4 py-md-5 my-md-5">
             <div class="row justify-content-center">
-                <div class="col-lg-6 col-md-8 border border-3">
+                <div class="border col-lg-6 col-md-8 border-3">
 
-                    <form class="text-center border border-light p-5" action="./backend/login/login.php" method="post" id="loginForm">
+                    <form class="p-5 text-center border border-light" action="./backend/login/login.php" method="post" id="loginForm">
 
-                        <p class="h4 mb-4 py-3">Welcome to Admin Portal</p>
+                        <p class="py-3 mb-4 h4">Welcome to Admin Portal</p>
 
                         <div class="form-row justify-content-center">
                             <div class="col-md-8 col-sm-10">
                                 <!-- Email -->
-                                <input type="username" id="username" name="username" class="form-control mb-4" placeholder="Username" required>
+                                <input type="username" id="username" name="username" class="mb-4 form-control" placeholder="Username" required>
                             </div>
                         </div>
                         <div class="form-row justify-content-center">
                             <div class="col-md-8 col-sm-10">
                                 <!-- Password -->
-                                <input type="password" id="password" name="password" class="form-control mb-4" placeholder="Password" required>
+                                <input type="password" id="password" name="password" class="mb-4 form-control" placeholder="Password" required>
                             </div>
                         </div>
                         <div class="form-row justify-content-center">
                             <div class="col-md-4 col-sm-6">
                                 <!-- Sign in button -->
-                                <button class="btn btn-primary btn-block my-4" type="submit">Login</button>
+                                <button class="my-4 btn btn-primary btn-block" type="submit">Login</button>
                             </div>
                         </div>
 
@@ -107,15 +97,15 @@ if (isset($_SESSION["loggedin"]))
                         <input type="text" hidden="true" id="browser" name="browser" value="<?= getCurrentBrowser() ?>">
 
                         <?php if (isset($_GET['error'])) : ?>
-                            <div class=" row justify-content-center mt-3 ">
+                            <div class="mt-3 row justify-content-center">
                                 <div role=" alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
-                                    <div class="toast-header danger-color-dark justify-content-between py-2">
+                                    <div class="py-2 toast-header danger-color-dark justify-content-between">
                                         <h5 class="text-white">Alert</h5>
-                                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                        <button type="button" class="mb-1 ml-2 close" data-dismiss="toast" aria-label="Close">
                                             <span aria-hidden="true" class="white-text">&times;</span>
                                         </button>
                                     </div>
-                                    <div class="toast-body danger-color white-text text-center">
+                                    <div class="text-center toast-body danger-color white-text">
                                         <?= $_GET['error'] ?>
                                     </div>
                                 </div>
@@ -130,33 +120,44 @@ if (isset($_SESSION["loggedin"]))
         </div>
     </main>
 
-    <footer class="page-footer font-small blue font-small">
-        <div class="col-md-12 text-center">
+    <footer class="page-footer font-small blue">
+        <div class="text-center col-md-12">
 
             <!-- Social Link on Bottom -->
-            <div class="mb-4 pt-4 flex-center">
+            <div class="pt-4 mb-4 flex-center">
                 <a class="whatsappLink">
-                    <i class="fab fa-whatsapp a-lg mr-md-5 mr-3 fa-2x hoverable"></i>
+                    <i class="mr-3 fab fa-whatsapp a-lg mr-md-5 fa-2x hoverable"></i>
                 </a>
                 <!-- Facebook -->
                 <a class="fb-ic" href="https://www.facebook.com/nightcatdigitalsolutions">
-                    <i class="fab fa-facebook fa-lg mr-md-5 mr-3 fa-2x hoverable"> </i>
+                    <i class="mr-3 fab fa-facebook fa-lg mr-md-5 fa-2x hoverable"> </i>
                 </a>
                 <!-- Twitter -->
                 <a class="tw-ic" href="https://twitter.com/nightcatdigital">
-                    <i class="fab fa-twitter fa-lg mr-md-5 mr-3 fa-2x hoverable"> </i>
+                    <i class="mr-3 fab fa-twitter fa-lg mr-md-5 fa-2x hoverable"> </i>
                 </a>
                 <!--Instagram-->
                 <a class="ins-ic" href="https://www.instagram.com/nightcatdigitalsolutions/">
-                    <i class="fab fa-instagram fa-lg mr-md-5 mr-3 fa-2x hoverable"> </i>
+                    <i class="mr-3 fab fa-instagram fa-lg mr-md-5 fa-2x hoverable"> </i>
                 </a>
             </div>
         </div>
-        <div class="footer-copyright text-center py-3">
+        <div class="py-3 text-center footer-copyright">
             <a href="https://www.nightcatdigitalsolutions.com">NIGHTCAT DIGITAL SOLUTIONS © 2013 -
                 <span id="latestYear"></span>. ALL RIGHTS RESERVED</a>
         </div>
     </footer>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js">
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js">
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js">
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.0.0/mdb.min.js">
+    </script>
+
+    <script src="./dist/js/script.prod.js"></script>
 
 </body>
 <script type="text/javascript">
