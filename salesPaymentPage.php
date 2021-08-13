@@ -275,9 +275,9 @@
     <div class="modal fade" id="printSalesPaymentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-notify modal-warning" role="document">
             <!--Content-->
-            <form action="./backend/sale/printPayment.php" method="POST">
+            <form action="./backend/sale/printSalePayment.php" method="POST">
                 <!--Header-->
-                <input hidden type="text" name="postType" value="print">
+                <input hidden type="text" name="postType" value="printSalePayment">
                 <input hidden type="text" name="sale_payment_id" id="print_salepayment_id" value="" />
                 <div class="modal-content">
                     <!--Header-->
@@ -398,4 +398,4 @@
         </div>
     </div>
 </div>
-<script src="./salePaymentPage.js"></script>
+<script src="./dist/js/salePaymentPage.prod.js"></script>

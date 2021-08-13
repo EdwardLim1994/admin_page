@@ -699,7 +699,9 @@ $(document).ready(function () {
                         $("#salespayment-table").empty();
                         $("#salespayment-currentPageNum").val(1);
                         salespaymenttotalPage = paginate(salespaymenttotalRow);
-                        generateTable();
+                        $(".btnSuccess").click(function () {
+                            location.reload();
+                        })
                         break;
                 }
             },
@@ -737,7 +739,9 @@ $(document).ready(function () {
                         $("#salespayment-table").empty();
                         $("#salespayment-currentPageNum").val(1);
                         salespaymenttotalPage = paginate(salespaymenttotalRow);
-                        generateTable();
+                        $(".btnSuccess").click(function () {
+                            location.reload();
+                        })
                         break;
                 }
             },
