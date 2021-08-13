@@ -138,7 +138,7 @@ switch ($postType) {
 		$recordsPerPage = 20;
 		$offsetValue = ($_POST['pageNum'] - 1) * $recordsPerPage;
 
-		$stmt = $mysqli->prepare("SELECT sale_payment_id, sale_id_header, sale_payment_date, sale_payment_time, payment_method, customer_name, sale_amount, sale_payment, reference FROM sale_payment ORDER BY sale_payment_id desc limit $recordsPerPage OFFSET $offsetValue");
+		$stmt = $mysqli->prepare("SELECT sale_payment_id, sale_id_header, sale_payment_date, sale_payment_time, payment_method, customer_name, sale_amount, sale_payment, reference FROM sale_payment ORDER BY sale_payment_id asc limit $recordsPerPage OFFSET $offsetValue");
 
 		$stmt->execute();
 		$result = $stmt->get_result();
@@ -159,7 +159,7 @@ switch ($postType) {
 		if (isset($_POST["sale_id"])) {
 
 			//fetch sale header data from sale header table
-			$stmt = $mysqli->prepare("SELECT customer_account, customer_name, sale_salesperson, sale_subtotal, sale_discount_header, sale_total_amount FROM sale_header WHERE sale_id = ? ");
+			$stmt = $mysqli->prepare("SELECT sale_id, customer_account, customer_name, sale_salesperson, sale_subtotal, sale_discount_header, sale_total_amount FROM sale_header WHERE sale_id = ? ");
 			$stmt->bind_param("s", $_POST["sale_id"]);
 			$stmt->execute();
 			$result = $stmt->get_result();
@@ -201,7 +201,7 @@ switch ($postType) {
 
 		// check isset for all post variable
 		$countSetAdd = 0;
-		$postVariable = array('customer_name', 'sale_id', 'payment_method', 'sale_amount', 'sale_payment', 'reference');
+		$postVariable = array('customer_name', 'sale_id', 'payment_method', 'sale_amount', 'sale_payment');
 
 		foreach ($postVariable as $variable_name) {
 			if (isset($_POST[$variable_name])) {
@@ -232,7 +232,7 @@ switch ($postType) {
 			$sale_payment_date = date("Y-m-d");
 			$sale_payment_time = date("H:i:s");
 			$payment_status = "Paid";
-			$reference = $_POST["reference"];
+			$reference = $_POST["reference"] != "" ? $_POST["reference"] : "";
 
 			//query insert data into sale_payment table - 11 field
 			$stmt = $mysqli->prepare("INSERT INTO sale_payment (sale_id_header, sale_payment_date, sale_payment_time, payment_method, customer_name, sale_amount, sale_payment, reference, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -254,7 +254,8 @@ switch ($postType) {
 
 			echo "success add payment";
 		} else {
-			echo "Some input field is not set.";
+			//echo "Some input field is not set.";
+			echo count($postVariable);
 		}
 		break;
 
@@ -278,6 +279,7 @@ switch ($postType) {
 
 			$payment_method = $_POST['payment_method'];
 			$sale_payment = $_POST['sale_payment'];
+			//$reference = isset($_POST["reference"]) ? $_POST["reference"] : "";
 
 			date_default_timezone_set("Asia/Kuala_Lumpur");
 			$modify_date = date("Y-m-d");

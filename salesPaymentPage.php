@@ -205,13 +205,28 @@
                         <div class="pb-5 row ">
                             <div class="col-12">
                                 <div class="position-relative">
-                                    <label for="update-salesorder-search-salesorder">Sales Order ID or Customer Name:</label>
-                                    <input type="text" class="form-control" id="update-salesorder-search-salesorder" placeholder="">
+                                    <label for="update-salespayment-search-salesorder">Sales Order ID or Customer Name:</label>
+                                    <input type="text" class="form-control" id="update-salespayment-search-salesorder" placeholder="">
 
                                     <!-- Item search result -->
-                                    <div id="update-salesorder-salesorder-search" class="m-0 bg-white w-100 position-absolute" style="z-index:5;">
+                                    <div id="update-salespayment-salesorder-search" class="m-0 bg-white w-100 position-absolute" style="z-index:5;">
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="pb-4 row ">
+                            <div class="text-center col-4">
+                                <h3 class="font-weight-bold">Amount Paid</h3>
+                                <h5>RM <span id="update-salespayment_amountPaid">0.00</span></h5>
+                            </div>
+                            <div class="text-center col-4">
+                                <h3 class="font-weight-bold">Total Charge</h3>
+                                <h5>RM <span id="update-salespayment_totalCharge">0.00</span></h5>
+                            </div>
+                            <div class="text-center col-4">
+                                <h3 class="font-weight-bold">Change</h3>
+                                <h5>RM <span id="update-salespayment_exchange">0.00</span></h5>
                             </div>
                         </div>
                         <div class="overflow-auto">
@@ -245,7 +260,7 @@
                                 <tfoot class="grey white-text">
                                     <tr>
                                         <th colspan="7" class="text-right"><strong>Total Amount : </strong></th>
-                                        <th id="update-salesorder-total_cost"></th>
+                                        <th id="update-salespayment-total_cost"></th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -286,6 +301,100 @@
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- View Sales Order Detail modal -->
+    <div class="modal fade" id="viewSalesOrderDetailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
+            <div class="modal-content">
+                <div class="p-0 m-0 bg-white sticky-top border-bottom">
+                    <!--Header-->
+
+                    <div class="modal-header">
+                        <p class="heading lead">Invoice Details</p>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</spans>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group ">
+                            <h3>Item Information</h3>
+
+                            <div class="overflow-auto">
+                                <table class="p-3 m-3">
+                                    <tr>
+                                        <td>Sale ID</td>
+                                        <td>: <span id="salepaymentdetail-sale_id"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Customer Account</td>
+                                        <td>: <span id="salepaymentdetail-customer_account"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Customer Name</td>
+                                        <td>: <span id="salepaymentdetail-customer_name"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Salesperson</td>
+                                        <td>: <span id="salepaymentdetail-sale_salesperson"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Subtotal (RM)</td>
+                                        <td>: <span id="salepaymentdetail-sale_subtotal"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Discount (%)</td>
+                                        <td>: <span id="salepaymentdetail-sale_discount_header"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Amount (RM)</td>
+                                        <td>: <span id="salepaymentdetail-sale_total_amount"></span></td>
+                                    </tr>
+
+                                </table>
+                                <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead class="grey white-text">
+                                        <tr>
+                                            <th class="text-center th-sm">Item No
+                                            </th>
+                                            <th class="text-center th-sm">Description
+                                            </th>
+                                            <th class="text-center th-sm">Qty
+                                            </th>
+                                            <th class="text-center th-sm">UOM
+                                            </th>
+                                            <th class="text-center th-sm">Selling Price(RM)
+                                            </th>
+                                            <th class="text-center th-sm">Base Cost(RM)
+                                            </th>
+                                            <th class="text-center th-sm">Discount(%)
+                                            </th>
+                                            <th class="text-center th-sm">Amount(RM)
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="salespaymentdetail-item-bucket">
+                                    </tbody>
+                                    <tfoot class="grey white-text">
+                                        <tr>
+                                            <th colspan="7" class="text-right"><strong>Discount : </strong></th>
+                                            <th id="salepaymentdetail-total_discount"></th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="7" class="text-right"><strong>Total Amount : </strong></th>
+                                            <th id="salepaymentdetail-total_cost"></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 </div>
