@@ -86,7 +86,7 @@
                             <div class="col-12">
                                 <div class="position-relative">
                                     <label for="salespayment-search-salesorder">Sales Order ID or Customer Name:</label>
-                                    <input type="text" class="form-control" id="salespayment-search-salesorder" placeholder="">
+                                    <input type="text" autocomplete="off" class="form-control" id="salespayment-search-salesorder" placeholder="">
 
                                     <!-- Item search result -->
                                     <div id="salespayment-salesorder-search" class="m-0 bg-white w-100 position-absolute" style="z-index:5;">
@@ -206,7 +206,7 @@
                             <div class="col-12">
                                 <div class="position-relative">
                                     <label for="update-salespayment-search-salesorder">Sales Order ID or Customer Name:</label>
-                                    <input type="text" class="form-control" id="update-salespayment-search-salesorder" placeholder="">
+                                    <input type="text" autocomplete="off" class="form-control" id="update-salespayment-search-salesorder" placeholder="">
 
                                     <!-- Item search result -->
                                     <div id="update-salespayment-salesorder-search" class="m-0 bg-white w-100 position-absolute" style="z-index:5;">
@@ -368,8 +368,6 @@
                                             </th>
                                             <th class="text-center th-sm">Selling Price(RM)
                                             </th>
-                                            <th class="text-center th-sm">Base Cost(RM)
-                                            </th>
                                             <th class="text-center th-sm">Discount(%)
                                             </th>
                                             <th class="text-center th-sm">Amount(RM)
@@ -380,11 +378,11 @@
                                     </tbody>
                                     <tfoot class="grey white-text">
                                         <tr>
-                                            <th colspan="7" class="text-right"><strong>Discount : </strong></th>
+                                            <th colspan="6" class="text-right"><strong>Discount : </strong></th>
                                             <th id="salepaymentdetail-total_discount"></th>
                                         </tr>
                                         <tr>
-                                            <th colspan="7" class="text-right"><strong>Total Amount : </strong></th>
+                                            <th colspan="6" class="text-right"><strong>Total Amount : </strong></th>
                                             <th id="salepaymentdetail-total_cost"></th>
                                         </tr>
                                     </tfoot>
@@ -399,3 +397,4 @@
     </div>
 </div>
 <script src="./dist/js/salePaymentPage.prod.js"></script>
+<!-- <script src="./salePaymentPage.js"></script> -->

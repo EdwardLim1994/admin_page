@@ -374,6 +374,10 @@ $(document).ready(function () {
                 },
                 success: function (results) {
                     var data = JSON.parse(results);
+                    var salesOrder_results = "";
+                    var total_amount = 0;
+                    var total_discount = 0;
+                    console.log(data);
 
                     $.each(data[0], function(i, item){
 
@@ -391,26 +395,25 @@ $(document).ready(function () {
                         if (item == "No Result") {
                             failedMessage("Failed", "Could not find any sale order");
                         } else {
-                            var invoice_results;
-
-                            invoice_results += `
+                            total_discount += parseFloat(item.amount) * (parseFloat(item.discount) / 100);
+                            total_amount += parseFloat(item.price);
+                            salesOrder_results += `
                             <tr>
                                 <td>${item.item_no}</td>
                                 <td>${item.description}</td>
                                 <td>${item.qty}</td>
                                 <td>${item.uom}</td>
-                                <td>${item.price}</td>
-                                <td>${item.price}</td>
-                                <td>${item.discount}</td>
                                 <td>${item.amount}</td>
+                                <td>${item.discount}</td>
+                                <td>${item.price}</td>
                             </tr>
                             `;
-                            $("#salespaymentdetail-item-bucket").empty().html(invoice_results);
-                            $("#salepaymentdetail-total_discount").empty().text(item.discount);
-                            $("#salepaymentdetail-total_cost").empty().text(item.amount);
-                            $("#viewSalesOrderDetailModal").modal("show");
                         }
                     });
+                    $("#salespaymentdetail-item-bucket").empty().html(salesOrder_results);
+                    $("#salepaymentdetail-total_discount").empty().text(total_discount.toFixed(2));
+                    $("#salepaymentdetail-total_cost").empty().text(total_amount.toFixed(2));
+                    $("#viewSalesOrderDetailModal").modal("show");
                 },
                 error: function(e){
                     failedMessage("Failed", "Unexpected error occur : " + e);

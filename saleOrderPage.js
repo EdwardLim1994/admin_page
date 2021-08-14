@@ -1,7 +1,6 @@
 salesOrderMainFunction();
 
 function salesOrderMainFunction() {
-    console.log("sales Order page script");
     var salesordertotalRow = countRow();
     var salesordertotalPage = paginate(salesordertotalRow);
     var timerCustomer;
@@ -146,12 +145,31 @@ function salesOrderMainFunction() {
 
     //Submit Sales Order on update
     $("#editSalesOrderSubmitBtn").click(function () {
-        editSalesOrder();
+        switch($("#update-salesorder_payment_status").val()){
+            case("Unpaid"):
+                editSalesOrder();
+                break;
+
+            case("Paid"):
+                
+                break;
+        }
+        
     })
 
     //Submit Sales Order on delete
     $("#deleteSalesOrderSubmitButton").click(function () {
-        deleteSalesOrder();
+        switch($("#salesorderDelete_isPaid").val()){
+            case("Unpaid"):
+                deleteSalesOrder();
+                break;
+
+            case("Paid"):
+                $("#deleteSalesOrderModal").modal("hide");
+                failedMessage("Failed", "This sale order has been paid and cannot be deleted for the sake of record");
+                break;
+        }
+        
     })
 
 
@@ -192,7 +210,6 @@ function salesOrderMainFunction() {
                             $("#salesorder-customer-search").empty().removeClass("border");
                             isSpinnerOnCustomer = false;
                         } else {
-                            console.log(results);
 
                             searchResult = `
                             <div class="sticky-top bg-white">
@@ -827,6 +844,7 @@ function salesOrderMainFunction() {
 
                             $('[data-id=' + value.item_id + ']').find(".update-itemQuantity").val((parseInt(itemQty) + 1));
                         } else {
+
                             item_results += `
                                 <tr class="update-item-row" data-id="${value.item_id}">
                                     <td>
@@ -935,7 +953,7 @@ function salesOrderMainFunction() {
             if (discount > 0) {
                 totalDiscount += (unit_price * (discount / 100)) * quantity;
             }
-            console.log(totalDiscount);
+
         })
 
 
@@ -1029,6 +1047,7 @@ function salesOrderMainFunction() {
                 //base_cost.push($(".item-row:nth-child(" + (i + 1) + ")").find(".base_cost").text());
                 discount.push($(".item-row:nth-child(" + (i + 1) + ")").find(".itemDiscount").val());
             });
+
 
             $.ajax({
                 type: "POST",
@@ -1173,7 +1192,7 @@ function salesOrderMainFunction() {
                 switch (results) {
                     case ("success delete"):
                         $("#deleteSalesOrderModal").modal("hide");
-                        successMessage("Success", "Sale Order is successfully added");
+                        successMessage("Success", "Sale Order is successfully deleted");
                         $(".btnSuccess").click(function () {
                             location.reload();
                         })
@@ -1296,11 +1315,34 @@ function salesOrderMainFunction() {
                     $(".editSalesOrderBtn").click(function () {
                         var salesorder = $(this).parent().parent().data("salesorder-id");
                         var tag = $(this).parent().parent();
+                        var isPaid = false;
+                        switch(tag.find(".payment_status").text()){
+                            case("Unpaid"):
+                                isPaid = false;
+                                break;
+
+                            case("Paid"):
+                                isPaid = true;
+                                break;
+                        }
                         $("#update-salesorder_id").val(salesorder);
                         $("#salesorder-update-search-customer_name").val(tag.find(".customer_name").text());
                         $("#salesorder-update-search-customer_id").val(tag.find(".customer_account").text())
-                        $("#salesorder-update-payment_mode").val();
+                        //$("#salesorder-update-payment_mode").val(tag.find(".payment_mode").text());
                         $("#salesorder-update-salesperson").val(tag.find(".sale_salesperson").text());
+                        $("#update-salesorder_payment_status").val(tag.find(".payment_status").text());
+
+                        if(isPaid){
+                            $("#salesorder-update-search-customer_name").attr("readonly", true);
+                            $("#salesorder-update-payment_mode").attr("readonly", true);
+                            $("#salesorder-update-salesperson").attr("readonly", true);
+                            $("#salesorder-update-search-item").attr("readonly", true);
+                        }else{
+                            $("#salesorder-update-search-customer_name").attr("readonly", false);
+                            $("#salesorder-update-payment_mode").attr("readonly", false);
+                            $("#salesorder-update-salesperson").attr("readonly", false);
+                            $("#salesorder-update-search-item").attr("readonly", false);
+                        }
 
                         $.ajax({
                             type: "POST",
@@ -1324,21 +1366,21 @@ function salesOrderMainFunction() {
                                     item_results += `
                                     <tr class="update-item-row" data-id="${value.sale_detail_id}">
                                         <td>
-                                            <button class="btn btn-danger update-deleteItemBtn py-md-3 px-md-4 p-sm-3">
+                                            <button class="btn ${isPaid ? "btn-light" : "btn-danger update-deleteItemBtn"} py-md-3 px-md-4 p-sm-3">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </td>
                                         <td class="update-item_no">${value.item_no}</td>
                                         <td class="update-description">${value.description}</td>
                                         <td>
-                                            <input type="number" class="form-control update-itemQuantity" min="1" value="${value.qty}">
+                                            <input ${isPaid ? "readonly" : ""} type="number" class="form-control update-itemQuantity" min="1" value="${value.qty}">
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control update-itemUnit" placeholder="unit" val="${value.uom}">
+                                            <input ${isPaid ? "readonly" : ""} type="text" class="form-control update-itemUnit" placeholder="unit" val="${value.uom}">
                                         </td>
                                         <td class="update-selling_price">${value.amount}</td>
                                         <td>
-                                            <input type="number" class="form-control update-itemDiscount" value="${value.discount}" min="0" max="100" step="1">
+                                            <input ${isPaid ? "readonly" : ""} type="number" class="form-control update-itemDiscount" value="${value.discount}" min="0" max="100" step="1">
                                         </td>
                                         <td class="update-total_price">${ newPrice.toFixed(2) }</td>
                                     </tr>
@@ -1402,6 +1444,8 @@ function salesOrderMainFunction() {
                     //Delete Sales Order Button
                     $(".deleteSalesOrderBtn").click(function () {
                         var salesorder_id = $(this).parent().parent().data("salesorder-id");
+                        var tag = $(this).parent().parent();
+                        $("#salesorderDelete_isPaid").val(tag.find(".payment_status").text());
                         $("#delete_id").val(salesorder_id);
                         $("#deleteSalesOrderName").text(salesorder_id)
                     })

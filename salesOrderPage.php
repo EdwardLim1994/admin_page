@@ -104,7 +104,7 @@
                             <div class="col-12">
                                 <div class="position-relative">
                                     <label for="salesorder-search-item">Item Name or Barcode:</label>
-                                    <input type="text" class="form-control" id="salesorder-search-item" placeholder="">
+                                    <input type="text" autocomplete="off" class="form-control" id="salesorder-search-item" placeholder="">
 
                                     <!-- Item search result -->
                                     <div id="salesorder-item-search" class="m-0 bg-white w-100 position-absolute" style="z-index:5;">
@@ -163,6 +163,7 @@
         <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
             <!--Content-->
             <input hidden="true" type="text" id="update-salesorder_id">
+            <input hidden="true" type="text" id="update-salesorder_payment_status">
             <div class="modal-content">
                 <div class="p-0 m-0 bg-white sticky-top border-bottom">
 
@@ -226,7 +227,7 @@
                             <div class="col-12">
                                 <div class="position-relative">
                                     <label for="salesorder-update-search-item">Item Name or Barcode:</label>
-                                    <input type="text" class="form-control" id="salesorder-update-search-item" placeholder="">
+                                    <input type="text" autocomplete="off" class="form-control" id="salesorder-update-search-item" placeholder="">
 
                                     <!-- Item search result -->
                                     <div id="salesorder-update-item-search" class="m-0 bg-white w-100 position-absolute" style="z-index:5;">
@@ -284,6 +285,7 @@
         <div class="modal-dialog modal-notify modal-warning" role="document">
 
             <input hidden="true" type="text" name="invoice_id" id="delete_id">
+            <input hidden="true" type="text" name="invoice_id" id="salesorderDelete_isPaid">
             <div class="modal-content">
                 <!--Header-->
                 <div class="modal-header">
@@ -310,4 +312,4 @@
     </div>
 
 </div>
-<script src="./saleOrderPage.js"></script>
+<script src="./dist/js/saleOrderPage.prod.js"></script>
