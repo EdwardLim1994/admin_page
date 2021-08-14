@@ -17,7 +17,7 @@ switch ($postType) {
 			$recordsPerPage = 10;
 			$offsetValue = ($_POST['pageNum'] - 1) * $recordsPerPage;
 
-			$stmt = $mysqli->prepare("SELECT sale_id, customer_name, sale_total_amount, payment_status FROM sale_header WHERE sale_id REGEXP ? OR customer_name REGEXP ?");
+			$stmt = $mysqli->prepare("SELECT sale_id, customer_name, sale_total_amount, payment_status FROM sale_header WHERE sale_id REGEXP ? OR customer_name REGEXP ? ORDER BY id desc");
 			$stmt->bind_param("ss", $_POST["searchSalesOrder"], $_POST["searchSalesOrder"]);
 
 			$stmt->execute();
@@ -138,7 +138,7 @@ switch ($postType) {
 		$recordsPerPage = 20;
 		$offsetValue = ($_POST['pageNum'] - 1) * $recordsPerPage;
 
-		$stmt = $mysqli->prepare("SELECT sale_payment_id, sale_id_header, sale_payment_date, sale_payment_time, payment_method, customer_name, sale_amount, sale_payment, reference FROM sale_payment ORDER BY sale_payment_id asc limit $recordsPerPage OFFSET $offsetValue");
+		$stmt = $mysqli->prepare("SELECT sale_payment_id, sale_id_header, sale_payment_date, sale_payment_time, payment_method, customer_name, sale_amount, sale_payment, reference FROM sale_payment ORDER BY sale_payment_id desc limit $recordsPerPage OFFSET $offsetValue");
 
 		$stmt->execute();
 		$result = $stmt->get_result();

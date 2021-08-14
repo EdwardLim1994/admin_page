@@ -101,7 +101,7 @@ $(document).ready(function () {
     $("#editSalesPaymentSubmitBtn").click(function () {
         if (parseFloat($("#update-salespayment-amount_apply").val()) <= 0) {
             failedMessage("Failed", "Current payment amount is 0");
-        } else if(parseFloat($("#supdate-alespayment_totalCharge").text()) > parseFloat($("#update-salespayment-amount_apply").val())){
+        } else if(parseFloat($("#update-salespayment_totalCharge").text()) > parseFloat($("#update-salespayment-amount_apply").val())){
             failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
         } else if($("#update-salespayment-salesorder-bucket").find(".update-salespayment-noResultText").length > 0){
             failedMessage("Failed", "No sales order added yet");
