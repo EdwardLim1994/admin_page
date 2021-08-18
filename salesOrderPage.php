@@ -2,9 +2,13 @@
     <!-- Add Sales order button -->
     <div class="row">
         <div class="text-right col-12">
-            <button id="addSalesOrderModalBtn" class="btn btn-danger py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#addSalesOrderModal">
-                <span class="textBreak">Add Sales Order</span>
+            <!-- <button id="onholdSalesPaymentModalBtn" class="btn btn-warning py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#onholdSalesPaymentModal">
+                <span>View OnHold Payment</span>
                 <span class="iconBreak"><i class="fas fa-file-invoice"></i></span>
+            </button> -->
+            <button id="addSalesOrderModalBtn" class="btn btn-danger py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#addSalesOrderModal">
+                <span>Add Sales Order</span>
+                <!-- <span class="iconBreak"><i class="fas fa-file-invoice"></i></span> -->
             </button>
         </div>
     </div>
@@ -18,6 +22,7 @@
                 <option value="all" selected>All</option>
                 <option value="unpaid">Unpaid</option>
                 <option value="paid">Paid</option>
+                <option value="onhold">On Hold</option>
             </select>
         </div>
         <div class="text-right col-8 d-flex flex-column justify-content-end ">
@@ -54,6 +59,7 @@
                     </div>
 
                     <div class="modal-footer justify-content-end">
+                        <button id="onholdSalesOrderSubmitBtn" class="btn btn-warning">On Hold</button>
                         <button id="addSalesOrderSubmitBtn" class="btn btn-info">Add</button>
 
                     </div>
@@ -158,6 +164,83 @@
         </div>
     </div>
 
+    <!-- Add Sale Payment Modal -->
+
+    <div class="modal fade" id="addSalePaymentBtnModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
+
+            <div class="modal-content">
+                <div class="p-0 m-0 bg-white sticky-top border-bottom">
+                    <div class="modal-header">
+                        <p class="heading lead">Add Sales Payment</p>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</spans>
+                        </button>
+                    </div>
+
+                    <div class="modal-footer justify-content-end">
+                        <button id="addSalesPaymentSubmitBtn" class="btn btn-info">Make Payment</button>
+                    </div>
+                    <hr>
+                    <div class="modal-body">
+                        <div class="form-group">
+
+                            <h3>Payment Information</h3>
+                            <div class="row">
+                                <div class="col-12 col-sm-6">
+                                    <label for="salepayment_sale_id">Sale ID</label>
+                                    <input type="text" autocomplete="off" class="form-control" name="customer_account" id="salepayment_sale_id" readonly>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <label for="salepayment_customer_name">Customer Name</label>
+                                    <input type="text" autocomplete="off" class="form-control" name="customer_account" id="salepayment_customer_name" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="salespayment-amount_apply">Payment Amount</label>
+                                    <input type="number" value="0.00" min="0" step="0.01" class="form-control" id="salespayment-amount_apply" placeholder="">
+
+                                </div>
+
+                                <div class="col-4">
+                                    <label for="salespayment-payment_mode">Payment Mode</label>
+                                    <select class="browser-default custom-select" name="customer_account" id="salespayment-payment_mode">
+                                        <option value="cash" selected="selected">Cash</option>
+                                        <option value="cheque">Cheque</option>
+                                        <option value="transfer">Transfer</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label for="salespayment-reference">Reference</label>
+                                    <input class="form-control" type="text" id="salespayment-reference">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="pb-4 row ">
+                                <div class="text-center col-4">
+                                    <h3 class="font-weight-bold">Amount Paid</h3>
+                                    <h5>RM <span id="salespayment_amountPaid">0.00</span></h5>
+                                </div>
+                                <div class="text-center col-4">
+                                    <h3 class="font-weight-bold">Total Charge</h3>
+                                    <h5>RM <span id="salespayment_totalCharge">0.00</span></h5>
+                                </div>
+                                <div class="text-center col-4">
+                                    <h3 class="font-weight-bold">Change</h3>
+                                    <h5>RM <span id="salespayment_exchange">0.00</span></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Update sales order modal -->
     <div class="modal fade" id="editSalesOrderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
@@ -310,6 +393,7 @@
             <!-- </form> -->
         </div>
     </div>
-
 </div>
+
 <script src="./dist/js/saleOrderPage.prod.js"></script>
+<!-- <script src="./saleOrderPage.js"></script> -->

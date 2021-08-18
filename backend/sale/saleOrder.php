@@ -71,7 +71,7 @@ switch ($postType) {
 		$recordsPerPage = 20;
 		$offsetValue = ($_POST['pageNum'] - 1) * $recordsPerPage;
 
-		$stmt = $mysqli->prepare("SELECT id, sale_id, customer_account, customer_name, sale_date, sale_phone_num, sale_salesperson, sale_subtotal, sale_discount_header, sale_total_amount, payment_status FROM sale_header ORDER BY id desc limit $recordsPerPage OFFSET $offsetValue");
+		$stmt = $mysqli->prepare("SELECT id, sale_id, customer_account, customer_name, sale_date, sale_phone_num, sale_salesperson, sale_subtotal, sale_discount_header, sale_total_amount, payment_status, isOnHold FROM sale_header ORDER BY id desc limit $recordsPerPage OFFSET $offsetValue");
 		$stmt->execute();
 		$result = $stmt->get_result();
 
@@ -92,7 +92,7 @@ switch ($postType) {
 		$recordsPerPage = 20;
 		$offsetValue = ($_POST['pageNum'] - 1) * $recordsPerPage;
 
-		$stmt = $mysqli->prepare("SELECT id, sale_id, customer_account, customer_name, sale_date, sale_phone_num, sale_salesperson, sale_subtotal, sale_discount_header, sale_total_amount, payment_status FROM sale_header WHERE payment_status = 'Unpaid' ORDER BY id desc limit $recordsPerPage OFFSET $offsetValue");
+		$stmt = $mysqli->prepare("SELECT id, sale_id, customer_account, customer_name, sale_date, sale_phone_num, sale_salesperson, sale_subtotal, sale_discount_header, sale_total_amount, payment_status, isOnHold FROM sale_header WHERE payment_status = 'Unpaid' ORDER BY id desc limit $recordsPerPage OFFSET $offsetValue");
 		$stmt->execute();
 		$result = $stmt->get_result();
 
@@ -113,7 +113,7 @@ switch ($postType) {
 		$recordsPerPage = 20;
 		$offsetValue = ($_POST['pageNum'] - 1) * $recordsPerPage;
 
-		$stmt = $mysqli->prepare("SELECT id, sale_id, customer_account, customer_name, sale_date, sale_phone_num, sale_salesperson, sale_subtotal, sale_discount_header, sale_total_amount, payment_status FROM sale_header WHERE payment_status = 'Paid' ORDER BY id desc limit $recordsPerPage OFFSET $offsetValue");
+		$stmt = $mysqli->prepare("SELECT id, sale_id, customer_account, customer_name, sale_date, sale_phone_num, sale_salesperson, sale_subtotal, sale_discount_header, sale_total_amount, payment_status, isOnHold FROM sale_header WHERE payment_status = 'Paid' ORDER BY id desc limit $recordsPerPage OFFSET $offsetValue");
 		$stmt->execute();
 		$result = $stmt->get_result();
 
@@ -128,6 +128,45 @@ switch ($postType) {
 		$stmt->close();
 		break;
 
+	//Retrieve onhold sale order
+	case("viewSaleHeaderOnHold"):
+		$recordsPerPage = 20;
+		$offsetValue = ($_POST['pageNum'] - 1) * $recordsPerPage;
+
+		$stmt = $mysqli->prepare("SELECT id, sale_id, customer_account, customer_name, sale_date, sale_phone_num, sale_salesperson, sale_subtotal, sale_discount_header, sale_total_amount, payment_status, isOnHold FROM sale_header WHERE isOnHold = 1 ORDER BY id desc limit $recordsPerPage OFFSET $offsetValue");
+		$stmt->execute();
+		$result = $stmt->get_result();
+
+		if (mysqli_num_rows($result) > 0) {
+			while ($row = mysqli_fetch_assoc($result)) {
+				$jsonArray[] = $row;
+			};
+			echo json_encode($jsonArray);
+		} else {
+			echo "No Result";
+		}
+		$stmt->close();
+		break;
+
+	//Find the latest added sale order
+	case("findLatestSaleOrder"):
+		// SELECT * FROM sale_header ORDER BY id DESC LIMIT 1;
+
+		$stmt = $mysqli->prepare("SELECT sale_id, customer_name FROM sale_header ORDER BY id DESC LIMIT 1");
+		$stmt->execute();
+		$result = $stmt->get_result();
+
+		if (mysqli_num_rows($result) > 0) {
+			while ($row = mysqli_fetch_assoc($result)) {
+				$jsonArray[] = $row;
+			};
+			echo json_encode($jsonArray);
+		} else {
+			echo "No Result";
+		}
+		$stmt->close();
+		break;
+	
 	case ("viewDetail"):
 
 		if (isset($_POST["search"])) {
@@ -154,7 +193,7 @@ switch ($postType) {
 		$countSetAdd = 0;
 		$postVariable = array(
 			'sale_salesperson', 'sale_subtotal', 'sale_discount_header', 'sale_total_amount',
-			'item_id', 'item_no', 'description', 'uom', 'qty', 'price', 'discount', 'amount'
+			'item_id', 'item_no', 'description', 'uom', 'qty', 'price', 'discount', 'amount', 'isOnHold' // <- added isOnHold to determine whether sale order is onhold or not (only accept 1 or 0)
 		);
 
 		foreach ($postVariable as $variable_name) {
@@ -203,11 +242,12 @@ switch ($postType) {
 			$customer_name = "CASH";
 			$sale_phone_num = " ";
 			$payment_status = "Unpaid";
+			$isOnHold = $_POST['isOnHold'];  // <- store isOnHold variable value
 
 
-			//query insert data into sale_header table - 13 field
-			$stmt = $mysqli->prepare("INSERT INTO sale_header (sale_id, customer_account, customer_name, sale_date, sale_phone_num, sale_salesperson, sale_subtotal, sale_discount_header, sale_total_amount, payment_status, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			$stmt->bind_param("ssssssdddssss", $sale_id, $customer_account, $customer_name, $sale_date, $sale_phone_num, $sale_salesperson, $sale_subtotal, $sale_discount_header, $sale_total_amount, $payment_status, $creation_date, $creation_time, $creation_user);
+			//query insert data into sale_header table - 13 field  <- plus isOnHold
+			$stmt = $mysqli->prepare("INSERT INTO sale_header (sale_id, customer_account, customer_name, sale_date, sale_phone_num, sale_salesperson, sale_subtotal, sale_discount_header, sale_total_amount, payment_status, isOnHold, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			$stmt->bind_param("ssssssdddsisss", $sale_id, $customer_account, $customer_name, $sale_date, $sale_phone_num, $sale_salesperson, $sale_subtotal, $sale_discount_header, $sale_total_amount, $payment_status, $isOnHold, $creation_date, $creation_time, $creation_user);
 			$stmt->execute();
 			$stmt->close();
 
@@ -219,9 +259,9 @@ switch ($postType) {
 			}
 			$stmtlog->close();
 
-			//query insert data into sale_header_log table - 14 field
-			$stmt = $mysqli->prepare("INSERT INTO sale_header_log ( mode, sale_id, customer_account, customer_name, sale_date, sale_phone_num, sale_salesperson, sale_subtotal, sale_discount_header, sale_total_amount, payment_status, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			$stmt->bind_param("sssssssdddssss", $mode, $sale_id, $customer_account, $customer_name, $sale_date, $sale_phone_num, $sale_salesperson, $sale_subtotal, $sale_discount_header, $sale_total_amount, $payment_status, $creation_date, $creation_time, $creation_user);
+			//query insert data into sale_header_log table - 14 field  <- plus isOnHold
+			$stmt = $mysqli->prepare("INSERT INTO sale_header_log ( mode, sale_id, customer_account, customer_name, sale_date, sale_phone_num, sale_salesperson, sale_subtotal, sale_discount_header, sale_total_amount, payment_status, isOnHold, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			$stmt->bind_param("sssssssdddsisss", $mode, $sale_id, $customer_account, $customer_name, $sale_date, $sale_phone_num, $sale_salesperson, $sale_subtotal, $sale_discount_header, $sale_total_amount, $payment_status, $isOnHold, $creation_date, $creation_time, $creation_user);
 			$stmt->execute();
 			$stmt->close();
 

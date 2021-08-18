@@ -18,7 +18,7 @@ function salesOrderMainFunction() {
         generateTable();
     });
 
-    $("#salesorder_filter_select").change(function(){
+    $("#salesorder_filter_select").change(function () {
         generateTable();
     })
 
@@ -140,36 +140,53 @@ function salesOrderMainFunction() {
 
     //Submit Sales Order on add
     $("#addSalesOrderSubmitBtn").click(function () {
-        addSalesOrder();
+        addSalesOrder("add");
+    })
+
+    $("#onholdSalesOrderSubmitBtn").click(function () {
+        addSalesOrder("onhold");
+    })
+
+    $("#addSalesPaymentSubmitBtn").click(function () {
+
+        if (parseFloat($("#salespayment-amount_apply").val()) <= 0) {
+            failedMessage("Failed", "Current payment amount is 0");
+        } else if (parseFloat($("#salespayment_totalCharge").text()) > parseFloat($("#salespayment-amount_apply").val())) {
+            failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
+        } else if ($("#salespayment-salesorder-bucket").find(".salespayment-noResultText").length > 0) {
+            failedMessage("Failed", "No sales order added yet");
+        } else {
+            addSalesPayment();
+        }
     })
 
     //Submit Sales Order on update
     $("#editSalesOrderSubmitBtn").click(function () {
-        switch($("#update-salesorder_payment_status").val()){
-            case("Unpaid"):
+        switch ($("#update-salesorder_payment_status").val()) {
+            case ("Unpaid"):
                 editSalesOrder();
                 break;
 
-            case("Paid"):
-                
+            case ("Paid"):
+
                 break;
         }
-        
+
     })
 
     //Submit Sales Order on delete
     $("#deleteSalesOrderSubmitButton").click(function () {
-        switch($("#salesorderDelete_isPaid").val()){
-            case("Unpaid"):
+        switch ($("#salesorderDelete_isPaid").val()) {
+            case ("Unpaid"):
                 deleteSalesOrder();
                 break;
 
-            case("Paid"):
+            case ("Paid"):
                 $("#deleteSalesOrderModal").modal("hide");
                 failedMessage("Failed", "This sale order has been paid and cannot be deleted for the sake of record");
                 break;
         }
-        
+
     })
 
 
@@ -391,14 +408,14 @@ function salesOrderMainFunction() {
                                 `;
                             });
                             searchResult += `</div>`;
-                                $("#salesorder-item-search").empty().html(searchResult);
-                                isSpinnerOnItem = false;
-                                itemSearchCountRow();
-                                itemSearchSelect();
+                            $("#salesorder-item-search").empty().html(searchResult);
+                            isSpinnerOnItem = false;
+                            itemSearchCountRow();
+                            itemSearchSelect();
 
-                                $("#itemSearchCurrentPageNum").focusout(function () {
-                                    itemSearchResults(parseInt($(this).val()));
-                                })
+                            $("#itemSearchCurrentPageNum").focusout(function () {
+                                itemSearchResults(parseInt($(this).val()));
+                            })
                         }
                     },
                     error: function (e) {
@@ -464,7 +481,9 @@ function salesOrderMainFunction() {
                     //if (isItemSoldOut == false) {
                     if ($("#salesorder-item-bucket").find(".salesorder-noResultText").length > 0) {
                         $("#salesorder-item-bucket").empty();
+
                     }
+
                     if (item_results != "") {
                         $("#salesorder-item-bucket").append(item_results);
                     }
@@ -505,6 +524,8 @@ function salesOrderMainFunction() {
                     });
                     //}
                     itemBucketRemoveItem();
+
+
                 },
                 error: function (e) {
                     failedMessage("Failed", "Unexpected error occur : " + e);
@@ -726,6 +747,22 @@ function salesOrderMainFunction() {
                 updateCustomerSearchPagination(results);
             }
         });
+    }
+
+    function salespaymentCalculation() {
+        $("#salespayment-amount_apply").change(function () {
+            var amount = (parseFloat($(this).val())).toFixed(2);
+            $(this).val(amount);
+            $("#salespayment_amountPaid").empty().text(amount);
+
+            var amountPaid = parseFloat($("#salespayment_amountPaid").text());
+            var totalCharge = parseFloat($("#salespayment_totalCharge").text())
+            if (amountPaid > totalCharge) {
+                $("#salespayment_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
+            } else {
+                $("#salespayment_exchange").empty().text("0.00");
+            }
+        })
     }
 
 
@@ -1009,9 +1046,54 @@ function salesOrderMainFunction() {
         });
     }
 
+    //add sale payment
+    function addSalesPayment() {
+        var customer_name = $("#salepayment_customer_name").val();
+        var sale_id = $("#salepayment_sale_id").val();
+        var payment_method = $("#salespayment-payment_mode").val();
+        var sale_amount = $("#salespayment_totalCharge").text();
+        var sale_payment = $("#salespayment_amountPaid").text();
+        var reference = $("#salespayment-reference").val();
+
+        $.ajax({
+            type: "POST",
+            url: "./backend/sale/salePayment.php",
+            data: {
+                postType: "addSalePayment",
+                customer_name: customer_name,
+                sale_id: sale_id,
+                payment_method: payment_method,
+                sale_amount: sale_amount,
+                sale_payment: sale_payment,
+                reference: reference
+            },
+            success: function (results) {
+                switch (results) {
+                    case ("Some input field is not set."):
+                        failedMessage("Failed", results);
+                        break;
+
+                    case ("success add payment"):
+                        $("#addSalePaymentBtnModal").modal("hide");
+                        successMessage("Success", "Sale Payment is successfully added");
+                        // $("#salespayment-table").empty();
+                        // $("#salespayment-currentPageNum").val(1);
+                        // salespaymenttotalPage = paginate(salespaymenttotalRow);
+                        $(".btnSuccess").click(function () {
+                            location.reload();
+                        })
+                        break;
+                }
+            },
+            error: function (e) {
+                failedMessage("Failed", "Unexpected error occur : " + e);
+            }
+        })
+    }
+
 
     //Add function
-    function addSalesOrder() {
+    function addSalesOrder(mode) {
 
         var salesperson = "";
         var sale_subtotal = "";
@@ -1048,49 +1130,129 @@ function salesOrderMainFunction() {
                 discount.push($(".item-row:nth-child(" + (i + 1) + ")").find(".itemDiscount").val());
             });
 
+            switch (mode) {
+                case ("add"):
+                    $.ajax({
+                        type: "POST",
+                        url: "./backend/sale/saleOrder.php",
+                        data: {
+                            postType: "add",
+                            sale_salesperson: salesperson,
+                            sale_subtotal: sale_subtotal,
+                            sale_discount_header: sale_discount_header,
+                            sale_total_amount: sale_total_amount,
+                            item_id: item_id,
+                            item_no: item_no,
+                            description: description,
+                            uom: uom,
+                            qty: qty,
+                            price: price,
+                            discount: discount,
+                            amount: amount,
+                            isOnHold: 0
+                        },
+                        success: function (results) {
+                            switch (results) {
+                                case ("Some input field is not set."):
+                                    $("#addSalesOrderModal").modal("hide");
+                                    failedMessage("Failed", results);
+                                    break;
 
-            $.ajax({
-                type: "POST",
-                url: "./backend/sale/saleOrder.php",
-                data: {
-                    postType: "add",
-                    sale_salesperson: salesperson,
-                    sale_subtotal: sale_subtotal,
-                    sale_discount_header: sale_discount_header,
-                    sale_total_amount: sale_total_amount,
-                    item_id: item_id,
-                    item_no: item_no,
-                    description: description,
-                    uom: uom,
-                    qty: qty,
-                    price: price,
-                    discount: discount,
-                    amount: amount,
-                },
-                success: function (results) {
-                    switch (results) {
-                        case ("Some input field is not set."):
-                            $("#addSalesOrderModal").modal("hide");
-                            failedMessage("Failed", results);
-                            break;
+                                case ("success add"):
+                                    $("#addSalesOrderModal").modal("hide");
+                                    // successMessage("Success", "Sale Order is successfully added");
+                                    $("#salesorder-table").empty();
+                                    $("#salesorder-currentPageNum").val(1);
+                                    salesordertotalPage = paginate(salesordertotalRow);
+                                    generateTable();
+                                    findSalesOrder();
+                                    $("#addSalePaymentBtnModal").modal("show");
+                                    $("#salespayment_totalCharge").empty().text($("#salesorder-total_cost").text());
+                                    
+                                    salespaymentCalculation();
+                                    break;
+                            }
 
-                        case ("success add"):
-                            $("#addSalesOrderModal").modal("hide");
-                            successMessage("Success", "Sale Order is successfully added");
-                            $("#salesorder-table").empty();
-                            $("#salesorder-currentPageNum").val(1);
-                            totalPage = paginate(salesordertotalRow);
-                            generateTable();
-                            break;
-                    }
+                        },
+                        error: function (e) {
+                            failedMessage("Failed", "Unexpected error occur : " + e);
+                        }
+                    });
+                    break;
 
-                },
-                error: function (e) {
-                    failedMessage("Failed", "Unexpected error occur : " + e);
-                }
-            });
+                case ("onhold"):
+                    $.ajax({
+                        type: "POST",
+                        url: "./backend/sale/saleOrder.php",
+                        data: {
+                            postType: "add",
+                            sale_salesperson: salesperson,
+                            sale_subtotal: sale_subtotal,
+                            sale_discount_header: sale_discount_header,
+                            sale_total_amount: sale_total_amount,
+                            item_id: item_id,
+                            item_no: item_no,
+                            description: description,
+                            uom: uom,
+                            qty: qty,
+                            price: price,
+                            discount: discount,
+                            amount: amount,
+                            isOnHold: 1
+                        },
+                        success: function (results) {
+                            switch (results) {
+                                case ("Some input field is not set."):
+                                    $("#addSalesOrderModal").modal("hide");
+                                    failedMessage("Failed", results);
+                                    break;
+
+                                case ("success add"):
+                                    $("#addSalesOrderModal").modal("hide");
+                                    successMessage("Success", "Sale Order is successfully added and it is on hold");
+                                    $("#salesorder-table").empty();
+                                    $("#salesorder-currentPageNum").val(1);
+                                    salesordertotalPage = paginate(salesordertotalRow);
+                                    generateTable();
+                                    break;
+                            }
+
+                        },
+                        error: function (e) {
+                            failedMessage("Failed", "Unexpected error occur : " + e);
+                        }
+                    });
+                    break;
+            }
+
         }
+    }
 
+    function findSalesOrder() {
+        $.ajax({
+
+            type: "POST",
+            url: "./backend/sale/saleOrder.php",
+            data: {
+                postType: "findLatestSaleOrder"
+            },
+            success: function (results) {
+                if(results != "No Results"){
+                    $.each(JSON.parse(results), function(i, item){
+                        $("#salepayment_sale_id").val((item.sale_id).replace(/\"/g, ""));
+                        $("#salepayment_customer_name").val(item.customer_name);
+                    })
+
+                }else{
+                    failedMessage("Failed", "No Sale order was found");
+                }
+
+
+            },
+            error: function (e) {
+                failedMessage("Failed", "Unexpected error occur : " + e);
+            }
+        })
     }
 
     //Edit function
@@ -1278,6 +1440,9 @@ function salesOrderMainFunction() {
             case ("paid"):
                 postType = "viewSaleHeaderPaid"
                 break;
+            case("onhold"):
+                postType = "viewSaleHeaderOnHold"
+            
         }
 
         if ($("#salesorder-currentPageNum").val() != 0) {
@@ -1292,8 +1457,6 @@ function salesOrderMainFunction() {
 
         $("#salesorder-currentPageNum").val(currentPageNum);
 
-
-
         $.ajax({
             type: "POST",
             url: "./backend/sale/saleOrder.php",
@@ -1302,7 +1465,7 @@ function salesOrderMainFunction() {
                 pageNum: currentPageNum
             },
             success: function (results) {
-
+                console.log(results);
                 if (results == "0 results" || results == "No Result") {
                     renderTable("salesorder");
                     tableSetting("salesorder");
@@ -1316,12 +1479,12 @@ function salesOrderMainFunction() {
                         var salesorder = $(this).parent().parent().data("salesorder-id");
                         var tag = $(this).parent().parent();
                         var isPaid = false;
-                        switch(tag.find(".payment_status").text()){
-                            case("Unpaid"):
+                        switch (tag.find(".payment_status").text()) {
+                            case ("Unpaid"):
                                 isPaid = false;
                                 break;
 
-                            case("Paid"):
+                            case ("Paid"):
                                 isPaid = true;
                                 break;
                         }
@@ -1332,12 +1495,12 @@ function salesOrderMainFunction() {
                         $("#salesorder-update-salesperson").val(tag.find(".sale_salesperson").text());
                         $("#update-salesorder_payment_status").val(tag.find(".payment_status").text());
 
-                        if(isPaid){
+                        if (isPaid) {
                             $("#salesorder-update-search-customer_name").attr("readonly", true);
                             $("#salesorder-update-payment_mode").attr("readonly", true);
                             $("#salesorder-update-salesperson").attr("readonly", true);
                             $("#salesorder-update-search-item").attr("readonly", true);
-                        }else{
+                        } else {
                             $("#salesorder-update-search-customer_name").attr("readonly", false);
                             $("#salesorder-update-payment_mode").attr("readonly", false);
                             $("#salesorder-update-salesperson").attr("readonly", false);
@@ -1449,6 +1612,29 @@ function salesOrderMainFunction() {
                         $("#delete_id").val(salesorder_id);
                         $("#deleteSalesOrderName").text(salesorder_id)
                     })
+
+                    $(".addSalePaymentBtn").click(function() {
+                        var tag = $(this).parent().parent();
+                        var sale_payment = tag.find(".sale_total_amount").text();
+                        var sale_id_header = tag.find(".sale_id").text();
+                        var customer_name = tag.find(".customer_name").text();
+
+                        switch(tag.find(".payment_status").text()){
+                            case("Unpaid"):
+                                $("#salespayment_totalCharge").empty().text(sale_payment);
+                                $("#salepayment_sale_id").val(sale_id_header);
+                                $("#salepayment_customer_name").val(customer_name);
+        
+                                salespaymentCalculation();
+                                break;
+
+                            case("Paid"):
+                                $("#addSalePaymentBtnModal").modal("hide");
+                                failedMessage("Failed", "This sale order has been paid");
+                                break;
+                        }
+
+                    })
                 }
             },
             error: function (e) {
@@ -1497,6 +1683,7 @@ function salesOrderMainFunction() {
                     ' <th scope="col" class="th-lg">Sale Total Discount</th> ' +
                     ' <th scope="col" class="th-lg">Sale Total Amount</th> ' +
                     ' <th scope="col" class="th-lg">Payment Status</th> ' +
+                    ' <th scope="col" class="th-lg">Is On Hold ?</th> ' +
                     ' </tr> ' +
                     ' </thead> ' +
                     ' <tbody id="salesorderContent"> ' +
@@ -1515,6 +1702,7 @@ function salesOrderMainFunction() {
                     ' <th scope="col" class="th-lg">Sale Total Discount</th> ' +
                     ' <th scope="col" class="th-lg">Sale Total Amount</th> ' +
                     ' <th scope="col" class="th-lg">Payment Status</th> ' +
+                    ' <th scope="col" class="th-lg">Is On Hold ?</th> ' +
                     ' </tr> ' +
                     ' </tfoot> ' +
                     ' </table>'
@@ -1534,11 +1722,14 @@ function salesOrderMainFunction() {
                         <tr class="salesorder-row" data-salesorder-id="${salesorder.sale_id}">
                             <th>${++i}</th>
                             <td>
-                                <button class="btn btn-warning editSalesOrderBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#editSalesOrderModal">
+                                <button title="Update Sales Order" class="btn btn-warning editSalesOrderBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#editSalesOrderModal">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger deleteSalesOrderBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#deleteSalesOrderModal">
+                                <button title="Delete Sales Order" class="btn btn-danger deleteSalesOrderBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#deleteSalesOrderModal">
                                     <i class="fas fa-trash-alt"></i>
+                                </button>
+                                <button title="Pay this Order" class="btn btn-secondary addSalePaymentBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#addSalePaymentBtnModal">
+                                    <i class="fas fa-money-bill-wave-alt"></i>
                                 </button>
                             </td>
                             <td class="sale_id">${salesorder.sale_id}</td>
@@ -1551,6 +1742,7 @@ function salesOrderMainFunction() {
                             <td class="sale_discount_header">${salesorder.sale_discount_header}</td>
                             <td class="sale_total_amount">${salesorder.sale_total_amount}</td>
                             <td class="payment_status capitalize font-weight-bold ${salesorder.payment_status == "Unpaid" ? "text-danger" : "text-success"}">${salesorder.payment_status}</td>
+                            <td class="isOnHold">${salesorder.isOnHold ? "Yes": "No"}</td>
                         </tr>
                     `);
                 });

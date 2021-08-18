@@ -40,21 +40,27 @@ switch ($postType) {
 
 	case ("searchSalesOrderSelect"):
 
-		$stmt = $mysqli->prepare("SELECT sale_id, customer_name, sale_salesperson, sale_date, sale_subtotal, sale_discount_header, sale_total_amount FROM sale_header WHERE sale_id = ?;");
-		$stmt->bind_param("s", $_POST["saleID"]);
-		$stmt->execute();
-		$result = $stmt->get_result();
-		// Check number of rows in the result set
-		if ($result->num_rows > 0) {
-			// Fetch result rows as an associative array
-			while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
-				$jsonArray[] = $row;
+		if(isset($_POST["saleID"])){
+
+			$stmt = $mysqli->prepare("SELECT sale_id, customer_name, sale_salesperson, sale_date, sale_subtotal, sale_discount_header, sale_total_amount FROM sale_header WHERE sale_id = ?;");
+			$stmt->bind_param("s", $_POST["saleID"]);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			// Check number of rows in the result set
+			if ($result->num_rows > 0) {
+				// Fetch result rows as an associative array
+				while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
+					$jsonArray[] = $row;
+				}
+				echo json_encode($jsonArray);
+			} else {
+				echo "No result";
 			}
-			echo json_encode($jsonArray);
-		} else {
-			echo "No result";
+			$stmt->close();
+		}else{
+			echo "Not binding";
 		}
-		$stmt->close();
+
 
 
 
@@ -240,8 +246,8 @@ switch ($postType) {
 			$stmt->execute();
 			$stmt->close();
 
-			//query to update payment_status in sale_header table
-			$stmt = $mysqli->prepare("UPDATE sale_header SET payment_status = ? WHERE sale_id = ?");
+			//query to update payment_status in sale_header table  <- set isOnHold to 0 whenever it is 1 or 0
+			$stmt = $mysqli->prepare("UPDATE sale_header SET payment_status = ?, isOnHold = 0 WHERE sale_id = ?");
 			$stmt->bind_param("ss", $payment_status, $_POST['sale_id']);
 			$stmt->execute();
 			$stmt->close();

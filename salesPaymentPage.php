@@ -1,14 +1,14 @@
 <div class="container my-4">
 
     <!-- Add Sales payment button -->
-    <div class="row">
+    <!-- <div class="row">
         <div class="text-right col-12">
             <button id="addSalesPaymentModalBtn" class="btn btn-danger py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#addSalesPaymentModal">
                 <span class="textBreak">Add Sales Payment</span>
                 <span class="iconBreak"><i class="fas fa-file-invoice"></i></span>
             </button>
         </div>
-    </div>
+    </div> -->
     <!-- Total row -->
     <!-- Pagination -->
     <div class="row">
@@ -32,8 +32,9 @@
         </div>
     </div>
 
+    <!-- Move add sale payment function to after added sale order -->
     <!-- Add sales payment modal -->
-    <div class="modal fade" id="addSalesPaymentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <!-- <div class="modal fade" id="addSalesPaymentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
             <div class="modal-content">
                 <div class="p-0 m-0 bg-white sticky-top border-bottom">
@@ -86,9 +87,9 @@
                             <div class="col-12">
                                 <div class="position-relative">
                                     <label for="salespayment-search-salesorder">Sales Order ID or Customer Name:</label>
-                                    <input type="text" autocomplete="off" class="form-control" id="salespayment-search-salesorder" placeholder="">
+                                    <input type="text" autocomplete="off" class="form-control" id="salespayment-search-salesorder" placeholder=""> 
 
-                                    <!-- Item search result -->
+
                                     <div id="salespayment-salesorder-search" class="m-0 bg-white w-100 position-absolute" style="z-index:5;">
                                     </div>
                                 </div>
@@ -149,8 +150,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
+    <!-- Disable update sale payment function -->
     <!-- Update sales payment modal -->
 
     <div class="modal fade" id="editSalesPaymentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
@@ -160,16 +162,16 @@
                 <div class="p-0 m-0 bg-white sticky-top border-bottom">
 
                     <div class="modal-header">
-                        <p class="heading lead">Update Sales Payment</p>
+                        <p class="heading lead">Sales Payment Detail</p>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true" class="white-text">&times;</spans>
                         </button>
                     </div>
-
+<!-- 
                     <div class="modal-footer justify-content-end">
                         <button id="editSalesPaymentSubmitBtn" class="btn btn-info">Update</button>
 
-                    </div>
+                    </div> -->
                 </div>
                 <div class="modal-body">
 
@@ -179,21 +181,17 @@
                         <div class="row">
                             <div class="col-4">
                                 <label for="update-salespayment-amount_apply">Payment Amount</label>
-                                <input type="number" value="0.00" min="0" step="0.01" class="form-control" id="update-salespayment-amount_apply" placeholder="">
+                                <input readonly type="number" value="0.00" min="0" step="0.01" class="form-control" id="update-salespayment-amount_apply" placeholder="">
 
                             </div>
 
                             <div class="col-4">
                                 <label for="update-salespayment-payment_mode">Payment Mode</label>
-                                <select class="browser-default custom-select" name="customer_account" id="update-salespayment-payment_mode">
-                                    <option value="cash" selected="selected">Cash</option>
-                                    <option value="cheque">Cheque</option>
-                                    <option value="transfer">Transfer</option>
-                                </select>
+                                <input readonly type="text" class="form-control" id="update-salespayment-payment_mode" placeholder="">
                             </div>
                             <div class="col-4">
                                 <label for="update-salespayment-reference">Reference</label>
-                                <input class="form-control" type="text" id="update-salespayment-reference">
+                                <input readonly class="form-control" type="text" id="update-salespayment-reference">
                             </div>
                         </div>
                     </div>
@@ -304,6 +302,7 @@
         </div>
     </div>
 
+    <!-- Move view sale order detail modal trigger to main sale payment table -->
     <!-- View Sales Order Detail modal -->
     <div class="modal fade" id="viewSalesOrderDetailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-xl modal-notify modal-info" role="document">

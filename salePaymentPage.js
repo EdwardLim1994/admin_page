@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    console.log("sales payment page script");
     var salespaymenttotalRow = countRow();
     var salespaymenttotalPage = paginate(salespaymenttotalRow);
     var timer;
@@ -61,54 +60,54 @@ $(document).ready(function () {
         }
     })
 
-    //clear add modal input
-    $("#addSalesPaymentModalBtn").click(function () {
-        $("#salespayment-amount_apply").val("0.00");
-        $("#salespayment-payment_mode").val("cash");
-        $("#salespayment-reference").val("");
-        $("#salespayment_amountPaid").empty().text("0.00");
-        $("#salespayment_totalCharge").empty().text("0.00");
-        $("#salespayment_exchange").empty().text("0.00");
-        $("#salespayment-search-salesorder").attr("readonly", false);
-        $("#salespayment-total_cost").empty();
-        $("#salespayment-salesorder-bucket").empty().html(`
-        <tr class="salespayment-noResultText">
-            <td colspan="9" class="text-center">
-                <h5>No sales order added yet</h5>
-            </td>
-        </tr>
-    `);
-    })
+    // //clear add modal input
+    // $("#addSalesPaymentModalBtn").click(function () {
+    //     $("#salespayment-amount_apply").val("0.00");
+    //     $("#salespayment-payment_mode").val("cash");
+    //     $("#salespayment-reference").val("");
+    //     $("#salespayment_amountPaid").empty().text("0.00");
+    //     $("#salespayment_totalCharge").empty().text("0.00");
+    //     $("#salespayment_exchange").empty().text("0.00");
+    //     $("#salespayment-search-salesorder").attr("readonly", false);
+    //     $("#salespayment-total_cost").empty();
+    //     $("#salespayment-salesorder-bucket").empty().html(`
+    //     <tr class="salespayment-noResultText">
+    //         <td colspan="9" class="text-center">
+    //             <h5>No sales order added yet</h5>
+    //         </td>
+    //     </tr>
+    // `);
+    // })
 
 
 
 
-    //add sale payment modal
-    $("#addSalesPaymentSubmitBtn").click(function () {
-        if (parseFloat($("#salespayment-amount_apply").val()) <= 0) {
-            failedMessage("Failed", "Current payment amount is 0");
-        } else if(parseFloat($("#salespayment_totalCharge").text()) > parseFloat($("#salespayment-amount_apply").val())){
-            failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
-        } else if($("#salespayment-salesorder-bucket").find(".salespayment-noResultText").length > 0){
-            failedMessage("Failed", "No sales order added yet");
-        }
-        else {
-            addSalesPayment();
-        }
-    })
+    // //add sale payment modal
+    // $("#addSalesPaymentSubmitBtn").click(function () {
+    //     if (parseFloat($("#salespayment-amount_apply").val()) <= 0) {
+    //         failedMessage("Failed", "Current payment amount is 0");
+    //     } else if(parseFloat($("#salespayment_totalCharge").text()) > parseFloat($("#salespayment-amount_apply").val())){
+    //         failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
+    //     } else if($("#salespayment-salesorder-bucket").find(".salespayment-noResultText").length > 0){
+    //         failedMessage("Failed", "No sales order added yet");
+    //     }
+    //     else {
+    //         addSalesPayment();
+    //     }
+    // })
 
-    //edit sale payment modal
-    $("#editSalesPaymentSubmitBtn").click(function () {
-        if (parseFloat($("#update-salespayment-amount_apply").val()) <= 0) {
-            failedMessage("Failed", "Current payment amount is 0");
-        } else if(parseFloat($("#update-salespayment_totalCharge").text()) > parseFloat($("#update-salespayment-amount_apply").val())){
-            failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
-        } else if($("#update-salespayment-salesorder-bucket").find(".update-salespayment-noResultText").length > 0){
-            failedMessage("Failed", "No sales order added yet");
-        } else {
-            editSalesPayment();
-        }
-    })
+    // //edit sale payment modal
+    // $("#editSalesPaymentSubmitBtn").click(function () {
+    //     if (parseFloat($("#update-salespayment-amount_apply").val()) <= 0) {
+    //         failedMessage("Failed", "Current payment amount is 0");
+    //     } else if(parseFloat($("#update-salespayment_totalCharge").text()) > parseFloat($("#update-salespayment-amount_apply").val())){
+    //         failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
+    //     } else if($("#update-salespayment-salesorder-bucket").find(".update-salespayment-noResultText").length > 0){
+    //         failedMessage("Failed", "No sales order added yet");
+    //     } else {
+    //         editSalesPayment();
+    //     }
+    // })
 
     $("#salespayment-amount_apply").change(function () {
         var amount = (parseFloat($(this).val())).toFixed(2);
@@ -117,250 +116,250 @@ $(document).ready(function () {
     })
 
 
-    //For Add Modal
-    //search sale order
-    function salespaymentSearchResults(pageNum) {
-        var timer;
-        var searchResult;
+    // //For Add Modal
+    // //search sale order
+    // function salespaymentSearchResults(pageNum) {
+    //     var timer;
+    //     var searchResult;
 
-        if ($("#salespayment-search-salesorder").val() != "") {
-            clearTimeout(timer);
-            timer = setTimeout(function () {
-                $.ajax({
-                    type: "POST",
-                    url: "./backend/sale/salePayment.php",
-                    data: {
-                        postType: "salesorderSearch",
-                        searchSalesOrder: $("#salespayment-search-salesorder").val(),
-                        pageNum: pageNum
-                    },
-                    success: function (results) {
-                        if (results == "No result") {
-                            if (isSpinnerOn == true) {
-                                $("#salespayment-salesorder-search").empty().html(`
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h5>${results}</h5>
-                                    </div>
-                                    <div class="col-6 text-right">
-                                        <a class="btn btn-primary" href="./itemMaintenance.php">Go add new item</a>
-                                    </div>
-                                </div>
-                                `);
-                                isSpinnerOn = false;
-                            }
-                        } else if (results == "") {
-                            $("#salespayment-salesorder-search").empty().removeClass("border");
-                            isSpinnerOn = false;
+    //     if ($("#salespayment-search-salesorder").val() != "") {
+    //         clearTimeout(timer);
+    //         timer = setTimeout(function () {
+    //             $.ajax({
+    //                 type: "POST",
+    //                 url: "./backend/sale/salePayment.php",
+    //                 data: {
+    //                     postType: "salesorderSearch",
+    //                     searchSalesOrder: $("#salespayment-search-salesorder").val(),
+    //                     pageNum: pageNum
+    //                 },
+    //                 success: function (results) {
+    //                     if (results == "No result") {
+    //                         if (isSpinnerOn == true) {
+    //                             $("#salespayment-salesorder-search").empty().html(`
+    //                             <div class="row">
+    //                                 <div class="col-6">
+    //                                     <h5>${results}</h5>
+    //                                 </div>
+    //                                 <div class="col-6 text-right">
+    //                                     <a class="btn btn-primary" href="./itemMaintenance.php">Go add new item</a>
+    //                                 </div>
+    //                             </div>
+    //                             `);
+    //                             isSpinnerOn = false;
+    //                         }
+    //                     } else if (results == "") {
+    //                         $("#salespayment-salesorder-search").empty().removeClass("border");
+    //                         isSpinnerOn = false;
 
-                        } else {
-                            searchResult = `
-                            <div class="sticky-top bg-white">
-                                <div class="row px-3 py-2 ">
-                                    <div class=" col-6 py-2 py-md-0">
-                                        <p class="my-auto">Search Result: <span class="font-weight-bold" id="salespaymentSearchRowTotal"></span></p>
-                                    </div>
-                                    <div class=" col-6 py-2 py-md-0">
-                                        <div class="d-flex flex-row justify-content-end">
-                                            <p class="my-auto">Page : </p>
-                                            <input type="number" id="salespaymentSearchCurrentPageNum" class="form-control w-25 mx-2 my-auto px-2 pageInput" min="1" value="${pageNum}">
-                                            <p class="my-auto"> of <span id="salespaymentSearchPageTotal"></span></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr class="p-0 m-0">
-                            </div>
-                            <div class="overflow-auto" style="max-height:200px;">
-                            `;
+    //                     } else {
+    //                         searchResult = `
+    //                         <div class="sticky-top bg-white">
+    //                             <div class="row px-3 py-2 ">
+    //                                 <div class=" col-6 py-2 py-md-0">
+    //                                     <p class="my-auto">Search Result: <span class="font-weight-bold" id="salespaymentSearchRowTotal"></span></p>
+    //                                 </div>
+    //                                 <div class=" col-6 py-2 py-md-0">
+    //                                     <div class="d-flex flex-row justify-content-end">
+    //                                         <p class="my-auto">Page : </p>
+    //                                         <input type="number" id="salespaymentSearchCurrentPageNum" class="form-control w-25 mx-2 my-auto px-2 pageInput" min="1" value="${pageNum}">
+    //                                         <p class="my-auto"> of <span id="salespaymentSearchPageTotal"></span></p>
+    //                                     </div>
+    //                                 </div>
+    //                             </div>
+    //                             <hr class="p-0 m-0">
+    //                         </div>
+    //                         <div class="overflow-auto" style="max-height:200px;">
+    //                         `;
 
-                            $.each(JSON.parse(results), function (i, value) {
-                                searchResult += `
-                                <a class="salespayment-search-results" data-id="${value.sale_id}">
-                                    <div class="view overlay  ${value.payment_status == "Unpaid" ? "" : "green lighten-4"}">
-                                        <div class="row px-3 py-2">
-                                            <div class="col-8 d-flex flex-row">
-                                                <h5 class="my-auto">${value.sale_id}</h5>
-                                                <small class="my-auto px-2 text-muted">${value.customer_name}</small>
-                                            </div>
-                                            <div class="col-4 d-flex flex-row justify-content-end">
-                                                <strong class="my-auto">Status</strong>
-                                                <p class="my-auto px-1 font-weight-bold ${value.payment_status == "Unpaid" ? 'text-danger' : 'text-success'}">${value.payment_status}</p>
-                                            </div>
-                                            <div class="mask flex-center ${value.payment_status == "Unpaid" ? "rgba-grey-slight" : "rgba-green-strong"}"></div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <hr class="p-0 m-0">
-                                `;
-                                searchResult += `</div>`;
+    //                         $.each(JSON.parse(results), function (i, value) {
+    //                             searchResult += `
+    //                             <a class="salespayment-search-results" data-id="${value.sale_id}">
+    //                                 <div class="view overlay  ${value.payment_status == "Unpaid" ? "" : "green lighten-4"}">
+    //                                     <div class="row px-3 py-2">
+    //                                         <div class="col-8 d-flex flex-row">
+    //                                             <h5 class="my-auto">${value.sale_id}</h5>
+    //                                             <small class="my-auto px-2 text-muted">${value.customer_name}</small>
+    //                                         </div>
+    //                                         <div class="col-4 d-flex flex-row justify-content-end">
+    //                                             <strong class="my-auto">Status</strong>
+    //                                             <p class="my-auto px-1 font-weight-bold ${value.payment_status == "Unpaid" ? 'text-danger' : 'text-success'}">${value.payment_status}</p>
+    //                                         </div>
+    //                                         <div class="mask flex-center ${value.payment_status == "Unpaid" ? "rgba-grey-slight" : "rgba-green-strong"}"></div>
+    //                                     </div>
+    //                                 </div>
+    //                             </a>
+    //                             <hr class="p-0 m-0">
+    //                             `;
+    //                             searchResult += `</div>`;
 
-                                $("#salespayment-salesorder-search").empty().html(searchResult);
-                                isSpinnerOn = false;
-                                salespaymentSearchCountRow();
-                                salespaymentSearchSelect();
+    //                             $("#salespayment-salesorder-search").empty().html(searchResult);
+    //                             isSpinnerOn = false;
+    //                             salespaymentSearchCountRow();
+    //                             salespaymentSearchSelect();
 
-                                $("#salespaymentSearchCurrentPageNum").focusout(function () {
-                                    salespaymentsearchResults(parseInt($(this).val()));
-                                })
-                            });
-                        }
-                    },
-                    error: function (e) {
-                        failedMessage("Failed", "Unexpected error occur : " + e);
-                    }
-                });
-            }, 1000);
-        } else {
-            $("#salespayment-salesorder-search").empty().removeClass("border");
-            isSpinnerOn = false;
-        }
+    //                             $("#salespaymentSearchCurrentPageNum").focusout(function () {
+    //                                 salespaymentsearchResults(parseInt($(this).val()));
+    //                             })
+    //                         });
+    //                     }
+    //                 },
+    //                 error: function (e) {
+    //                     failedMessage("Failed", "Unexpected error occur : " + e);
+    //                 }
+    //             });
+    //         }, 1000);
+    //     } else {
+    //         $("#salespayment-salesorder-search").empty().removeClass("border");
+    //         isSpinnerOn = false;
+    //     }
 
-    }
+    // }
 
 
-    //Select sales order
-    function salespaymentSearchSelect() {
-        $(".salespayment-search-results").click(function () {
-            $.ajax({
-                type: "POST",
-                url: "./backend/sale/salePayment.php",
-                data: {
-                    postType: "searchSalesOrderSelect",
-                    saleID: $(this).data("id")
-                },
-                success: function (results) {
-                    var salesorderResult = "";
-                    var total_charge = 0;
+    // //Select sales order
+    // function salespaymentSearchSelect() {
+    //     $(".salespayment-search-results").click(function () {
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "./backend/sale/salePayment.php",
+    //             data: {
+    //                 postType: "searchSalesOrderSelect",
+    //                 saleID: $(this).data("id")
+    //             },
+    //             success: function (results) {
+    //                 var salesorderResult = "";
+    //                 var total_charge = 0;
 
-                    $.each(JSON.parse(results), function (i, value) {
-                        if (value.sale_id != $(".salespayment-row").data("id")) {
-                            total_charge += parseFloat(value.sale_total_amount);
-                            salesorderResult += `
-                            <tr class="salespayment-row" data-id="${value.sale_id}">
-                                <td>
-                                    <button class="btn btn-danger deleteSalesOrderBtn py-md-3 px-md-4 p-sm-3">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                    <button class="btn btn-secondary viewSalesOrderBtn py-md-3 px-md-4 p-sm-3">
-                                        <i class="fas fa-file-invoice"></i>
-                                    </button>
-                                </td>
-                                <td class="sale_id">${value.sale_id}</td>
-                                <td class="customer_name">${value.customer_name}</td>
-                                <td class="sale_salesperson">${value.sale_salesperson}</td>
-                                <td class="sale_date">${value.sale_date}</td>
-                                <td class="sale_subtotal">${value.sale_subtotal}</td>
-                                <td class="sale_discount_header">${value.sale_discount_header}</td>
-                                <td class="sale_total_amount">${value.sale_total_amount}</td>
-                            </tr>
-                        `;
-                        } else {
-                            total_charge += parseFloat(value.sale_total_amount);
-                        }
-                    });
-                    if ($("#salespayment-salesorder-bucket").find(".salespayment-noResultText").length > 0) {
-                        $("#salespayment-salesorder-bucket").empty();
-                        $("#salespayment-search-salesorder").attr("readonly", true);
-                    }
+    //                 $.each(JSON.parse(results), function (i, value) {
+    //                     if (value.sale_id != $(".salespayment-row").data("id")) {
+    //                         total_charge += parseFloat(value.sale_total_amount);
+    //                         salesorderResult += `
+    //                         <tr class="salespayment-row" data-id="${value.sale_id}">
+    //                             <td>
+    //                                 <button class="btn btn-danger deleteSalesOrderBtn py-md-3 px-md-4 p-sm-3">
+    //                                     <i class="fas fa-trash-alt"></i>
+    //                                 </button>
+    //                                 <button class="btn btn-secondary viewSalesOrderBtn py-md-3 px-md-4 p-sm-3">
+    //                                     <i class="fas fa-file-invoice"></i>
+    //                                 </button>
+    //                             </td>
+    //                             <td class="sale_id">${value.sale_id}</td>
+    //                             <td class="customer_name">${value.customer_name}</td>
+    //                             <td class="sale_salesperson">${value.sale_salesperson}</td>
+    //                             <td class="sale_date">${value.sale_date}</td>
+    //                             <td class="sale_subtotal">${value.sale_subtotal}</td>
+    //                             <td class="sale_discount_header">${value.sale_discount_header}</td>
+    //                             <td class="sale_total_amount">${value.sale_total_amount}</td>
+    //                         </tr>
+    //                     `;
+    //                     } else {
+    //                         total_charge += parseFloat(value.sale_total_amount);
+    //                     }
+    //                 });
+    //                 if ($("#salespayment-salesorder-bucket").find(".salespayment-noResultText").length > 0) {
+    //                     $("#salespayment-salesorder-bucket").empty();
+    //                     $("#salespayment-search-salesorder").attr("readonly", true);
+    //                 }
 
-                    $("#salespayment-salesorder-search").empty().removeClass("border");
-                    $("#salespayment-search-salesorder").val("");
-                    if (salesorderResult != "") {
-                        $("#salespayment-salesorder-bucket").append(salesorderResult);
-                    }
+    //                 $("#salespayment-salesorder-search").empty().removeClass("border");
+    //                 $("#salespayment-search-salesorder").val("");
+    //                 if (salesorderResult != "") {
+    //                     $("#salespayment-salesorder-bucket").append(salesorderResult);
+    //                 }
 
-                    $(".deleteSalesOrderBtn").click(function () {
-                        $(this).closest("tr").remove();
+    //                 $(".deleteSalesOrderBtn").click(function () {
+    //                     $(this).closest("tr").remove();
 
-                        var amount = parseFloat($(this).parent().parent().find(".sale_total_amount").text())
-                        var total_amount = parseFloat($("#salespayment_totalCharge").text());
-                        //salespayment_totalCharge
-                        //salespayment-total_cost
-                        $("#salespayment-search-salesorder").attr("readonly", false);
-                        $("#salespayment-total_cost, #salespayment_totalCharge").empty().text((total_amount - amount).toFixed(2))
+    //                     var amount = parseFloat($(this).parent().parent().find(".sale_total_amount").text())
+    //                     var total_amount = parseFloat($("#salespayment_totalCharge").text());
+    //                     //salespayment_totalCharge
+    //                     //salespayment-total_cost
+    //                     $("#salespayment-search-salesorder").attr("readonly", false);
+    //                     $("#salespayment-total_cost, #salespayment_totalCharge").empty().text((total_amount - amount).toFixed(2))
 
-                        if ($.trim($("#salespayment-salesorder-bucket").html()).length == 0) {
-                            $("#salespayment-salesorder-bucket").html(`
-                                <tr class="salespayment-noResultText">
-                                    <td colspan="9" class="text-center">
-                                        <h5>No sales order added yet</h5>
-                                    </td>
-                                </tr>
-                            `);
-                        }
-                    });
+    //                     if ($.trim($("#salespayment-salesorder-bucket").html()).length == 0) {
+    //                         $("#salespayment-salesorder-bucket").html(`
+    //                             <tr class="salespayment-noResultText">
+    //                                 <td colspan="9" class="text-center">
+    //                                     <h5>No sales order added yet</h5>
+    //                                 </td>
+    //                             </tr>
+    //                         `);
+    //                     }
+    //                 });
 
-                    $("#salespayment_totalCharge, #salespayment-total_cost").empty().text(total_charge.toFixed(2));
+    //                 $("#salespayment_totalCharge, #salespayment-total_cost").empty().text(total_charge.toFixed(2));
 
-                    var amountPaid = parseFloat($("#salespayment_amountPaid").text());
-                    var totalCharge = parseFloat($("#salespayment_totalCharge").text())
-                    if (amountPaid > totalCharge) {
-                        $("#salespayment_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
-                    } else {
-                        $("#salespayment_exchange").empty().text("0.00");
-                    }
+    //                 var amountPaid = parseFloat($("#salespayment_amountPaid").text());
+    //                 var totalCharge = parseFloat($("#salespayment_totalCharge").text())
+    //                 if (amountPaid > totalCharge) {
+    //                     $("#salespayment_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
+    //                 } else {
+    //                     $("#salespayment_exchange").empty().text("0.00");
+    //                 }
 
-                    salespaymentCalculation();
-                    salespaymentViewSalesOrderDetail();
-                },
-                error: function (e) {
-                    failedMessage("Failed", "Unexpected error occur : " + e);
-                }
-            });
-        })
-    }
+    //                 salespaymentCalculation();
+    //                 salespaymentViewSalesOrderDetail();
+    //             },
+    //             error: function (e) {
+    //                 failedMessage("Failed", "Unexpected error occur : " + e);
+    //             }
+    //         });
+    //     })
+    // }
 
-    //search sale order pagination
-    function salespaymentSearchPagination(total) {
-        var rowperpage = 10;
-        var totalPage = Math.ceil(total / rowperpage);
-        $("#salespaymentSearchPageTotal").empty().text(totalPage);
-        $("#salespaymentSearchCurrentPageNum").attr("max", totalPage);
+    // //search sale order pagination
+    // function salespaymentSearchPagination(total) {
+    //     var rowperpage = 10;
+    //     var totalPage = Math.ceil(total / rowperpage);
+    //     $("#salespaymentSearchPageTotal").empty().text(totalPage);
+    //     $("#salespaymentSearchCurrentPageNum").attr("max", totalPage);
 
-        $("#salespaymentSearchCurrentPageNum").on('input', function () {
-            if ($("#salespaymentSearchCurrentPageNum").val() == "") {
-                console.log("empty item search");
-            } else if ($("#salespaymentSearchCurrentPageNum").val() < totalPage)
-                salespaymentSearchResults($("#salespaymentSearchCurrentPageNum").val());
-            else
-                salespaymentSearchResults(totalPage);
-        })
-    }
+    //     $("#salespaymentSearchCurrentPageNum").on('input', function () {
+    //         if ($("#salespaymentSearchCurrentPageNum").val() == "") {
+    //             console.log("empty item search");
+    //         } else if ($("#salespaymentSearchCurrentPageNum").val() < totalPage)
+    //             salespaymentSearchResults($("#salespaymentSearchCurrentPageNum").val());
+    //         else
+    //             salespaymentSearchResults(totalPage);
+    //     })
+    // }
 
-    //search sale order count row
-    function salespaymentSearchCountRow() {
-        $.ajax({
-            type: "POST",
-            url: "./backend/sale/salePayment.php",
-            data: {
-                postType: "salesorderCountRow",
-                searchSalesOrder: $("#salespayment-search-salesorder").val(),
-            },
-            success: function (results) {
-                $("#salespaymentSearchPageTotal").empty().html(results);
-                salespaymentSearchPagination(results);
-            },
-            error: function (e) {
-                failedMessage("Failed", "Unexpected error occur : " + e);
-            }
-        });
-    }
+    // //search sale order count row
+    // function salespaymentSearchCountRow() {
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "./backend/sale/salePayment.php",
+    //         data: {
+    //             postType: "salesorderCountRow",
+    //             searchSalesOrder: $("#salespayment-search-salesorder").val(),
+    //         },
+    //         success: function (results) {
+    //             $("#salespaymentSearchPageTotal").empty().html(results);
+    //             salespaymentSearchPagination(results);
+    //         },
+    //         error: function (e) {
+    //             failedMessage("Failed", "Unexpected error occur : " + e);
+    //         }
+    //     });
+    // }
 
-    function salespaymentCalculation() {
-        $("#salespayment-amount_apply").change(function () {
-            var amount = (parseFloat($(this).val())).toFixed(2);
-            $(this).val(amount);
-            $("#salespayment_amountPaid").empty().text(amount);
+    // function salespaymentCalculation() {
+    //     $("#salespayment-amount_apply").change(function () {
+    //         var amount = (parseFloat($(this).val())).toFixed(2);
+    //         $(this).val(amount);
+    //         $("#salespayment_amountPaid").empty().text(amount);
 
-            var amountPaid = parseFloat($("#salespayment_amountPaid").text());
-            var totalCharge = parseFloat($("#salespayment_totalCharge").text())
-            if (amountPaid > totalCharge) {
-                $("#salespayment_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
-            } else {
-                $("#salespayment_exchange").empty().text("0.00");
-            }
-        })
-    }
+    //         var amountPaid = parseFloat($("#salespayment_amountPaid").text());
+    //         var totalCharge = parseFloat($("#salespayment_totalCharge").text())
+    //         if (amountPaid > totalCharge) {
+    //             $("#salespayment_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
+    //         } else {
+    //             $("#salespayment_exchange").empty().text("0.00");
+    //         }
+    //     })
+    // }
 
      //View Sales order detail
     function salespaymentViewSalesOrderDetail(){
@@ -422,339 +421,339 @@ $(document).ready(function () {
         })
     }
 
-    //For update Modal
-    //search sale order
-    function updateSalespaymentSearchResults(pageNum) {
-        var timer;
-        var searchResult;
+    // //For update Modal
+    // //search sale order
+    // function updateSalespaymentSearchResults(pageNum) {
+    //     var timer;
+    //     var searchResult;
 
-        if ($("#update-salespayment-search-salesorder").val() != "") {
-            clearTimeout(timer);
-            timer = setTimeout(function () {
-                $.ajax({
-                    type: "POST",
-                    url: "./backend/sale/salePayment.php",
-                    data: {
-                        postType: "salesorderSearch",
-                        searchSalesOrder: $("#update-salespayment-search-salesorder").val(),
-                        pageNum: pageNum
-                    },
-                    success: function (results) {
-                        if (results == "No result") {
-                            if (isSpinnerOn == true) {
-                                $("#update-salespayment-salesorder-search").empty().html(`
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h5>${results}</h5>
-                                    </div>
-                                    <div class="col-6 text-right">
-                                        <a class="btn btn-primary" href="./itemMaintenance.php">Go add new item</a>
-                                    </div>
-                                </div>
-                                `);
-                                isSpinnerOn = false;
-                            }
-                        } else if (results == "") {
-                            $("#update-salespayment-salesorder-search").empty().removeClass("border");
-                            isSpinnerOn = false;
+    //     if ($("#update-salespayment-search-salesorder").val() != "") {
+    //         clearTimeout(timer);
+    //         timer = setTimeout(function () {
+    //             $.ajax({
+    //                 type: "POST",
+    //                 url: "./backend/sale/salePayment.php",
+    //                 data: {
+    //                     postType: "salesorderSearch",
+    //                     searchSalesOrder: $("#update-salespayment-search-salesorder").val(),
+    //                     pageNum: pageNum
+    //                 },
+    //                 success: function (results) {
+    //                     if (results == "No result") {
+    //                         if (isSpinnerOn == true) {
+    //                             $("#update-salespayment-salesorder-search").empty().html(`
+    //                             <div class="row">
+    //                                 <div class="col-6">
+    //                                     <h5>${results}</h5>
+    //                                 </div>
+    //                                 <div class="col-6 text-right">
+    //                                     <a class="btn btn-primary" href="./itemMaintenance.php">Go add new item</a>
+    //                                 </div>
+    //                             </div>
+    //                             `);
+    //                             isSpinnerOn = false;
+    //                         }
+    //                     } else if (results == "") {
+    //                         $("#update-salespayment-salesorder-search").empty().removeClass("border");
+    //                         isSpinnerOn = false;
 
-                        } else {
-                            searchResult = `
-                            <div class="sticky-top bg-white">
-                                <div class="row px-3 py-2 ">
-                                    <div class=" col-6 py-2 py-md-0">
-                                        <p class="my-auto">Search Result: <span class="font-weight-bold" id="update-salespaymentSearchRowTotal"></span></p>
-                                    </div>
-                                    <div class=" col-6 py-2 py-md-0">
-                                        <div class="d-flex flex-row justify-content-end">
-                                            <p class="my-auto">Page : </p>
-                                            <input type="number" id="update-salespaymentSearchCurrentPageNum" class="form-control w-25 mx-2 my-auto px-2 pageInput" min="1" value="${pageNum}">
-                                            <p class="my-auto"> of <span id="update-salespaymentSearchPageTotal"></span></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr class="p-0 m-0">
-                            </div>
-                            <div class="overflow-auto" style="max-height:200px;">
-                            `;
+    //                     } else {
+    //                         searchResult = `
+    //                         <div class="sticky-top bg-white">
+    //                             <div class="row px-3 py-2 ">
+    //                                 <div class=" col-6 py-2 py-md-0">
+    //                                     <p class="my-auto">Search Result: <span class="font-weight-bold" id="update-salespaymentSearchRowTotal"></span></p>
+    //                                 </div>
+    //                                 <div class=" col-6 py-2 py-md-0">
+    //                                     <div class="d-flex flex-row justify-content-end">
+    //                                         <p class="my-auto">Page : </p>
+    //                                         <input type="number" id="update-salespaymentSearchCurrentPageNum" class="form-control w-25 mx-2 my-auto px-2 pageInput" min="1" value="${pageNum}">
+    //                                         <p class="my-auto"> of <span id="update-salespaymentSearchPageTotal"></span></p>
+    //                                     </div>
+    //                                 </div>
+    //                             </div>
+    //                             <hr class="p-0 m-0">
+    //                         </div>
+    //                         <div class="overflow-auto" style="max-height:200px;">
+    //                         `;
 
-                            $.each(JSON.parse(results), function (i, value) {
-                                searchResult += `
-                                <a class="update-salespayment-search-results" data-id="${value.sale_id}">
-                                    <div class="view overlay  ${value.payment_status == "Unpaid" ? "" : "green lighten-4"}">
-                                        <div class="row px-3 py-2">
-                                            <div class="col-8 d-flex flex-row">
-                                                <h5 class="my-auto">${value.sale_id}</h5>
-                                                <small class="my-auto px-2 text-muted">${value.customer_name}</small>
-                                            </div>
-                                            <div class="col-4 d-flex flex-row justify-content-end">
-                                                <strong class="my-auto">Status</strong>
-                                                <p class="my-auto px-1 ${value.payment_status == "Unpaid" ? '' : 'text-success'}">${value.payment_status}</p>
-                                            </div>
-                                            <div class="mask flex-center ${value.payment_status == "Unpaid" ? "rgba-grey-slight" : "rgba-green-strong"}"></div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <hr class="p-0 m-0">
-                                `;
-                                searchResult += `</div>`;
+    //                         $.each(JSON.parse(results), function (i, value) {
+    //                             searchResult += `
+    //                             <a class="update-salespayment-search-results" data-id="${value.sale_id}">
+    //                                 <div class="view overlay  ${value.payment_status == "Unpaid" ? "" : "green lighten-4"}">
+    //                                     <div class="row px-3 py-2">
+    //                                         <div class="col-8 d-flex flex-row">
+    //                                             <h5 class="my-auto">${value.sale_id}</h5>
+    //                                             <small class="my-auto px-2 text-muted">${value.customer_name}</small>
+    //                                         </div>
+    //                                         <div class="col-4 d-flex flex-row justify-content-end">
+    //                                             <strong class="my-auto">Status</strong>
+    //                                             <p class="my-auto px-1 ${value.payment_status == "Unpaid" ? '' : 'text-success'}">${value.payment_status}</p>
+    //                                         </div>
+    //                                         <div class="mask flex-center ${value.payment_status == "Unpaid" ? "rgba-grey-slight" : "rgba-green-strong"}"></div>
+    //                                     </div>
+    //                                 </div>
+    //                             </a>
+    //                             <hr class="p-0 m-0">
+    //                             `;
+    //                             searchResult += `</div>`;
 
-                                $("#update-salespayment-salesorder-search").empty().html(searchResult);
-                                isSpinnerOn = false;
-                                updateSalespaymentSearchCountRow();
-                                updateSalespaymentSearchSelect();
+    //                             $("#update-salespayment-salesorder-search").empty().html(searchResult);
+    //                             isSpinnerOn = false;
+    //                             updateSalespaymentSearchCountRow();
+    //                             updateSalespaymentSearchSelect();
 
-                                $("#update-salespaymentSearchCurrentPageNum").focusout(function () {
-                                    updateSalespaymentsearchResults(parseInt($(this).val()));
-                                })
-                            });
-                        }
-                    },
-                    error: function (e) {
-                        failedMessage("Failed", "Unexpected error occur : " + e);
-                    }
-                });
-            }, 1000);
-        } else {
-            $("#update-salespayment-salesorder-search").empty().removeClass("border");
-            isSpinnerOn = false;
-        }
-    }
-
-
-    //Select sales order
-    function updateSalespaymentSearchSelect() {
-        $(".update-salespayment-search-results").click(function () {
-            $.ajax({
-                type: "POST",
-                url: "./backend/sale/salePayment.php",
-                data: {
-                    postType: "searchSalesOrderSelect",
-                    saleID: $(this).data("id")
-                },
-                success: function (results) {
-                    var salesorderResult = "";
-                    var total_charge = 0;
-
-                    $.each(JSON.parse(results), function (i, value) {
-                        if (value.sale_id != $(".salespayment-row").data("id")) {
-                            total_charge += parseFloat(value.sale_total_amount);
-                            salesorderResult += `
-                            <tr class="update-salespayment-row" data-id="${value.sale_id}">
-                                <td>
-                                    <button class="btn btn-danger deleteSalesOrderBtn py-md-3 px-md-4 p-sm-3">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                    <button class="btn btn-secondary viewSalesOrderBtn py-md-3 px-md-4 p-sm-3">
-                                        <i class="fas fa-file-invoice"></i>
-                                    </button>
-                                </td>
-                                <td class="sale_id">${value.sale_id}</td>
-                                <td class="customer_name">${value.customer_name}</td>
-                                <td class="sale_salesperson">${value.sale_salesperson}</td>
-                                <td class="sale_date">${value.sale_date}</td>
-                                <td class="sale_subtotal">${value.sale_subtotal}</td>
-                                <td class="sale_discount_header">${value.sale_discount_header}</td>
-                                <td class="sale_total_amount">${value.sale_total_amount}</td>
-                            </tr>
-                        `;
-                        } else {
-                            total_charge += parseFloat(value.sale_total_amount);
-                        }
-                    });
-                    if ($("#update-salespayment-salesorder-bucket").find(".update-salespayment-noResultText").length > 0) {
-                        $("#update-salespayment-salesorder-bucket").empty();
-                        $("#update-salespayment-search-salesorder").attr("readonly", true);
-                    }
-
-                    $("#update-salespayment-salesorder-search").empty().removeClass("border");
-                    $("#update-salespayment-search-salesorder").val("");
-                    if (salesorderResult != "") {
-                        $("#update-salespayment-salesorder-bucket").append(salesorderResult);
-                    }
-
-                    $(".deleteSalesOrderBtn").click(function () {
-                        $(this).closest("tr").remove();
-
-                        var amount = parseFloat($(this).parent().parent().find(".sale_total_amount").text())
-                        var total_amount = parseFloat($("#update-salespayment_totalCharge").text());
-                        //salespayment_totalCharge
-                        //salespayment-total_cost
-                        $("#update-salespayment-search-salesorder").attr("readonly", false);
-                        $("#update-salespayment-total_cost, #update-salespayment_totalCharge").empty().text((total_amount - amount).toFixed(2))
-
-                        if ($.trim($("#update-salespayment-salesorder-bucket").html()).length == 0) {
-                            $("#update-salespayment-salesorder-bucket").html(`
-                                <tr class="update-salespayment-noResultText">
-                                    <td colspan="9" class="text-center">
-                                        <h5>No sales order added yet</h5>
-                                    </td>
-                                </tr>
-                            `);
-                        }
-                    });
-
-                    $("#update-salespayment_totalCharge, #update-salespayment-total_cost").empty().text(total_charge.toFixed(2));
-
-                    var amountPaid = parseFloat($("#update-salespayment_amountPaid").text());
-                    var totalCharge = parseFloat($("#update-salespayment_totalCharge").text())
-                    if (amountPaid > totalCharge) {
-                        $("#update-salespayment_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
-                    } else {
-                        $("#update-salespayment_exchange").empty().text("0.00");
-                    }
-
-                    salespaymentViewSalesOrderDetail();
-                    updatesalespaymentCalculation();
-
-                },
-                error: function (e) {
-                    failedMessage("Failed", "Unexpected error occur : " + e);
-                }
-            });
-        })
-    }
-
-    //search sale order pagination
-    function updateSalespaymentSearchPagination(total) {
-        var rowperpage = 10;
-        var totalPage = Math.ceil(total / rowperpage);
-        $("#salespaymentSearchPageTotal").empty().text(totalPage);
-        $("#salespaymentSearchCurrentPageNum").attr("max", totalPage);
-
-        $("#salespaymentSearchCurrentPageNum").on('input', function () {
-            if ($("#salespaymentSearchCurrentPageNum").val() == "") {
-                console.log("empty item search");
-            } else if ($("#salespaymentSearchCurrentPageNum").val() < totalPage)
-                updateSalespaymentSearchResults($("#salespaymentSearchCurrentPageNum").val());
-            else
-                updateSalespaymentSearchResults(totalPage);
-        })
-    }
-
-    //search sale order count row
-    function updateSalespaymentSearchCountRow() {
-        $.ajax({
-            type: "POST",
-            url: "./backend/sale/salePayment.php",
-            data: {
-                postType: "salesorderCountRow",
-                searchSalesOrder: $("#update-salespayment-search-salesorder").val(),
-            },
-            success: function (results) {       
-                $("#update-salespaymentSearchPageTotal").empty().html(results);
-                updateSalespaymentSearchPagination(results);
-            },
-            error: function (e) {
-                failedMessage("Failed", "Unexpected error occur : " + e);
-            }
-        });
-    }
+    //                             $("#update-salespaymentSearchCurrentPageNum").focusout(function () {
+    //                                 updateSalespaymentsearchResults(parseInt($(this).val()));
+    //                             })
+    //                         });
+    //                     }
+    //                 },
+    //                 error: function (e) {
+    //                     failedMessage("Failed", "Unexpected error occur : " + e);
+    //                 }
+    //             });
+    //         }, 1000);
+    //     } else {
+    //         $("#update-salespayment-salesorder-search").empty().removeClass("border");
+    //         isSpinnerOn = false;
+    //     }
+    // }
 
 
-    function updatesalespaymentCalculation() {
-        $("#update-salespayment-amount_apply").change(function () {
-            var amount = (parseFloat($(this).val())).toFixed(2);
-            $(this).val(amount);
-            $("#update-salespayment_amountPaid").empty().text(amount);
+    // //Select sales order
+    // function updateSalespaymentSearchSelect() {
+    //     $(".update-salespayment-search-results").click(function () {
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "./backend/sale/salePayment.php",
+    //             data: {
+    //                 postType: "searchSalesOrderSelect",
+    //                 saleID: $(this).data("id")
+    //             },
+    //             success: function (results) {
+    //                 var salesorderResult = "";
+    //                 var total_charge = 0;
 
-            var amountPaid = parseFloat($("#update-salespayment_amountPaid").text());
-            var totalCharge = parseFloat($("#update-salespayment_totalCharge").text())
-            if (amountPaid > totalCharge) {
-                $("#update-salespayment_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
-            } else {
-                $("#update-salespayment_exchange").empty().text("0.00");
-            }
-        })
-    }
+    //                 $.each(JSON.parse(results), function (i, value) {
+    //                     if (value.sale_id != $(".salespayment-row").data("id")) {
+    //                         total_charge += parseFloat(value.sale_total_amount);
+    //                         salesorderResult += `
+    //                         <tr class="update-salespayment-row" data-id="${value.sale_id}">
+    //                             <td>
+    //                                 <button class="btn btn-danger deleteSalesOrderBtn py-md-3 px-md-4 p-sm-3">
+    //                                     <i class="fas fa-trash-alt"></i>
+    //                                 </button>
+    //                                 <button class="btn btn-secondary viewSalesOrderBtn py-md-3 px-md-4 p-sm-3">
+    //                                     <i class="fas fa-file-invoice"></i>
+    //                                 </button>
+    //                             </td>
+    //                             <td class="sale_id">${value.sale_id}</td>
+    //                             <td class="customer_name">${value.customer_name}</td>
+    //                             <td class="sale_salesperson">${value.sale_salesperson}</td>
+    //                             <td class="sale_date">${value.sale_date}</td>
+    //                             <td class="sale_subtotal">${value.sale_subtotal}</td>
+    //                             <td class="sale_discount_header">${value.sale_discount_header}</td>
+    //                             <td class="sale_total_amount">${value.sale_total_amount}</td>
+    //                         </tr>
+    //                     `;
+    //                     } else {
+    //                         total_charge += parseFloat(value.sale_total_amount);
+    //                     }
+    //                 });
+    //                 if ($("#update-salespayment-salesorder-bucket").find(".update-salespayment-noResultText").length > 0) {
+    //                     $("#update-salespayment-salesorder-bucket").empty();
+    //                     $("#update-salespayment-search-salesorder").attr("readonly", true);
+    //                 }
+
+    //                 $("#update-salespayment-salesorder-search").empty().removeClass("border");
+    //                 $("#update-salespayment-search-salesorder").val("");
+    //                 if (salesorderResult != "") {
+    //                     $("#update-salespayment-salesorder-bucket").append(salesorderResult);
+    //                 }
+
+    //                 $(".deleteSalesOrderBtn").click(function () {
+    //                     $(this).closest("tr").remove();
+
+    //                     var amount = parseFloat($(this).parent().parent().find(".sale_total_amount").text())
+    //                     var total_amount = parseFloat($("#update-salespayment_totalCharge").text());
+    //                     //salespayment_totalCharge
+    //                     //salespayment-total_cost
+    //                     $("#update-salespayment-search-salesorder").attr("readonly", false);
+    //                     $("#update-salespayment-total_cost, #update-salespayment_totalCharge").empty().text((total_amount - amount).toFixed(2))
+
+    //                     if ($.trim($("#update-salespayment-salesorder-bucket").html()).length == 0) {
+    //                         $("#update-salespayment-salesorder-bucket").html(`
+    //                             <tr class="update-salespayment-noResultText">
+    //                                 <td colspan="9" class="text-center">
+    //                                     <h5>No sales order added yet</h5>
+    //                                 </td>
+    //                             </tr>
+    //                         `);
+    //                     }
+    //                 });
+
+    //                 $("#update-salespayment_totalCharge, #update-salespayment-total_cost").empty().text(total_charge.toFixed(2));
+
+    //                 var amountPaid = parseFloat($("#update-salespayment_amountPaid").text());
+    //                 var totalCharge = parseFloat($("#update-salespayment_totalCharge").text())
+    //                 if (amountPaid > totalCharge) {
+    //                     $("#update-salespayment_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
+    //                 } else {
+    //                     $("#update-salespayment_exchange").empty().text("0.00");
+    //                 }
+
+    //                 salespaymentViewSalesOrderDetail();
+    //                 updatesalespaymentCalculation();
+
+    //             },
+    //             error: function (e) {
+    //                 failedMessage("Failed", "Unexpected error occur : " + e);
+    //             }
+    //         });
+    //     })
+    // }
+
+    // //search sale order pagination
+    // function updateSalespaymentSearchPagination(total) {
+    //     var rowperpage = 10;
+    //     var totalPage = Math.ceil(total / rowperpage);
+    //     $("#salespaymentSearchPageTotal").empty().text(totalPage);
+    //     $("#salespaymentSearchCurrentPageNum").attr("max", totalPage);
+
+    //     $("#salespaymentSearchCurrentPageNum").on('input', function () {
+    //         if ($("#salespaymentSearchCurrentPageNum").val() == "") {
+    //             console.log("empty item search");
+    //         } else if ($("#salespaymentSearchCurrentPageNum").val() < totalPage)
+    //             updateSalespaymentSearchResults($("#salespaymentSearchCurrentPageNum").val());
+    //         else
+    //             updateSalespaymentSearchResults(totalPage);
+    //     })
+    // }
+
+    // //search sale order count row
+    // function updateSalespaymentSearchCountRow() {
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "./backend/sale/salePayment.php",
+    //         data: {
+    //             postType: "salesorderCountRow",
+    //             searchSalesOrder: $("#update-salespayment-search-salesorder").val(),
+    //         },
+    //         success: function (results) {       
+    //             $("#update-salespaymentSearchPageTotal").empty().html(results);
+    //             updateSalespaymentSearchPagination(results);
+    //         },
+    //         error: function (e) {
+    //             failedMessage("Failed", "Unexpected error occur : " + e);
+    //         }
+    //     });
+    // }
 
 
-    //add sale payment
-    function addSalesPayment() {
-        var customer_name = $("#salespayment-salesorder-bucket").find(".salespayment-row").find(".customer_name").text();
-        var sale_id = $("#salespayment-salesorder-bucket").find(".salespayment-row").data("id");
-        var payment_method = $("#salespayment-payment_mode").val();
-        var sale_amount = $("#salespayment_totalCharge").text();
-        var sale_payment = $("#salespayment_amountPaid").text();
-        var reference = $("#salespayment-reference").val();
+    // function updatesalespaymentCalculation() {
+    //     $("#update-salespayment-amount_apply").change(function () {
+    //         var amount = (parseFloat($(this).val())).toFixed(2);
+    //         $(this).val(amount);
+    //         $("#update-salespayment_amountPaid").empty().text(amount);
 
-        $.ajax({
-            type: "POST",
-            url: "./backend/sale/salePayment.php",
-            data: {
-                postType: "addSalePayment",
-                customer_name: customer_name,
-                sale_id: sale_id,
-                payment_method: payment_method,
-                sale_amount: sale_amount,
-                sale_payment: sale_payment,
-                reference: reference
-            },
-            success: function (results) {
-                switch (results) {
-                    case ("Some input field is not set."):
-                        failedMessage("Failed", results);
-                        break;
+    //         var amountPaid = parseFloat($("#update-salespayment_amountPaid").text());
+    //         var totalCharge = parseFloat($("#update-salespayment_totalCharge").text())
+    //         if (amountPaid > totalCharge) {
+    //             $("#update-salespayment_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
+    //         } else {
+    //             $("#update-salespayment_exchange").empty().text("0.00");
+    //         }
+    //     })
+    // }
 
-                    case ("success add payment"):
-                        $("#addSalesPaymentModal").modal("hide");
-                        successMessage("Success", "Sale Payment is successfully added");
-                        $("#salespayment-table").empty();
-                        $("#salespayment-currentPageNum").val(1);
-                        salespaymenttotalPage = paginate(salespaymenttotalRow);
-                        $(".btnSuccess").click(function () {
-                            location.reload();
-                        })
-                        break;
-                }
-            },
-            error: function(e){
-                failedMessage("Failed", "Unexpected error occur : " + e);
-            }
-        })
-    }
-    //update sale payment
-    function editSalesPayment() {
-        var sale_payment_id = $("#update-salespayment_id").val();
-        var payment_method = $("#update-salespayment-payment_mode").val();
-        var sale_payment = $("#update-salespayment-amount_apply").val()
-        var reference = $("#update-salespayment-reference").val();
 
-        $.ajax({
-            type: "POST",
-            url: "./backend/sale/salePayment.php",
-            data: {
-                postType: "updateSalePayment",
-                sale_payment_id: sale_payment_id,
-                payment_method: payment_method,
-                sale_payment: sale_payment,
-                reference: reference
-            },
-            success: function(results){
-                switch (results) {
-                    case ("Some input field is not set."):
-                        failedMessage("Failed", results);
-                        break;
+    // //add sale payment
+    // function addSalesPayment() {
+    //     var customer_name = $("#salespayment-salesorder-bucket").find(".salespayment-row").find(".customer_name").text();
+    //     var sale_id = $("#salespayment-salesorder-bucket").find(".salespayment-row").data("id");
+    //     var payment_method = $("#salespayment-payment_mode").val();
+    //     var sale_amount = $("#salespayment_totalCharge").text();
+    //     var sale_payment = $("#salespayment_amountPaid").text();
+    //     var reference = $("#salespayment-reference").val();
 
-                    case ("success edit payment"):
-                        $("#editSalesPaymentModal").modal("hide");
-                        successMessage("Success", "Sale Payment is successfully updated");
-                        $("#salespayment-table").empty();
-                        $("#salespayment-currentPageNum").val(1);
-                        salespaymenttotalPage = paginate(salespaymenttotalRow);
-                        $(".btnSuccess").click(function () {
-                            location.reload();
-                        })
-                        break;
-                }
-            },
-            error: function(e){
-                console.log(e)
-                failedMessage("Failed", "Unexpected error occur : " + e);
-            }
-        })
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "./backend/sale/salePayment.php",
+    //         data: {
+    //             postType: "addSalePayment",
+    //             customer_name: customer_name,
+    //             sale_id: sale_id,
+    //             payment_method: payment_method,
+    //             sale_amount: sale_amount,
+    //             sale_payment: sale_payment,
+    //             reference: reference
+    //         },
+    //         success: function (results) {
+    //             switch (results) {
+    //                 case ("Some input field is not set."):
+    //                     failedMessage("Failed", results);
+    //                     break;
 
-    }
+    //                 case ("success add payment"):
+    //                     $("#addSalesPaymentModal").modal("hide");
+    //                     successMessage("Success", "Sale Payment is successfully added");
+    //                     $("#salespayment-table").empty();
+    //                     $("#salespayment-currentPageNum").val(1);
+    //                     salespaymenttotalPage = paginate(salespaymenttotalRow);
+    //                     $(".btnSuccess").click(function () {
+    //                         location.reload();
+    //                     })
+    //                     break;
+    //             }
+    //         },
+    //         error: function(e){
+    //             failedMessage("Failed", "Unexpected error occur : " + e);
+    //         }
+    //     })
+    // }
+    // //update sale payment
+    // function editSalesPayment() {
+    //     var sale_payment_id = $("#update-salespayment_id").val();
+    //     var payment_method = $("#update-salespayment-payment_mode").val();
+    //     var sale_payment = $("#update-salespayment-amount_apply").val()
+    //     var reference = $("#update-salespayment-reference").val();
+
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "./backend/sale/salePayment.php",
+    //         data: {
+    //             postType: "updateSalePayment",
+    //             sale_payment_id: sale_payment_id,
+    //             payment_method: payment_method,
+    //             sale_payment: sale_payment,
+    //             reference: reference
+    //         },
+    //         success: function(results){
+    //             switch (results) {
+    //                 case ("Some input field is not set."):
+    //                     failedMessage("Failed", results);
+    //                     break;
+
+    //                 case ("success edit payment"):
+    //                     $("#editSalesPaymentModal").modal("hide");
+    //                     successMessage("Success", "Sale Payment is successfully updated");
+    //                     $("#salespayment-table").empty();
+    //                     $("#salespayment-currentPageNum").val(1);
+    //                     salespaymenttotalPage = paginate(salespaymenttotalRow);
+    //                     $(".btnSuccess").click(function () {
+    //                         location.reload();
+    //                     })
+    //                     break;
+    //             }
+    //         },
+    //         error: function(e){
+    //             console.log(e)
+    //             failedMessage("Failed", "Unexpected error occur : " + e);
+    //         }
+    //     })
+
+    // }
 
     function failedMessage(headline, body) {
         $("#failedToModal").modal("show");
@@ -847,8 +846,6 @@ $(document).ready(function () {
                         $("#update-salespayment_amountPaid").empty().text(sale_payment);
                         $("#update-salespayment_id").val(tag.data("salespayment-id"));
 
-                        
-                        console.log(sale_id_header);
                         $.ajax({
                             type: "POST",
                             url: "./backend/sale/salePayment.php",
@@ -857,18 +854,14 @@ $(document).ready(function () {
                                 saleID: sale_id_header
                             },
                             success: function (results) {
-                                var salesorderResult = "";
+                                var salesorderResult = "";  
                                 var total_charge = 0;
-
                                 $.each(JSON.parse(results), function (i, value) {
                                     if (value.sale_id != $(".salespayment-row").data("id")) {
                                         total_charge += parseFloat(value.sale_total_amount);
                                         salesorderResult += `
                                             <tr class="update-salespayment-row" data-id="${value.sale_id}">
                                                 <td>
-                                                    <button class="btn btn-danger deleteSalesOrderBtn py-md-3 px-md-4 p-sm-3">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </button>
                                                     <button class="btn btn-secondary viewSalesOrderBtn py-md-3 px-md-4 p-sm-3">
                                                         <i class="fas fa-file-invoice"></i>
                                                     </button>
@@ -897,47 +890,45 @@ $(document).ready(function () {
                                     $("#update-salespayment-salesorder-bucket").empty().html(salesorderResult);
                                 }
 
-                                $(".deleteSalesOrderBtn").click(function () {
-                                    $(this).closest("tr").remove();
+                                // $(".deleteSalesOrderBtn").click(function () {
+                                //     $(this).closest("tr").remove();
 
-                                    var amount = parseFloat($(this).parent().parent().find(".sale_total_amount").text())
-                                    var total_amount = parseFloat($("#update-salespayment_totalCharge").text());
-                                    //salespayment_totalCharge
-                                    //salespayment-total_cost
-                                    $("#update-salespayment-search-salesorder").attr("readonly", false);
-                                    $("#update-salespayment-total_cost, #update-salespayment_totalCharge").empty().text((total_amount - amount).toFixed(2))
+                                //     var amount = parseFloat($(this).parent().parent().find(".sale_total_amount").text())
+                                //     var total_amount = parseFloat($("#update-salespayment_totalCharge").text());
+                                //     //salespayment_totalCharge
+                                //     //salespayment-total_cost
+                                //     $("#update-salespayment-search-salesorder").attr("readonly", false);
+                                //     $("#update-salespayment-total_cost, #update-salespayment_totalCharge").empty().text((total_amount - amount).toFixed(2))
 
-                                    if ($.trim($("#update-salespayment-salesorder-bucket").html()).length == 0) {
-                                        $("#update-salespayment-salesorder-bucket").html(`
-                                            <tr class="update-salespayment-noResultText">
-                                                <td colspan="9" class="text-center">
-                                                    <h5>No sales order added yet</h5>
-                                                </td>
-                                            </tr>
-                                        `);
-                                    }
-                                });
+                                //     if ($.trim($("#update-salespayment-salesorder-bucket").html()).length == 0) {
+                                //         $("#update-salespayment-salesorder-bucket").html(`
+                                //             <tr class="update-salespayment-noResultText">
+                                //                 <td colspan="9" class="text-center">
+                                //                     <h5>No sales order added yet</h5>
+                                //                 </td>
+                                //             </tr>
+                                //         `);
+                                //     }
+                                // });
 
                                 $("#update-salespayment_totalCharge, #update-salespayment-total_cost").empty().text(total_charge.toFixed(2));
 
-                                var amountPaid = parseFloat($("#update-salespayment_amountPaid").text());
-                                var totalCharge = parseFloat($("#update-salespayment_totalCharge").text())
-                                if (amountPaid > totalCharge) {
-                                    $("#update-salespayment_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
-                                } else {
-                                    $("#update-salespayment_exchange").empty().text("0.00");
-                                }
+                                // var amountPaid = parseFloat($("#update-salespayment_amountPaid").text());
+                                // var totalCharge = parseFloat($("#update-salespayment_totalCharge").text())
+                                // if (amountPaid > totalCharge) {
+                                //     $("#update-salespayment_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
+                                // } else {
+                                //     $("#update-salespayment_exchange").empty().text("0.00");
+                                // }
 
                                 salespaymentViewSalesOrderDetail(); 
-                                updatesalespaymentCalculation();
+                                //updatesalespaymentCalculation();
 
                             },
                             error: function (e) {
                                 failedMessage("Failed", "Unexpected error occur : " + e);
                             }
                         });
-
-
 
                     })
 
@@ -1019,6 +1010,7 @@ $(document).ready(function () {
         }
     }
 
+
     function renderContent(results, type) {
         switch (type) {
             case ("salespayment"):
@@ -1029,10 +1021,10 @@ $(document).ready(function () {
                         <tr class="salespayment-row" data-salespayment-id="${salespayment.sale_payment_id}">
                             <th>${++i}</th>
                             <td>
-                                <button class="btn btn-warning editSalesPaymentBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#editSalesPaymentModal">
-                                    <i class="fas fa-edit"></i>
+                                <button title="View Payment" class="btn btn-warning editSalesPaymentBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#editSalesPaymentModal">
+                                    <i class="fas fa-receipt"></i>
                                 </button>
-                                <button class="btn btn-secondary printSalesPaymentBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#printSalesPaymentModal">
+                                <button title="Print Payment" class="btn btn-secondary printSalesPaymentBtn py-md-3 px-md-4 p-sm-3"  data-toggle="modal" data-target="#printSalesPaymentModal">
                                     <i class="fas fa-print"></i>
                                 </button>
                             </td>
