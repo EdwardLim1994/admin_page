@@ -58,10 +58,10 @@ else
     </script>
 
     <script src="./dist/js/script.prod.js"></script>
-    <script src="./dist/js/itemMaintenance.prod.js"></script>
+    <!-- <script src="./dist/js/itemMaintenance.prod.js"></script> -->
     <script src="./dist/js/datatables.min.js"></script>
 
-    <!-- <script src="./itemMaintenance.js"></script> -->
+    <script src="./itemMaintenance.js"></script>
 
 
 </head>
