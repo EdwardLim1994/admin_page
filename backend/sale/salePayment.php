@@ -203,127 +203,127 @@ switch ($postType) {
 			break;
 		}
 
-	case ("addSalePayment"):
+	// case ("addSalePayment"):
 
-		// check isset for all post variable
-		$countSetAdd = 0;
-		$postVariable = array('customer_name', 'sale_id', 'payment_method', 'sale_amount', 'sale_payment');
+	// 	// check isset for all post variable
+	// 	$countSetAdd = 0;
+	// 	$postVariable = array('customer_name', 'sale_id', 'payment_method', 'sale_amount', 'sale_payment');
 
-		foreach ($postVariable as $variable_name) {
-			if (isset($_POST[$variable_name])) {
-				$countSetAdd++;
-			} else {
-				$countSetAdd--;
-				//echo $variable_name. "not set<br>";
-			}
-		}
+	// 	foreach ($postVariable as $variable_name) {
+	// 		if (isset($_POST[$variable_name])) {
+	// 			$countSetAdd++;
+	// 		} else {
+	// 			$countSetAdd--;
+	// 			//echo $variable_name. "not set<br>";
+	// 		}
+	// 	}
 
-		// if all post variable is set, insert data into database
-		if ($countSetAdd == count($postVariable)) {
+	// 	// if all post variable is set, insert data into database
+	// 	if ($countSetAdd == count($postVariable)) {
 
-			$customer_name = $_POST['customer_name'];
-			$sale_id_header = $_POST['sale_id'];
-			$payment_method = $_POST['payment_method'];
-			$sale_amount = $_POST['sale_amount'];
-			$sale_payment = $_POST['sale_payment'];
+	// 		$customer_name = $_POST['customer_name'];
+	// 		$sale_id_header = $_POST['sale_id'];
+	// 		$payment_method = $_POST['payment_method'];
+	// 		$sale_amount = $_POST['sale_amount'];
+	// 		$sale_payment = $_POST['sale_payment'];
 
-			date_default_timezone_set("Asia/Kuala_Lumpur");
-			$creation_date = date("Y-m-d");
-			$creation_time = date("H:i:s");
-			$creation_user = $_SESSION["username"];
-			//$creation_user = "admin"; // comment this when submit
-			$mode = "Add";
+	// 		date_default_timezone_set("Asia/Kuala_Lumpur");
+	// 		$creation_date = date("Y-m-d");
+	// 		$creation_time = date("H:i:s");
+	// 		$creation_user = $_SESSION["username"];
+	// 		//$creation_user = "admin"; // comment this when submit
+	// 		$mode = "Add";
 
-			// create variable for rest of the table
-			$sale_payment_date = date("Y-m-d");
-			$sale_payment_time = date("H:i:s");
-			$payment_status = "Paid";
-			$reference = $_POST["reference"] != "" ? $_POST["reference"] : "";
+	// 		// create variable for rest of the table
+	// 		$sale_payment_date = date("Y-m-d");
+	// 		$sale_payment_time = date("H:i:s");
+	// 		$payment_status = "Paid";
+	// 		$reference = $_POST["reference"] != "" ? $_POST["reference"] : "";
 
-			//query insert data into sale_payment table - 11 field
-			$stmt = $mysqli->prepare("INSERT INTO sale_payment (sale_id_header, sale_payment_date, sale_payment_time, payment_method, customer_name, sale_amount, sale_payment, reference, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			$stmt->bind_param("sssssddssss", $sale_id_header, $sale_payment_date, $sale_payment_time, $payment_method, $customer_name, $sale_amount, $sale_payment, $reference, $creation_date, $creation_time, $creation_user);
-			$stmt->execute();
-			$stmt->close();
+	// 		//query insert data into sale_payment table - 11 field
+	// 		$stmt = $mysqli->prepare("INSERT INTO sale_payment (sale_id_header, sale_payment_date, sale_payment_time, payment_method, customer_name, sale_amount, sale_payment, reference, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	// 		$stmt->bind_param("sssssddssss", $sale_id_header, $sale_payment_date, $sale_payment_time, $payment_method, $customer_name, $sale_amount, $sale_payment, $reference, $creation_date, $creation_time, $creation_user);
+	// 		$stmt->execute();
+	// 		$stmt->close();
 
-			//query to update payment_status in sale_header table  <- set isOnHold to 0 whenever it is 1 or 0
-			$stmt = $mysqli->prepare("UPDATE sale_header SET payment_status = ?, isOnHold = 0 WHERE sale_id = ?");
-			$stmt->bind_param("ss", $payment_status, $_POST['sale_id']);
-			$stmt->execute();
-			$stmt->close();
+	// 		//query to update payment_status in sale_header table  <- set isOnHold to 0 whenever it is 1 or 0
+	// 		$stmt = $mysqli->prepare("UPDATE sale_header SET payment_status = ?, isOnHold = 0 WHERE sale_id = ?");
+	// 		$stmt->bind_param("ss", $payment_status, $_POST['sale_id']);
+	// 		$stmt->execute();
+	// 		$stmt->close();
 
-			//query insert data into sale_payment_log table - 12 field
-			$stmt = $mysqli->prepare("INSERT INTO sale_payment_log (mode, sale_id_header, sale_payment_date, sale_payment_time, payment_method, customer_name, sale_amount, sale_payment, reference, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			$stmt->bind_param("ssssssddssss", $mode, $sale_id_header, $sale_payment_date, $sale_payment_time, $payment_method, $customer_name, $sale_amount, $sale_payment, $reference, $creation_date, $creation_time, $creation_user);
-			$stmt->execute();
-			$stmt->close();
+	// 		//query insert data into sale_payment_log table - 12 field
+	// 		$stmt = $mysqli->prepare("INSERT INTO sale_payment_log (mode, sale_id_header, sale_payment_date, sale_payment_time, payment_method, customer_name, sale_amount, sale_payment, reference, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	// 		$stmt->bind_param("ssssssddssss", $mode, $sale_id_header, $sale_payment_date, $sale_payment_time, $payment_method, $customer_name, $sale_amount, $sale_payment, $reference, $creation_date, $creation_time, $creation_user);
+	// 		$stmt->execute();
+	// 		$stmt->close();
 
-			echo "success add payment";
-		} else {
-			//echo "Some input field is not set.";
-			echo count($postVariable);
-		}
-		break;
+	// 		echo "success add payment";
+	// 	} else {
+	// 		//echo "Some input field is not set.";
+	// 		echo count($postVariable);
+	// 	}
+	// 	break;
 
-	case ("updateSalePayment"):
+	// case ("updateSalePayment"):
 
-		// check isset for all post variable
-		$countSetUpdate = 0;
-		$postVariable = array('sale_payment_id', 'payment_method', 'sale_payment');
+	// 	// check isset for all post variable
+	// 	$countSetUpdate = 0;
+	// 	$postVariable = array('sale_payment_id', 'payment_method', 'sale_payment');
 
-		foreach ($postVariable as $variable_name) {
-			if (isset($_POST[$variable_name])) {
-				$countSetUpdate++;
-			} else {
-				$countSetUpdate--;
-				print_r($_POST[$variable_name]);
-			}
-		}
+	// 	foreach ($postVariable as $variable_name) {
+	// 		if (isset($_POST[$variable_name])) {
+	// 			$countSetUpdate++;
+	// 		} else {
+	// 			$countSetUpdate--;
+	// 			print_r($_POST[$variable_name]);
+	// 		}
+	// 	}
 
-		// if all post variable is set, update data into database
-		if ($countSetUpdate == count($postVariable)) {
+	// 	// if all post variable is set, update data into database
+	// 	if ($countSetUpdate == count($postVariable)) {
 
-			$payment_method = $_POST['payment_method'];
-			$sale_payment = $_POST['sale_payment'];
-			//$reference = isset($_POST["reference"]) ? $_POST["reference"] : "";
+	// 		$payment_method = $_POST['payment_method'];
+	// 		$sale_payment = $_POST['sale_payment'];
+	// 		//$reference = isset($_POST["reference"]) ? $_POST["reference"] : "";
 
-			date_default_timezone_set("Asia/Kuala_Lumpur");
-			$modify_date = date("Y-m-d");
-			$modify_time = date("H:i:s");
+	// 		date_default_timezone_set("Asia/Kuala_Lumpur");
+	// 		$modify_date = date("Y-m-d");
+	// 		$modify_time = date("H:i:s");
 
-			$modify_user = $_SESSION["username"];
-			//$modify_user = "admin";
-			$mode = "Update";
+	// 		$modify_user = $_SESSION["username"];
+	// 		//$modify_user = "admin";
+	// 		$mode = "Update";
 
-			$sale_payment_date = date("Y-m-d");
-			$sale_payment_time = date("H:i:s");
+	// 		$sale_payment_date = date("Y-m-d");
+	// 		$sale_payment_time = date("H:i:s");
 
-			//update query for sale_payment tabel - 7 fields
-			$stmt = $mysqli->prepare("UPDATE sale_payment SET payment_method = ?, sale_payment_date = ?, sale_payment_time = ?, sale_payment = ?, modified_date = ?, modified_time = ?, modified_user = ? WHERE sale_payment_id = ?");
-			$stmt->bind_param("sssdsssi", $payment_method, $sale_payment_date, $sale_payment_time, $sale_payment, $modify_date, $modify_time, $modify_user, $_POST['sale_payment_id']);
-			$stmt->execute();
-			$stmt->close();
+	// 		//update query for sale_payment tabel - 7 fields
+	// 		$stmt = $mysqli->prepare("UPDATE sale_payment SET payment_method = ?, sale_payment_date = ?, sale_payment_time = ?, sale_payment = ?, modified_date = ?, modified_time = ?, modified_user = ? WHERE sale_payment_id = ?");
+	// 		$stmt->bind_param("sssdsssi", $payment_method, $sale_payment_date, $sale_payment_time, $sale_payment, $modify_date, $modify_time, $modify_user, $_POST['sale_payment_id']);
+	// 		$stmt->execute();
+	// 		$stmt->close();
 
-			//query to fetch data from sale_payment table
-			$stmt = $mysqli->prepare("SELECT sale_id_header, customer_name, sale_amount, reference, creation_date, creation_time, creation_user FROM sale_payment WHERE sale_payment_id = ?");
-			$stmt->bind_param("i", $_POST["sale_payment_id"]);
-			$stmt->execute();
-			$stmt->store_result();
-			$stmt->bind_result($sale_id_header, $customer_name, $sale_amount, $reference, $creation_date, $creation_time, $creation_user);
-			$stmt->fetch();
-			$stmt->close();
+	// 		//query to fetch data from sale_payment table
+	// 		$stmt = $mysqli->prepare("SELECT sale_id_header, customer_name, sale_amount, reference, creation_date, creation_time, creation_user FROM sale_payment WHERE sale_payment_id = ?");
+	// 		$stmt->bind_param("i", $_POST["sale_payment_id"]);
+	// 		$stmt->execute();
+	// 		$stmt->store_result();
+	// 		$stmt->bind_result($sale_id_header, $customer_name, $sale_amount, $reference, $creation_date, $creation_time, $creation_user);
+	// 		$stmt->fetch();
+	// 		$stmt->close();
 
-			//query insert data into sale_payment_log table - 12 field
-			$stmt = $mysqli->prepare("INSERT INTO sale_payment_log (mode, sale_id_header, sale_payment_date, sale_payment_time, payment_method, customer_name, sale_amount, sale_payment, reference, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			$stmt->bind_param("ssssssddssss", $mode, $sale_id_header, $sale_payment_date, $sale_payment_time, $payment_method, $customer_name, $sale_amount, $sale_payment, $reference, $creation_date, $creation_time, $creation_user);
-			$stmt->execute();
-			$stmt->close();
+	// 		//query insert data into sale_payment_log table - 12 field
+	// 		$stmt = $mysqli->prepare("INSERT INTO sale_payment_log (mode, sale_id_header, sale_payment_date, sale_payment_time, payment_method, customer_name, sale_amount, sale_payment, reference, creation_date, creation_time, creation_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	// 		$stmt->bind_param("ssssssddssss", $mode, $sale_id_header, $sale_payment_date, $sale_payment_time, $payment_method, $customer_name, $sale_amount, $sale_payment, $reference, $creation_date, $creation_time, $creation_user);
+	// 		$stmt->execute();
+	// 		$stmt->close();
 
-			echo "success edit payment";
-		} else {
-			echo "Some input field is not set.";
-		}
-		break;
+	// 		echo "success edit payment";
+	// 	} else {
+	// 		echo "Some input field is not set.";
+	// 	}
+	// 	break;
 }
 
 mysqli_close($mysqli);
