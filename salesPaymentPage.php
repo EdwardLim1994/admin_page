@@ -180,31 +180,31 @@
                             <div class="overflow-auto">
                                 <table class="p-3 m-3">
                                     <tr>
-                                        <td>Sale ID</td>
+                                        <td class="font-weight-bold">Sale ID</td>
                                         <td>: <span id="salepaymentdetail-sale_id"></span></td>
                                     </tr>
                                     <tr>
-                                        <td>Customer Account</td>
+                                        <td class="font-weight-bold">Customer Account</td>
                                         <td>: <span id="salepaymentdetail-customer_account"></span></td>
                                     </tr>
                                     <tr>
-                                        <td>Customer Name</td>
+                                        <td class="font-weight-bold">Customer Name</td>
                                         <td>: <span id="salepaymentdetail-customer_name"></span></td>
                                     </tr>
                                     <tr>
-                                        <td>Salesperson</td>
+                                        <td class="font-weight-bold">Salesperson</td>
                                         <td>: <span id="salepaymentdetail-sale_salesperson"></span></td>
                                     </tr>
                                     <tr>
-                                        <td>Subtotal (RM)</td>
+                                        <td class="font-weight-bold">Subtotal (RM)</td>
                                         <td>: <span id="salepaymentdetail-sale_subtotal"></span></td>
                                     </tr>
                                     <tr>
-                                        <td>Discount (%)</td>
+                                        <td class="font-weight-bold">Discount (%)</td>
                                         <td>: <span id="salepaymentdetail-sale_discount_header"></span></td>
                                     </tr>
                                     <tr>
-                                        <td>Total Amount (RM)</td>
+                                        <td class="font-weight-bold">Total Amount (RM)</td>
                                         <td>: <span id="salepaymentdetail-sale_total_amount"></span></td>
                                     </tr>
 

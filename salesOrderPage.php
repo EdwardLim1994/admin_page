@@ -391,7 +391,7 @@
             <!-- </form> -->
         </div>
     </div>
-    <!-- Move view sale order detail modal trigger to main sale payment table -->
+    <!-- Move view sale order  class="font-weight-bold" modal trigger to main sale payment table -->
     <!-- View Sales Order Detail modal -->
     <div class="modal fade" id="salesOrderDetailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
@@ -415,31 +415,31 @@
                             <div class="overflow-auto">
                                 <table class="p-3 m-3">
                                     <tr>
-                                        <td>Sale ID</td>
+                                        <td class="font-weight-bold">Sale ID</td>
                                         <td>: <span id="saleorderdetail-sale_id"></span></td>
                                     </tr>
                                     <tr>
-                                        <td>Customer Account</td>
+                                        <td class="font-weight-bold">Customer Account</td>
                                         <td>: <span id="saleorderdetail-customer_account"></span></td>
                                     </tr>
                                     <tr>
-                                        <td>Customer Name</td>
+                                        <td class="font-weight-bold">Customer Name</td>
                                         <td>: <span id="saleorderdetail-customer_name"></span></td>
                                     </tr>
                                     <tr>
-                                        <td>Salesperson</td>
+                                        <td class="font-weight-bold">Salesperson</td>
                                         <td>: <span id="saleorderdetail-sale_salesperson"></span></td>
                                     </tr>
                                     <tr>
-                                        <td>Subtotal (RM)</td>
+                                        <td class="font-weight-bold">Subtotal (RM)</td>
                                         <td>: <span id="saleorderdetail-sale_subtotal"></span></td>
                                     </tr>
                                     <tr>
-                                        <td>Discount (%)</td>
+                                        <td class="font-weight-bold">Discount (%)</td>
                                         <td>: <span id="saleorderdetail-sale_discount_header"></span></td>
                                     </tr>
                                     <tr>
-                                        <td>Total Amount (RM)</td>
+                                        <td class="font-weight-bold">Total Amount (RM)</td>
                                         <td>: <span id="saleorderdetail-sale_total_amount"></span></td>
                                     </tr>
 
@@ -485,6 +485,6 @@
         </div>
     </div>
 </div>
-<!-- 
-<script src="./dist/js/saleOrderPage.prod.js"></script> -->
-<script src="./saleOrderPage.js"></script>
+
+<script src="./dist/js/saleOrderPage.prod.js"></script>
+<!-- <script src="./saleOrderPage.js"></script> -->
