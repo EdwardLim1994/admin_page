@@ -1985,7 +1985,7 @@ function salesOrderMainFunction() {
                                 ${salesorder.payment_status == "UnPaid" ? 
                                     '<button title="Update Sales Order" class="btn btn-warning editSalesOrderBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#editSalesOrderModal"><i class="fas fa-edit"></i></button>' 
                                     : 
-                                    '<button class="btn btn-secondary viewSalesOrderDetailBtn py-md-3 px-md-4 p-sm-3"><i class="fas fa-file-invoice"></i> </button>'
+                                    '<button title="View Sales Order Detail" class="btn btn-secondary viewSalesOrderDetailBtn py-md-3 px-md-4 p-sm-3"><i class="fas fa-file-invoice"></i> </button>'
                                 }
                                 ${salesorder.payment_status == "UnPaid" ? '<button title="Delete Sales Order" class="btn btn-danger deleteSalesOrderBtn py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#deleteSalesOrderModal"><i class="fas fa-trash-alt"></i></button>': ''}
                             </td>

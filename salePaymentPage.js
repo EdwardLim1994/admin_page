@@ -228,7 +228,7 @@ $(document).ready(function () {
                                         salesorderResult += `
                                             <tr class="update-salespayment-row" data-id="${value.sale_id}">
                                                 <td>
-                                                    <button class="btn btn-secondary viewSalesOrderBtn py-md-3 px-md-4 p-sm-3">
+                                                    <button title="View Sales Order Detail" class="btn btn-secondary viewSalesOrderBtn py-md-3 px-md-4 p-sm-3">
                                                         <i class="fas fa-file-invoice"></i>
                                                     </button>
                                                 </td>
