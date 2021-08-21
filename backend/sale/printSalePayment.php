@@ -49,6 +49,7 @@ switch ($postType) {
 			$stmt->close();
 			echo json_encode(array($salePaymentHeaderArray, $salePaymentBodyArray));
 		}
+		echo '<br><a href="../../saleMaintenance.php">Return</a>';
 		break;
 
 }

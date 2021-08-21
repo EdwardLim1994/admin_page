@@ -18,7 +18,11 @@ function salesOrderMainFunction() {
         generateTable();
     });
 
-    $("#salesorder_filter_select").change(function () {
+    // $("#salesorder_filter_select").change(function () {
+    //     generateTable();
+    // })
+
+    $("input[name='showingsalesordermode']").change(function () {
         generateTable();
     })
 
@@ -1654,10 +1658,10 @@ function salesOrderMainFunction() {
         var currentPageNum;
         var postType = "viewSaleHeader";
         var url = "./backend/sale/saleOrder.php";
-        var current_filter = $("#salesorder_filter_select").val();
+        var current_filter = $("input[name='showingsalesordermode']:checked").val();
 
         switch (current_filter) {
-            case ("all"):
+            case ("paid"):
                 postType = "viewSaleHeader";
                 url = "./backend/sale/saleOrder.php";
                 break;
@@ -1757,9 +1761,11 @@ function salesOrderMainFunction() {
                                 search: salesorder
                             },
                             success: function (results) {
+
                                 var item_results;
                                 var totalCost = 0;
                                 var totalDiscount = 0;
+                                var max_quantity = 0;
                                 if (results == "No Result") {
                                     failedMessage("Failed", "No sales order detail found");
                                 } else {
@@ -1770,7 +1776,21 @@ function salesOrderMainFunction() {
                                         var newPrice = (value.amount * value.qty) - discountPrice;
                                         totalCost += newPrice;
                                         totalDiscount += discountPrice;
-
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "./backend/invoice/viewCustmrItem.php",
+                                            data: {
+                                                postType: "searchRowItemGetQuantity",
+                                                itemID: value.item_id
+                                            },
+                                            async: false,
+                                            success: function(results){
+                                                max_quantity = parseInt(results);
+                                            },
+                                            error: function(e){
+                                                console.log(e);
+                                            }
+                                        })
                                         item_results += `
                                         <tr class="update-item-row" data-id="${value.item_id}">
                                             <td>
@@ -1781,7 +1801,7 @@ function salesOrderMainFunction() {
                                             <td class="update-item_no">${value.item_no}</td>    
                                             <td class="update-description">${value.description}</td>
                                             <td>
-                                                <input ${isPaid ? "readonly" : ""} type="number" class="form-control update-itemQuantity" min="1" max="${value.itemQty > 0 ? value.itemQty : 1}" value="${value.qty}">
+                                                <input ${isPaid ? "readonly" : ""} type="number" class="form-control update-itemQuantity" min="1" max="${max_quantity > 0 ? max_quantity : 1}" value="${value.qty}">
                                             </td>
                                             <td>
                                                 <input ${isPaid ? "readonly" : ""} type="text" class="form-control update-itemUnit" placeholder="unit" val="${value.uom}">

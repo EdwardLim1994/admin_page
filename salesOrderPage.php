@@ -16,12 +16,20 @@
     <!-- Total row -->
     <!-- Pagination -->
     <div class="row">
-        <div class="col-4 d-flex flex-column align-items-end">
-            <label class="text-left w-100 h5-responsive" for="salesorder_filter_select">Showing Onhold Payment: </label>
+        <div class="col-4 d-flex flex-column justify-content-end">
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" value="onhold" id="salesorderShowingOnhold" name="showingsalesordermode" checked>
+                <label for="salesorderShowingOnhold" class="custom-control-label">Show Onhold Sale Order</label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" value="paid" id="salesorderShowingPaid" name="showingsalesordermode">
+                <label for="salesorderShowingPaid" class="custom-control-label">Show Paid Sale Order</label>
+            </div>
+            <!-- <label class="text-left w-100 h5-responsive" for="salesorder_filter_select">Showing Onhold Payment: </label>
             <select class="mt-2 browser-default custom-select" id="salesorder_filter_select">
                 <option value="all" selected>No</option>
                 <option value="onhold">Yes</option>
-            </select>
+            </select> -->
         </div>
         <div class="text-right col-8 d-flex flex-column justify-content-end ">
             <div class="pb-4 rowResults">
@@ -477,6 +485,6 @@
         </div>
     </div>
 </div>
-
-<script src="./dist/js/saleOrderPage.prod.js"></script>
-<!-- <script src="./saleOrderPage.js"></script> -->
+<!-- 
+<script src="./dist/js/saleOrderPage.prod.js"></script> -->
+<script src="./saleOrderPage.js"></script>
