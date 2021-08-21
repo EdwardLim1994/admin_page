@@ -84,7 +84,7 @@ $(document).ready(function () {
                         $("#salepaymentdetail-customer_name").empty().text(item.customer_name);
                         $("#salepaymentdetail-sale_salesperson").empty().text(item.sale_salesperson);
                         $("#salepaymentdetail-sale_subtotal").empty().text(item.sale_subtotal);
-                        $("#salepaymentdetail-sale_discount_header").empty().text(item.sale_discount_header);
+                        $("#salepaymentdetail-sale_discount_header").empty().text(parseFloat(item.sale_discount_header) * 100);
                         $("#salepaymentdetail-sale_total_amount").empty().text(item.sale_total_amount);
                     });
 
@@ -102,7 +102,7 @@ $(document).ready(function () {
                                 <td>${item.qty}</td>
                                 <td>${item.uom}</td>
                                 <td>${item.amount}</td>
-                                <td>${item.discount}</td>
+                                <td>${parseInt(item.discount)}</td>
                                 <td>${item.price}</td>
                             </tr>
                             `;

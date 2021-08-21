@@ -1215,7 +1215,7 @@ function salesOrderMainFunction() {
         } else {
 
             salesperson = $("#salesorder-salesperson").val();
-            sale_subtotal = "";
+            sale_subtotal = (parseFloat($("#salesorder-total_cost").text()) + parseFloat($("#salesorder-total_discount").text())).toFixed(2);
             sale_discount_header = $("#salesorder-total_discount").text();
             sale_total_amount = $("#salesorder-total_cost").text();
             payment_method = $("#salespayment-payment_mode").val();
@@ -1363,7 +1363,7 @@ function salesOrderMainFunction() {
                 } else {
 
                     salesperson = $("#salesorder-update-salesperson").val();
-                    sale_subtotal = "";
+                    sale_subtotal = (parseFloat($("#salesorder-update-total_discount").text()) + parseFloat($("#salesorder-update-total_cost").text())).toFixed(2);
                     sale_discount_header = $("#salesorder-update-total_discount").text();
                     sale_total_amount = $("#salesorder-update-total_cost").text();
                     customer_name = $("#salesorder-update-search-customer_name").val();
@@ -1444,7 +1444,7 @@ function salesOrderMainFunction() {
                 } else {
 
                     salesperson = $("#salesorder-update-salesperson").val();
-                    sale_subtotal = "";
+                    sale_subtotal = (parseFloat( $("#salesorder-update-total_discount").text()) + parseFloat($("#salesorder-update-total_cost").text())).toFixed(2);
                     sale_discount_header = $("#salesorder-update-total_discount").text();
                     sale_total_amount = $("#salesorder-update-total_cost").text();
                     customer_name = $("#salesorder-update-search-customer_name").val();
@@ -1578,7 +1578,7 @@ function salesOrderMainFunction() {
                     $("#saleorderdetail-customer_name").empty().text(item.customer_name);
                     $("#saleorderdetail-sale_salesperson").empty().text(item.sale_salesperson);
                     $("#saleorderdetail-sale_subtotal").empty().text(item.sale_subtotal);
-                    $("#saleorderdetail-sale_discount_header").empty().text(item.sale_discount_header);
+                    $("#saleorderdetail-sale_discount_header").empty().text(parseFloat(item.sale_discount_header) * 100);
                     $("#saleorderdetail-sale_total_amount").empty().text(item.sale_total_amount);
                 });
 
@@ -1596,7 +1596,7 @@ function salesOrderMainFunction() {
                                 <td>${item.qty}</td>
                                 <td>${item.uom}</td>
                                 <td>${item.amount}</td>
-                                <td>${item.discount}</td>
+                                <td>${parseInt(item.discount)}</td>
                                 <td>${item.price}</td>
                             </tr>
                             `;
