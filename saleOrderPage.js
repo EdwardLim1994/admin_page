@@ -594,6 +594,9 @@ function salesOrderMainFunction() {
             totalCost += parseFloat(totalPrice);
         })
         $("#salesorder-total_cost, #salespayment_totalCharge").empty().html(totalCost.toFixed(2));
+        if(parseFloat($("#salespayment_amountPaid").text()) > parseFloat($("#salespayment_totalCharge").text())){
+            $("#salespayment_exchange").empty().text((parseFloat($("#salespayment_amountPaid").text()) - parseFloat($("#salespayment_totalCharge").text())).toFixed(2));
+        }
     }
 
     function itemBucketTotalDiscount() {
@@ -1052,6 +1055,10 @@ function salesOrderMainFunction() {
         })
         $("#salesorder-update-total_cost").empty().html(totalCost.toFixed(2));
         $("#update-salespayment_totalCharge").empty().text(totalCost.toFixed(2));
+
+        if(parseFloat($("#update-salespayment_amountPaid").text()) > parseFloat($("#update-salespayment_totalCharge").text())){
+            $("#update-salespayment_exchange").empty().text((parseFloat($("#update-salespayment_amountPaid").text()) - parseFloat($("#update-salespayment_totalCharge").text())).toFixed(2));
+        }
 
     }
 
