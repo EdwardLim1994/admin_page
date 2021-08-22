@@ -472,7 +472,7 @@ function salesOrderMainFunction() {
                     var item_results;
                     var item_id = [];
                     var itemID;
-                    if (!isItemSoldOut) {
+                    //if (!isItemSoldOut) {
                         $.each($(".update-item-row"), function (i, v) {
                             item_id.push($(`.update-item-row:eq(${i})`).data("id"))
                         });
@@ -561,11 +561,11 @@ function salesOrderMainFunction() {
                         itemBucketRemoveItem();
                         $("#salespayment_totalCharge").empty().text($("#salesorder-total_cost").text());
 
-                    } else {
-                        $("#salesorder-item-search").empty().removeClass("border");
-                        $("#salesorder-search-item").val("");
-                        failedMessage("Failed", "Item is sold out");
-                    }
+                    // } else {
+                    //     $("#salesorder-item-search").empty().removeClass("border");
+                    //     $("#salesorder-search-item").val("");
+                    //     failedMessage("Failed", "Item is sold out");
+                    // }
 
                 },
                 error: function (e) {
@@ -939,7 +939,7 @@ function salesOrderMainFunction() {
                     var isItemSoldOut = false;
                     var itemID;
                     var item_id = [];
-                    if (!isItemSoldOut) {
+                    //if (!isItemSoldOut) {
                         $.each($(".update-item-row"), function (i, v) {
                             item_id.push($(`.update-item-row:eq(${i})`).data("id"))
                         });
@@ -1026,11 +1026,11 @@ function salesOrderMainFunction() {
                         });
                         //}
                         updateitemBucketRemoveItem();
-                    } else {
-                        $("#salesorder-update-item-search").empty().removeClass("border");
-                        $("#salesorder-update-search-item").val("");
-                        failedMessage("Failed", "Item is sold out");
-                    }
+                    // } else {
+                    //     $("#salesorder-update-item-search").empty().removeClass("border");
+                    //     $("#salesorder-update-search-item").val("");
+                    //     failedMessage("Failed", "Item is sold out");
+                    // }
                 }
             });
         });
