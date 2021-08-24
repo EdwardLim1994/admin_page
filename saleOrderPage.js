@@ -143,28 +143,16 @@ function salesOrderMainFunction() {
         `);
     })
 
-
     //Submit Sales Order on add
     $("#addSalesOrderSubmitBtn").click(function () {
         addSalesOrder("add");
     })
 
+
     $("#onholdSalesOrderSubmitBtn").click(function () {
         addSalesOrder("onhold");
     })
 
-    // $("#addSalesPaymentSubmitBtn").click(function () {
-
-    //     if (parseFloat($("#salespayment-amount_apply").val()) <= 0) {
-    //         failedMessage("Failed", "Current payment amount is 0");
-    //     } else if (parseFloat($("#salespayment_totalCharge").text()) > parseFloat($("#salespayment-amount_apply").val())) {
-    //         failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
-    //     } else if ($("#salespayment-salesorder-bucket").find(".salespayment-noResultText").length > 0) {
-    //         failedMessage("Failed", "No sales order added yet");
-    //     } else {
-    //         addSalesPayment("add");
-    //     }
-    // });
 
     $("#editonholdSalesOrderSubmitBtn").click(function () {
         if (parseFloat($("#update-salespayment_amountPaid").text()) <= 0) {
@@ -461,6 +449,8 @@ function salesOrderMainFunction() {
     function itemSearchSelect() {
         $(".item-search-results").click(function () {
             var isItemSoldOut = $(this).data("issoldout");
+            $("#salesorder-item-search").empty().removeClass("border");
+            $("#salesorder-search-item").val("");
             $.ajax({
                 type: "POST",
                 url: "./backend/invoice/viewCustmrItem.php",
@@ -496,7 +486,7 @@ function salesOrderMainFunction() {
                                     <td class="item_no">${value.item_no}</td>
                                     <td class="description">${value.description}</td>
                                     <td>
-                                        <input type="number" class="form-control itemQuantity" min="1" max="${value.qty_available > 0 ? value.qty_available : 1}" value="1">
+                                        <input type="number" class="form-control itemQuantity" min="1" value="1">
                                     </td>
                                     <td>
                                         <input type="text" class="form-control itemUnit" value="unit">
@@ -522,8 +512,7 @@ function salesOrderMainFunction() {
                         if (item_results != "") {
                             $("#salesorder-item-bucket").append(item_results);
                         }
-                        $("#salesorder-item-search").empty().removeClass("border");
-                        $("#salesorder-search-item").val("");
+
                         itemBucketTotalPrice(itemID);
                         itemBucketTotalDiscount();
                         itemBucketTotalCost();
@@ -927,6 +916,8 @@ function salesOrderMainFunction() {
     function updateItemSearchSelect() {
         $(".update-item-search-results").click(function () {
             // var isItemSoldOut = $(this).data("issoldout");
+            $("#salesorder-update-item-search").empty().removeClass("border");
+            $("#salesorder-update-search-item").val("");
             $.ajax({
                 type: "POST",
                 url: "./backend/invoice/viewCustmrItem.php",
@@ -964,7 +955,7 @@ function salesOrderMainFunction() {
                                         <td class="update-item_no">${value.item_no}</td>
                                         <td class="update-description">${value.description}</td>
                                         <td>
-                                            <input type="number" class="form-control update-itemQuantity" min="1" max="${value.qty_available > 0 ? value.qty_available : 1}" value="1">
+                                            <input type="number" class="form-control update-itemQuantity" min="1 value="1">
                                         </td>
                                         <td>
                                             <input type="text" class="form-control update-itemUnit" value="unit">
@@ -989,8 +980,7 @@ function salesOrderMainFunction() {
                         if (item_results != "") {
                             $("#salesorder-update-item-bucket").append(item_results);
                         }
-                        $("#salesorder-update-item-search").empty().removeClass("border");
-                        $("#salesorder-update-search-item").val("");
+
                         updateitemBucketTotalPrice(itemID);
                         updateitemBucketTotalDiscount();
                         updateitemBucketTotalCost();
@@ -1212,6 +1202,9 @@ function salesOrderMainFunction() {
 
         if ($("#salesorder-item-bucket").find(".salesorder-noResultText").length > 0) {
             failedMessage("Failed", "Item bucket is empty");
+            $(".btnDismiss").click(function(){
+                $("#salesorder-search-item").focus();
+            })
         } else {
 
             salesperson = $("#salesorder-salesperson").val();
@@ -1359,7 +1352,9 @@ function salesOrderMainFunction() {
             case ("onhold"):
                 if ($("#salesorder-update-item-bucket").find(".salesorder-update-noResultText").length > 0) {
                     failedMessage("Failed", "Item bucket is empty");
-
+                    $(".btnDismiss").click(function(){
+                        $("#salesorder-search-item").focus();
+                    })
                 } else {
 
                     salesperson = $("#salesorder-update-salesperson").val();
@@ -1559,6 +1554,7 @@ function salesOrderMainFunction() {
 
     function viewSalesOrderDetail(button) {
 
+
         $.ajax({
             type: "POST",
             url: "./backend/sale/salePayment.php",
@@ -1571,6 +1567,16 @@ function salesOrderMainFunction() {
                 var salesOrder_results = "";
                 var total_amount = 0;
                 var total_discount = 0;
+                $.each(data[2], function(i, item){
+                    $("#salepaymentdetail-sale_payment_date").empty().text(item.sale_payment_date);
+                    $("#salepaymentdetail-sale_payment_time").empty().text(item.sale_payment_time);
+                    $("#salepaymentdetail-payment_method").empty().text(item.payment_method);
+                    $("#salepaymentdetail-reference").empty().text(item.reference);
+                    $("#update-salespayment_amountPaid-detail").empty().text(item.sale_payment);
+                    $("#update-salespayment_totalCharge-detail").empty().text(item.sale_amount);
+                    $("#update-salespayment_exchange-detail").empty().text(parseFloat(item.sale_payment) - parseFloat(item.sale_amount) > 0 ? (parseFloat(item.sale_payment) - parseFloat(item.sale_amount)).toFixed(2) : "0.00")
+                });
+
                 $.each(data[0], function (i, item) {
 
                     $("#saleorderdetail-sale_id").empty().text(item.sale_id);
@@ -1578,7 +1584,7 @@ function salesOrderMainFunction() {
                     $("#saleorderdetail-customer_name").empty().text(item.customer_name);
                     $("#saleorderdetail-sale_salesperson").empty().text(item.sale_salesperson);
                     $("#saleorderdetail-sale_subtotal").empty().text(item.sale_subtotal);
-                    $("#saleorderdetail-sale_discount_header").empty().text(parseFloat(item.sale_discount_header) * 100);
+                    $("#saleorderdetail-sale_discount_header").empty().text((parseFloat(item.sale_discount_header)).toFixed(2));
                     $("#saleorderdetail-sale_total_amount").empty().text(item.sale_total_amount);
                 });
 
@@ -1726,14 +1732,14 @@ function salesOrderMainFunction() {
                         }
                         // $("#salesorder-update-payment_mode").val();
                         // $("#update-salespayment_amountPaid").empty().text();
-                        $("#update-salespayment_totalCharge").empty().text(tag.find(".sale_total_amount").text());
+                        $("#update-salesorder_totalCharge").empty().text(tag.find(".sale_total_amount").text());
                         // $("#update-salespayment_exchange").empty().text();
                         $("#update-salesorder_id").val(salesorder);
                         $("#salesorder-update-search-customer_name").val(tag.find(".customer_name").text());
                         $("#salesorder-update-search-customer_id").val(tag.find(".customer_account").text())
                         //$("#salesorder-update-payment_mode").val(tag.find(".payment_mode").text());
                         $("#salesorder-update-salesperson").val(tag.find(".sale_salesperson").text());
-                        $("#update-salesorder_payment_status").val(tag.find(".payment_status").text());
+                        $("#update-salesorder_order_status").val(tag.find(".payment_status").text());
                         $("#update-salesorder_isOnHold").val(tag.find(".isOnHold").text());
                         $("#salesorder-update-reference").val(tag.data("reference"));
 

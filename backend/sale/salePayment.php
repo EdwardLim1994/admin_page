@@ -198,7 +198,23 @@ switch ($postType) {
 			}
 			$stmt->close();
 
-			echo json_encode(array($saleHeaderArray, $saleDetailArray));
+			$stmt = $mysqli->prepare("SELECT sale_payment_id, sale_payment_date, sale_payment_time, payment_method, sale_amount, sale_payment, reference FROM sale_payment WHERE sale_id_header = ?");
+			$stmt->bind_param("s", $_POST["sale_id"]);
+			$stmt->execute();
+			$result = $stmt->get_result();
+
+			if (mysqli_num_rows($result) > 0) {
+				while ($row = mysqli_fetch_assoc($result)) {
+					$salePaymentArray[] = $row;
+				};
+				//echo json_encode($jsonArray);
+
+			} else {
+				echo "No Result";
+			}
+			$stmt->close();
+
+			echo json_encode(array($saleHeaderArray, $saleDetailArray, $salePaymentArray));
 
 			break;
 		}

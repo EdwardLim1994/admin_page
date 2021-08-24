@@ -1,6 +1,5 @@
+<!-- Sale Payment Section -->
 <div class="container my-4">
-
-
     <div class="row">
         <div class="text-right col-12 d-flex flex-column justify-content-end ">
             <div class="pb-4 rowResults">
@@ -22,7 +21,7 @@
         </div>
     </div>
 
- 
+
     <div class="modal fade" id="editSalesPaymentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
             <input hidden="true" type="text" id="update-salespayment_id">
@@ -35,7 +34,7 @@
                             <span aria-hidden="true" class="white-text">&times;</spans>
                         </button>
                     </div>
-<!-- 
+                    <!-- 
                     <div class="modal-footer justify-content-end">
                         <button id="editSalesPaymentSubmitBtn" class="btn btn-info">Update</button>
 
@@ -43,7 +42,7 @@
                 </div>
                 <div class="modal-body">
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
 
                         <h3>Payment Information</h3>
                         <div class="row">
@@ -63,12 +62,9 @@
                             </div>
                         </div>
                     </div>
-                    <hr>
+                    <hr> -->
                     <div class="form-group ">
-
-                        <h3>Sales Order Information</h3>
-
-                        <div class="pb-4 row ">
+                        <div class="pb-2 row ">
                             <div class="text-center col-4">
                                 <h3 class="font-weight-bold">Amount Paid</h3>
                                 <h5>RM <span id="update-salespayment_amountPaid">0.00</span></h5>
@@ -82,6 +78,30 @@
                                 <h5>RM <span id="update-salespayment_exchange">0.00</span></h5>
                             </div>
                         </div>
+                    </div>
+                    <hr>
+                    <div class="py-3 form-group" style="transform:scale(1.2);">
+                        <h3 class="text-center ">Payment Information</h3>
+                        <table class="p-3 m-3 mx-auto" >
+                            <tr>
+                                <td class="font-weight-bold">Payment Date</td>
+                                <td>: <span id="update-salepayment-sale_payment_date"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold">Payment Time</td>
+                                <td>: <span id="update-salepayment-sale_payment_time"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold">Payment Method</td>
+                                <td>: <span id="update-salepayment-payment_method"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold">Reference</td>
+                                <td>: <span id="update-salepayment-reference"></span></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="form-group">
                         <div class="overflow-auto">
                             <table class="table table-striped table-bordered" cellspacing="0" width="100%">
                                 <thead class="grey white-text">
@@ -166,7 +186,7 @@
                     <!--Header-->
 
                     <div class="modal-header">
-                        <p class="heading lead">Invoice Details</p>
+                        <p class="heading lead">Sales Order Details</p>
 
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true" class="white-text">&times;</spans>
@@ -175,9 +195,8 @@
 
                     <div class="modal-body">
                         <div class="form-group ">
-                            <h3>Item Information</h3>
-
                             <div class="overflow-auto">
+                                <h3>Sale Order Information</h3>
                                 <table class="p-3 m-3">
                                     <tr>
                                         <td class="font-weight-bold">Sale ID</td>
@@ -209,6 +228,9 @@
                                     </tr>
 
                                 </table>
+
+                                <hr>
+                                <h3>Item Information</h3>
                                 <table class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead class="grey white-text">
                                         <tr>
@@ -250,5 +272,5 @@
         </div>
     </div>
 </div>
-<script src="./dist/js/salePaymentPage.prod.js"></script>
-<!-- <script src="./salePaymentPage.js"></script> -->
+<!-- <script src="./dist/js/salePaymentPage.prod.js"></script> -->
+<script src="./salePaymentPage.js"></script>

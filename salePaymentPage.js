@@ -205,11 +205,16 @@ $(document).ready(function () {
                         var payment_method = tag.find(".payment_method").text();
                         var sale_payment = tag.find(".sale_payment").text();
                         var sale_id_header = tag.find(".sale_id_header").text();
+                        var sale_amount = tag.find(".sale_amount").text();
+                        console.log(sale_payment)
 
-                        $("#update-salespayment-amount_apply").val(sale_payment);
-                        $("#update-salespayment-payment_mode").val(payment_method);
-                        $("#update-salespayment-reference").val(reference);
+                        $("#update-salepayment-sale_payment_date").empty().text(tag.find(".sale_payment_date").text());
+                        $("#update-salepayment-sale_payment_time").empty().text(tag.find(".sale_payment_time").text());
+                        $("#update-salepayment-payment_method").empty().text(payment_method);
+                        $("#pdate-salepayment-reference").empty().text(reference);
                         $("#update-salespayment_amountPaid").empty().text(sale_payment);
+                        $("#update-salespayment_totalCharge").empty().text(sale_amount);
+                        $("#update-salespayment_exchange").empty().text(parseFloat(sale_payment) - parseFloat(sale_amount) > 0 ? (parseFloat(sale_payment) - parseFloat(sale_amount)).toFixed(2) : "0.00" )
                         $("#update-salespayment_id").val(tag.data("salespayment-id"));
 
                         $.ajax({

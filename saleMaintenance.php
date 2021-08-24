@@ -176,7 +176,7 @@ else
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <a type="button" class="btn btn-outline-danger waves-effect" data-dismiss="modal">OK</a>
+                        <a type="button" class="btn btn-outline-danger waves-effect btnDismiss" data-dismiss="modal">OK</a>
                     </div>
                 </div>
             </div>

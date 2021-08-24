@@ -1,3 +1,4 @@
+<!-- Sale Order Section -->
 <div class="container my-4">
     <!-- Add Sales order button -->
     <div class="row">
@@ -18,13 +19,14 @@
     <div class="row">
         <div class="col-4 d-flex flex-column justify-content-end">
             <div class="custom-control custom-radio">
-                <input type="radio" class="custom-control-input" value="onhold" id="salesorderShowingOnhold" name="showingsalesordermode" checked>
-                <label for="salesorderShowingOnhold" class="custom-control-label">Show Onhold Sale Order</label>
-            </div>
-            <div class="custom-control custom-radio">
-                <input type="radio" class="custom-control-input" value="paid" id="salesorderShowingPaid" name="showingsalesordermode">
+                <input type="radio" class="custom-control-input" value="paid" id="salesorderShowingPaid" name="showingsalesordermode" checked>
                 <label for="salesorderShowingPaid" class="custom-control-label">Show Paid Sale Order</label>
             </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" value="onhold" id="salesorderShowingOnhold" name="showingsalesordermode">
+                <label for="salesorderShowingOnhold" class="custom-control-label">Show Onhold Sale Order</label>
+            </div>
+
             <!-- <label class="text-left w-100 h5-responsive" for="salesorder_filter_select">Showing Onhold Payment: </label>
             <select class="mt-2 browser-default custom-select" id="salesorder_filter_select">
                 <option value="all" selected>No</option>
@@ -87,60 +89,6 @@
                     </div>
                 </div>
                 <div class="modal-body">
-
-
-                    <div class="form-group position-relative">
-                        <h3>Customer Information</h3>
-                        <div class="row">
-                            <div class="col-6">
-                                <label for="salesorder-search-customer_name">Customer Name</label>
-                                <input type="text" autocomplete="off" class="form-control" name="customer_account" id="salesorder-search-customer_name" placeholder="">
-                            </div>
-                            <div class="col-6">
-                                <label for="edit-customer_account">Account Number</label>
-                                <input type="text" autocomplete="off" class="form-control" name="customer_account" id="salesorder-search-customer_id" placeholder="">
-                            </div>
-                        </div>
-
-                        <!-- Customer search result -->
-                        <div id="salesorder-customer-search" class="m-0 bg-white w-100 position-absolute" style="z-index:5;"></div>
-                    </div>
-                    <hr>
-                    <div class="form-group">
-
-                        <h3>Payment Information</h3>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="salespayment-amount_apply">Payment Amount</label>
-                                    <input type="number" value="0.00" min="0" step="0.01" class="form-control" id="salespayment-amount_apply" placeholder="">
-
-                                </div>
-
-                                <div class="col-6">
-                                    <label for="salespayment-payment_mode">Payment Mode</label>
-                                    <select class="browser-default custom-select" name="customer_account" id="salespayment-payment_mode">
-                                        <option value="cash" selected="selected">Cash</option>
-                                        <option value="cheque">Cheque</option>
-                                        <option value="transfer">Transfer</option>
-                                    </select>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <label for="salesorder-salesperson">Salesperson:</label>
-                                <input type="text" class="form-control" name="customer_account" id="salesorder-salesperson" placeholder="">
-
-                            </div>
-                            <div class="col-6">
-                                <label for="salespayment-reference">Reference</label>
-                                <input class="form-control" type="text" id="salespayment-reference">
-                            </div>
-
-                        </div>
-                    </div>
                     <div class="form-group ">
 
                         <h3>Item Information</h3>
@@ -198,6 +146,62 @@
                             </table>
                         </div>
                     </div>
+                    <hr>
+                    <div class="form-group">
+
+                        <h3>Payment Information</h3>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="salespayment-amount_apply">Payment Amount</label>
+                                    <input type="number" value="0.00" min="0" step="0.01" class="form-control" id="salespayment-amount_apply" placeholder="">
+
+                                </div>
+
+                                <div class="col-6">
+                                    <label for="salespayment-payment_mode">Payment Mode</label>
+                                    <select class="browser-default custom-select" name="customer_account" id="salespayment-payment_mode">
+                                        <option value="cash" selected="selected">Cash</option>
+                                        <option value="cheque">Cheque</option>
+                                        <option value="transfer">Transfer</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="salesorder-salesperson">Salesperson:</label>
+                                <input type="text" class="form-control" name="customer_account" id="salesorder-salesperson" placeholder="">
+
+                            </div>
+                            <div class="col-6">
+                                <label for="salespayment-reference">Reference</label>
+                                <input class="form-control" type="text" id="salespayment-reference">
+                            </div>
+
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group position-relative">
+                        <h3>Customer Information</h3>
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="salesorder-search-customer_name">Customer Name</label>
+                                <input type="text" autocomplete="off" class="form-control" name="customer_account" id="salesorder-search-customer_name" placeholder="">
+                            </div>
+                            <div class="col-6">
+                                <label for="edit-customer_account">Account Number</label>
+                                <input type="text" autocomplete="off" class="form-control" name="customer_account" id="salesorder-search-customer_id" placeholder="">
+                            </div>
+                        </div>
+
+                        <!-- Customer search result -->
+                        <div id="salesorder-customer-search" class="m-0 bg-white w-100 position-absolute" style="z-index:5;"></div>
+                    </div>
+                    <hr>
+
+
                 </div>
             </div>
         </div>
@@ -231,74 +235,20 @@
                         <div class="row">
                             <div class="text-center col-4">
                                 <h3 class="font-weight-bold">Amount Paid</h3>
-                                <h5>RM <span id="update-salespayment_amountPaid">0.00</span></h5>
+                                <h5>RM <span id="update-salesorder_amountPaid">0.00</span></h5>
                             </div>
                             <div class="text-center col-4">
                                 <h3 class="font-weight-bold">Total Charge</h3>
-                                <h5>RM <span id="update-salespayment_totalCharge">0.00</span></h5>
+                                <h5>RM <span id="update-salesorder_totalCharge">0.00</span></h5>
                             </div>
                             <div class="text-center col-4">
                                 <h3 class="font-weight-bold">Change</h3>
-                                <h5>RM <span id="update-salespayment_exchange">0.00</span></h5>
+                                <h5>RM <span id="update-salesorder_exchange">0.00</span></h5>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group position-relative">
-                        <div class="row">
-                            <div class="col-6">
-                                <label for="salesorder-search-customer_name">Customer Name</label>
-                                <input type="text" autocomplete="off" class="form-control" name="customer_account" id="salesorder-update-search-customer_name" placeholder="">
-                            </div>
-                            <div class="col-6">
-                                <label for="salesorder-update-search-customer_id">Account Number</label>
-                                <input type="text" autocomplete="off" class="form-control" name="customer_account" id="salesorder-update-search-customer_id" placeholder="">
-                            </div>
-                        </div>
-
-                        <!-- Customer search result -->
-                        <div id="salesorder-update-customer-search" class="m-0 bg-white w-100 position-absolute" style="z-index:5;"></div>
-                    </div>
-                    <hr>
-
-
-                    <div class="form-group">
-
-                        <h3>Receive Information</h3>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="salesorder-update-amount_apply">Payment Amount</label>
-                                    <input type="number" value="0.00" min="0" step="0.01" class="form-control" id="salesorder-update-amount_apply" placeholder="">
-
-                                </div>
-
-                                <div class="col-6">
-                                    <label for="salesorder-update-payment_mode">Payment Mode</label>
-                                    <select class="browser-default custom-select" name="customer_account" id="salesorder-update-payment_mode">
-                                        <option value="cash" selected="selected">Cash</option>
-                                        <option value="cheque">Cheque</option>
-                                        <option value="transfer">Transfer</option>
-                                    </select>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <label for="salesorder-update-salesperson">Salesperson:</label>
-                                <input type="text" class="form-control" name="customer_account" id="salesorder-update-salesperson" placeholder="">
-
-                            </div>
-                            <div class="col-6">
-                                <label for="salesorder-update-reference">Reference</label>
-                                <input class="form-control" type="text" id="salesorder-update-reference">
-                            </div>
-
-                        </div>
-
-                    </div>
                     <div class="form-group ">
 
                         <h3>Item Information</h3>
@@ -356,6 +306,59 @@
                             </table>
                         </div>
                     </div>
+                    <div class="form-group">
+
+                        <h3>Receive Information</h3>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="salesorder-update-amount_apply">Payment Amount</label>
+                                    <input type="number" value="0.00" min="0" step="0.01" class="form-control" id="salesorder-update-amount_apply" placeholder="">
+
+                                </div>
+
+                                <div class="col-6">
+                                    <label for="salesorder-update-payment_mode">Payment Mode</label>
+                                    <select class="browser-default custom-select" name="customer_account" id="salesorder-update-payment_mode">
+                                        <option value="cash" selected="selected">Cash</option>
+                                        <option value="cheque">Cheque</option>
+                                        <option value="transfer">Transfer</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="salesorder-update-salesperson">Salesperson:</label>
+                                <input type="text" class="form-control" name="customer_account" id="salesorder-update-salesperson" placeholder="">
+
+                            </div>
+                            <div class="col-6">
+                                <label for="salesorder-update-reference">Reference</label>
+                                <input class="form-control" type="text" id="salesorder-update-reference">
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="form-group position-relative">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="salesorder-search-customer_name">Customer Name</label>
+                                <input type="text" autocomplete="off" class="form-control" name="customer_account" id="salesorder-update-search-customer_name" placeholder="">
+                            </div>
+                            <div class="col-6">
+                                <label for="salesorder-update-search-customer_id">Account Number</label>
+                                <input type="text" autocomplete="off" class="form-control" name="customer_account" id="salesorder-update-search-customer_id" placeholder="">
+                            </div>
+                        </div>
+
+                        <!-- Customer search result -->
+                        <div id="salesorder-update-customer-search" class="m-0 bg-white w-100 position-absolute" style="z-index:5;"></div>
+                    </div>
+                    <hr>
+
                 </div>
             </div>
         </div>
@@ -400,7 +403,7 @@
                     <!--Header-->
 
                     <div class="modal-header">
-                        <p class="heading lead">Sales Order Detail</p>
+                        <p class="heading lead">Information</p>
 
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true" class="white-text">&times;</spans>
@@ -409,41 +412,84 @@
 
                     <div class="modal-body">
                         <div class="form-group ">
+                            <div class="form-group">
+                                <div class="pb-2 row ">
+                                    <div class="text-center col-4">
+                                        <h3 class="font-weight-bold">Amount Paid</h3>
+                                        <h5>RM <span id="update-salespayment_amountPaid-detail">0.00</span></h5>
+                                    </div>
+                                    <div class="text-center col-4">
+                                        <h3 class="font-weight-bold">Total Charge</h3>
+                                        <h5>RM <span id="update-salespayment_totalCharge-detail">0.00</span></h5>
+                                    </div>
+                                    <div class="text-center col-4">
+                                        <h3 class="font-weight-bold">Change</h3>
+                                        <h5>RM <span id="update-salespayment_exchange-detail">0.00</span></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
 
-                            <h3>Information</h3>
 
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <h3>Sales Order Detail</h3>
+                                    <table class="p-3 m-3">
+                                        <tr>
+                                            <td class="font-weight-bold">Sale Order ID</td>
+                                            <td>: <span id="saleorderdetail-sale_id"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold">Customer Account</td>
+                                            <td>: <span id="saleorderdetail-customer_account"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold">Customer Name</td>
+                                            <td>: <span id="saleorderdetail-customer_name"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold">Salesperson</td>
+                                            <td>: <span id="saleorderdetail-sale_salesperson"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold">Subtotal (RM)</td>
+                                            <td>: <span id="saleorderdetail-sale_subtotal"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold">Total Discount (RM)</td>
+                                            <td>: <span id="saleorderdetail-sale_discount_header"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold">Total Amount (RM)</td>
+                                            <td>: <span id="saleorderdetail-sale_total_amount"></span></td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                                <div class="col-6">
+                                    <h3>Payment Information</h3>
+                                    <table class="p-3 m-3">
+                                        <tr>
+                                            <td class="font-weight-bold">Payment Date</td>
+                                            <td>: <span id="salepaymentdetail-sale_payment_date"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold">Payment Time</td>
+                                            <td>: <span id="salepaymentdetail-sale_payment_time"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold">Payment Method</td>
+                                            <td>: <span id="salepaymentdetail-payment_method"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold">Reference</td>
+                                            <td>: <span id="salepaymentdetail-reference"></span></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
                             <div class="overflow-auto">
-                                <table class="p-3 m-3">
-                                    <tr>
-                                        <td class="font-weight-bold">Sale ID</td>
-                                        <td>: <span id="saleorderdetail-sale_id"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="font-weight-bold">Customer Account</td>
-                                        <td>: <span id="saleorderdetail-customer_account"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="font-weight-bold">Customer Name</td>
-                                        <td>: <span id="saleorderdetail-customer_name"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="font-weight-bold">Salesperson</td>
-                                        <td>: <span id="saleorderdetail-sale_salesperson"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="font-weight-bold">Subtotal (RM)</td>
-                                        <td>: <span id="saleorderdetail-sale_subtotal"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="font-weight-bold">Discount (%)</td>
-                                        <td>: <span id="saleorderdetail-sale_discount_header"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="font-weight-bold">Total Amount (RM)</td>
-                                        <td>: <span id="saleorderdetail-sale_total_amount"></span></td>
-                                    </tr>
-
-                                </table>
                                 <table class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead class="grey white-text">
                                         <tr>
@@ -486,5 +532,5 @@
     </div>
 </div>
 
-<script src="./dist/js/saleOrderPage.prod.js"></script>
-<!-- <script src="./saleOrderPage.js"></script> -->
+<!-- <script src="./dist/js/saleOrderPage.prod.js"></script> -->
+<script src="./saleOrderPage.js"></script>
