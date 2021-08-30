@@ -532,5 +532,5 @@
     </div>
 </div>
 
-<!-- <script src="./dist/js/saleOrderPage.prod.js"></script> -->
-<script src="./saleOrderPage.js"></script>
+<script src="./dist/js/saleOrderPage.prod.js"></script>
+<!-- <script src="./saleOrderPage.js"></script> -->
