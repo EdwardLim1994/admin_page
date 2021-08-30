@@ -42,27 +42,6 @@
                 </div>
                 <div class="modal-body">
 
-                    <!-- <div class="form-group">
-
-                        <h3>Payment Information</h3>
-                        <div class="row">
-                            <div class="col-4">
-                                <label for="update-salespayment-amount_apply">Payment Amount</label>
-                                <input readonly type="number" value="0.00" min="0" step="0.01" class="form-control" id="update-salespayment-amount_apply" placeholder="">
-
-                            </div>
-
-                            <div class="col-4">
-                                <label for="update-salespayment-payment_mode">Payment Mode</label>
-                                <input readonly type="text" class="form-control" id="update-salespayment-payment_mode" placeholder="">
-                            </div>
-                            <div class="col-4">
-                                <label for="update-salespayment-reference">Reference</label>
-                                <input readonly class="form-control" type="text" id="update-salespayment-reference">
-                            </div>
-                        </div>
-                    </div>
-                    <hr> -->
                     <div class="form-group ">
                         <div class="pb-2 row ">
                             <div class="text-center col-4">
