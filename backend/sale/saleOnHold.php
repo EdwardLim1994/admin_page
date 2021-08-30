@@ -28,7 +28,7 @@ switch ($postType) {
 		$recordsPerPage = 20;
 		$offsetValue = ($_POST['pageNum'] - 1) * $recordsPerPage;
 
-		$stmt = $mysqli->prepare("SELECT id, sale_id, customer_account, customer_name, sale_date, sale_phone_num, sale_salesperson, sale_subtotal, sale_discount_header, sale_total_amount, payment_status, isOnHold FROM sale_header WHERE isOnHold = 1 ORDER BY id desc limit $recordsPerPage OFFSET $offsetValue");
+		$stmt = $mysqli->prepare("SELECT id, sale_id, customer_account, customer_name, sale_date, sale_phone_num, sale_salesperson, sale_subtotal, sale_discount_header, sale_total_amount, payment_status, isOnHold, creation_time  FROM sale_header WHERE isOnHold = 1 ORDER BY id desc limit $recordsPerPage OFFSET $offsetValue");
 		$stmt->execute();
 		$result = $stmt->get_result();
 
