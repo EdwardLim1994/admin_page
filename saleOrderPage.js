@@ -1998,7 +1998,7 @@ function salesOrderMainFunction() {
 
                 renderTable("salesorder");
                 $.each(results, function (i, salesorder) {
-                    var splited_time = salesorder.creation_time.split(':') 
+                    var splited_time = (salesorder.creation_time).split(':') 
                     var time_hour = parseInt(splited_time[0]) > 12 ? parseInt(splited_time[0]) - 12 : parseInt(splited_time[0])
                     var time_minutes =  splited_time[1]
                     var time_stamp =  parseInt(splited_time[0]) > 12 ? "pm" : "am"
