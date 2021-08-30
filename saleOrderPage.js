@@ -155,9 +155,9 @@ function salesOrderMainFunction() {
 
 
     $("#editonholdSalesOrderSubmitBtn").click(function () {
-        if (parseFloat($("#update-salespayment_amountPaid").text()) <= 0) {
+        if (parseFloat($("#update-salesorder_amountPaid").text()) <= 0) {
             failedMessage("Failed", "Current payment amount is 0");
-        } else if (parseFloat($("#update-salespayment_totalCharge").text()) > parseFloat($("#update-salespayment_amountPaid").text())) {
+        } else if (parseFloat($("#update-salesorder_totalCharge").text()) > parseFloat($("#update-salesorder_amountPaid").text())) {
             failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
         } else if ($("#salesorder-update-item-bucket").find(".salesorder-update-noResultText").length > 0) {
             failedMessage("Failed", "No sales order added yet");
@@ -183,7 +183,7 @@ function salesOrderMainFunction() {
                 break;
 
             case ("Paid"):
-
+                console.log("triggered")
                 break;
         }
 
@@ -799,22 +799,6 @@ function salesOrderMainFunction() {
         })
     }
 
-    function updatesalespaymentCalculation() {
-        $("#salesorder-update-amount_apply").change(function () {
-            var amount = (parseFloat($(this).val())).toFixed(2);
-            $(this).val(amount);
-            $("#update-salespayment_amountPaid").empty().text(amount);
-
-            var amountPaid = parseFloat($("#update-salespayment_amountPaid").text());
-            var totalCharge = parseFloat($("#update-salespayment_totalCharge").text())
-            if (amountPaid > totalCharge) {
-                $("#update-salespayment_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
-            } else {
-                $("#update-salespayment_exchange").empty().text("0.00");
-            }
-        })
-    }
-
 
     // Item Search Function for Update Modal
     function updateItemSearchResults(pageNum) {
@@ -984,7 +968,20 @@ function salesOrderMainFunction() {
                         updateitemBucketTotalPrice(itemID);
                         updateitemBucketTotalDiscount();
                         updateitemBucketTotalCost();
-
+                        $("#salesorder-update-amount_apply").change(function () {
+                            var amount = (parseFloat($(this).val())).toFixed(2);
+                            $(this).val(amount);
+                            console.log("in updateitem select",(parseFloat($(this).val())).toFixed(2))
+                            $("#update-salesorder_amountPaid").empty().text();
+                
+                            var amountPaid = parseFloat($("#update-salesorder_amountPaid").text());
+                            var totalCharge = parseFloat($("#update-salesorder_totalCharge").text())
+                            if (amountPaid > totalCharge) {
+                                $("#update-salesorder_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
+                            } else {
+                                $("#update-salesorder_exchange").empty().text("0.00");
+                            }
+                        })
 
                         $(".update-itemQuantity").change(function () {
                             if ($(this).val() > parseInt($(this).attr("max"))) {
@@ -1044,7 +1041,7 @@ function salesOrderMainFunction() {
             totalCost += parseFloat(totalPrice);
         })
         $("#salesorder-update-total_cost").empty().html(totalCost.toFixed(2));
-        $("#update-salespayment_totalCharge").empty().text(totalCost.toFixed(2));
+        $("#update-salesorder_totalCharge").empty().text(totalCost.toFixed(2));
 
         if(parseFloat($("#update-salespayment_amountPaid").text()) > parseFloat($("#update-salespayment_totalCharge").text())){
             $("#update-salespayment_exchange").empty().text((parseFloat($("#update-salespayment_amountPaid").text()) - parseFloat($("#update-salespayment_totalCharge").text())).toFixed(2));
@@ -1128,12 +1125,12 @@ function salesOrderMainFunction() {
     }
 
     //add sale payment
-    function addSalesPayment(mode) {
+    function addSalesPayment() {
         var customer_name = $("#salesorder-update-search-customer_name").val();
         var sale_id = $("#update-salesorder_id").val();
         var payment_method = $("#salesorder-update-payment_mode").val();
-        var sale_amount = $("#update-salespayment_totalCharge").text();
-        var sale_payment = $("#update-salespayment_amountPaid").text();
+        var sale_amount = $("#update-salesorder_totalCharge").text();
+        var sale_payment = $("#update-salesorder_amountPaid").text();
         var reference = $("#salesorder-update-reference").val();
         var item_id = [];
         var qty = [];
@@ -1406,6 +1403,7 @@ function salesOrderMainFunction() {
                             // reference: reference
                         },
                         success: function (results) {
+                            console.log(results)
                             switch (results) {
                                 case ("Some input field is not set."):
                                     $("#addSalesOrderModal").modal("hide");
@@ -1567,7 +1565,9 @@ function salesOrderMainFunction() {
                 var salesOrder_results = "";
                 var total_amount = 0;
                 var total_discount = 0;
+                console.log(data);
                 $.each(data[2], function(i, item){
+                    
                     $("#salepaymentdetail-sale_payment_date").empty().text(item.sale_payment_date);
                     $("#salepaymentdetail-sale_payment_time").empty().text(item.sale_payment_time);
                     $("#salepaymentdetail-payment_method").empty().text(item.payment_method);
@@ -1713,8 +1713,6 @@ function salesOrderMainFunction() {
                     renderContent(JSON.parse(results), "salesorder");
                     $(".viewSalesOrderDetailBtn").click(function () {
                         viewSalesOrderDetail($(this));
-
-
                     })
                     //Update Sales Order Button
                     $(".editSalesOrderBtn").click(function () {
@@ -1739,7 +1737,7 @@ function salesOrderMainFunction() {
                         $("#salesorder-update-search-customer_id").val(tag.find(".customer_account").text())
                         //$("#salesorder-update-payment_mode").val(tag.find(".payment_mode").text());
                         $("#salesorder-update-salesperson").val(tag.find(".sale_salesperson").text());
-                        $("#update-salesorder_order_status").val(tag.find(".payment_status").text());
+                        $("#update-salesorder_payment_status").val(tag.find(".payment_status").text());
                         $("#update-salesorder_isOnHold").val(tag.find(".isOnHold").text());
                         $("#salesorder-update-reference").val(tag.data("reference"));
 
@@ -1765,7 +1763,6 @@ function salesOrderMainFunction() {
                             $("#salesorder-update-search-item").attr("readonly", false);
                         }
 
-                        updatesalespaymentCalculation();
                         $.ajax({
                             type: "POST",
                             url: "./backend/sale/saleOrder.php",
@@ -1814,7 +1811,7 @@ function salesOrderMainFunction() {
                                             <td class="update-item_no">${value.item_no}</td>    
                                             <td class="update-description">${value.description}</td>
                                             <td>
-                                                <input ${isPaid ? "readonly" : ""} type="number" class="form-control update-itemQuantity" min="1" max="${max_quantity > 0 ? max_quantity : 1}" value="${value.qty}">
+                                                <input ${isPaid ? "readonly" : ""} type="number" class="form-control update-itemQuantity" min="1" value="${value.qty}">
                                             </td>
                                             <td>
                                                 <input ${isPaid ? "readonly" : ""} type="text" class="form-control update-itemUnit" placeholder="unit" val="${value.uom}">
@@ -1883,6 +1880,21 @@ function salesOrderMainFunction() {
                                         updateitemBucketTotalCost();
 
                                     });
+
+                                    $("#salesorder-update-amount_apply").focusout(function () {
+                                        var amount = (parseFloat($(this).val())).toFixed(2);
+                                        $(this).val(amount);
+                                        console.log("in on click edit button", $(this).val())
+                                        $("#update-salesorder_amountPaid").empty().html($(this).val());
+                            
+                                        var amountPaid = parseFloat($("#update-salesorder_amountPaid").text());
+                                        var totalCharge = parseFloat($("#update-salesorder_totalCharge").text())
+                                        if (amountPaid > totalCharge) {
+                                            $("#update-salesorder_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
+                                        } else {
+                                            $("#update-salesorder_exchange").empty().text("0.00");
+                                        }
+                                    })
                                 }
                             },
                             error: function (e) {
@@ -1942,6 +1954,7 @@ function salesOrderMainFunction() {
                     ' <th scope="col" class="th-lg">Sale ID</th> ' +
                     ' <th scope="col" class="th-lg">Customer Account</th> ' +
                     ' <th scope="col" class="th-lg">Customer Name</th> ' +
+                    ' <th scope="col" class="th-lg">Sale Time</th> ' +
                     ' <th scope="col" class="th-lg">Sale Date</th> ' +
                     ' <th scope="col" class="th-lg">Sale Phone Number</th> ' +
                     ' <th scope="col" class="th-lg">Saleperson</th> ' +
@@ -1961,6 +1974,7 @@ function salesOrderMainFunction() {
                     ' <th scope="col" class="th-lg">Sale ID</th> ' +
                     ' <th scope="col" class="th-lg">Customer Account</th> ' +
                     ' <th scope="col" class="th-lg">Customer Name</th> ' +
+                    ' <th scope="col" class="th-lg">Sale Time</th> ' +
                     ' <th scope="col" class="th-lg">Sale Date</th> ' +
                     ' <th scope="col" class="th-lg">Sale Phone Number</th> ' +
                     ' <th scope="col" class="th-lg">Saleperson</th> ' +
@@ -1984,6 +1998,11 @@ function salesOrderMainFunction() {
 
                 renderTable("salesorder");
                 $.each(results, function (i, salesorder) {
+                    var splited_time = salesorder.creation_time.split(':') 
+                    var time_hour = parseInt(splited_time[0]) > 12 ? parseInt(splited_time[0]) - 12 : parseInt(splited_time[0])
+                    var time_minutes =  splited_time[1]
+                    var time_stamp =  parseInt(splited_time[0]) > 12 ? "pm" : "am"
+                    var time = time_hour.toString() + ":" + time_minutes + " " + time_stamp;
                     $("#salesorderContent").append(`
                         <tr class="salesorder-row" data-salesorder-id="${salesorder.sale_id}">
                             <th>${++i}</th>
@@ -1998,6 +2017,7 @@ function salesOrderMainFunction() {
                             <td class="sale_id">${salesorder.sale_id}</td>
                             <td class="customer_account">${salesorder.customer_account}</td>
                             <td class="customer_name">${salesorder.customer_name}</td>
+                            <td class="sale_time">${time}</td>
                             <td class="sale_date">${salesorder.sale_date}</td>
                             <td class="sale_phone_num">${salesorder.sale_phone_num}</td>
                             <td class="sale_salesperson">${salesorder.sale_salesperson}</td>
