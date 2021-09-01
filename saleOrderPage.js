@@ -145,55 +145,45 @@ function salesOrderMainFunction() {
 
     //Submit Sales Order on add
     $("#addSalesOrderSubmitBtn").click(function () {
-        $(this).attr("disabled", true).empty().html(`
-        <div class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        `);
+
+        addSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#addSalesOrderSubmitBtn");
 
         setTimeout(function () {
             if (parseFloat($("#salespayment_amountPaid").text()) <= 0) {
                 failedMessage("Failed", "Current payment amount is 0");
-                $("#addSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+                removeSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#addSalesOrderSubmitBtn", "Pay");
             } else if (parseFloat($("#salespayment_totalCharge").text()) > parseFloat($("#salespayment_amountPaid").text())) {
                 failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
-                $("#addSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+                removeSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#addSalesOrderSubmitBtn", "Pay");
             } else if ($("#salesorder-item-bucket").find(".salesorder-noResultText").length > 0) {
                 failedMessage("Failed", "No sales order added yet");
-                $("#addSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+                removeSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#addSalesOrderSubmitBtn", "Pay");
             } else {
                 addSalesOrder("add");
-                $("#addSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+                removeSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#addSalesOrderSubmitBtn", "Pay");
             }
-            
+
         }, 1000);
     })
 
 
     $("#onholdSalesOrderSubmitBtn").click(function () {
-        $(this).attr("disabled", true).empty().html(`
-        <div class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        `);
+
+        addSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#onholdSalesOrderSubmitBtn");
 
         setTimeout(function () {
             if (parseFloat($("#update-salesorder_amountPaid").text()) <= 0) {
                 failedMessage("Failed", "Current payment amount is 0");
-                $("#onholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('On Hold');
+                removeSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#onholdSalesOrderSubmitBtn", "On Hold");
             } else if (parseFloat($("#update-salesorder_totalCharge").text()) > parseFloat($("#update-salesorder_amountPaid").text())) {
                 failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
-                $("#onholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('On Hold');
+                removeSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#onholdSalesOrderSubmitBtn", "On Hold");
             } else if ($("#salesorder-update-item-bucket").find(".salesorder-update-noResultText").length > 0) {
                 failedMessage("Failed", "No sales order added yet");
-                $("#onholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('On Hold');
+                removeSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#onholdSalesOrderSubmitBtn", "On Hold");
             } else {
                 addSalesOrder("onhold");
-                $("#onholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('On Hold');
+                removeSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#onholdSalesOrderSubmitBtn", "On Hold");
             }
         }, 1000);
     })
@@ -201,33 +191,26 @@ function salesOrderMainFunction() {
 
     $("#editonholdSalesOrderSubmitBtn").click(function () {
 
-        $(this).attr("disabled", true).empty().html(`
-        <div class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        `);
+
+        addSpinnerOnSubmit("#editonholdSalesOrderSubmitBtn, #editSalesOrderSubmitBtn", "#editonholdSalesOrderSubmitBtn");
 
         setTimeout(function () {
             if (parseFloat($("#update-salesorder_amountPaid").text()) <= 0) {
                 failedMessage("Failed", "Current payment amount is 0");
-                $("#editonholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+                removeSpinnerOnSubmit("#editonholdSalesOrderSubmitBtn, #editSalesOrderSubmitBtn", "#editonholdSalesOrderSubmitBtn", "Pay");
             } else if (parseFloat($("#update-salesorder_totalCharge").text()) > parseFloat($("#update-salesorder_amountPaid").text())) {
                 failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
-                $("#editonholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+                removeSpinnerOnSubmit("#editonholdSalesOrderSubmitBtn, #editSalesOrderSubmitBtn", "#editonholdSalesOrderSubmitBtn", "Pay");
             } else if ($("#salesorder-update-item-bucket").find(".salesorder-update-noResultText").length > 0) {
                 failedMessage("Failed", "No sales order added yet");
-                $("#editonholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+                removeSpinnerOnSubmit("#editonholdSalesOrderSubmitBtn, #editSalesOrderSubmitBtn", "#editonholdSalesOrderSubmitBtn", "Pay");
             } else {
                 addSalesPayment();
-                $("#editonholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+                removeSpinnerOnSubmit("#editonholdSalesOrderSubmitBtn, #editSalesOrderSubmitBtn", "#editonholdSalesOrderSubmitBtn", "Pay");
             }
 
 
         }, 1000);
-
-
 
     })
 
@@ -241,19 +224,19 @@ function salesOrderMainFunction() {
             </div>
         </div>
         `);
-
+        addSpinnerOnSubmit("#editonholdSalesOrderSubmitBtn, #editSalesOrderSubmitBtn", "#editSalesOrderSubmitBtn");
         setTimeout(function () {
             switch ($("#update-salesorder_payment_status").val()) {
                 case ("UnPaid"):
                     switch ($("#update-salesorder_isOnHold").val()) {
                         case ("Yes"):
                             editSalesOrder("onhold");
-                            $("#editSalesOrderSubmitBtn").attr("disabled", false).empty().text('Update');
+                            removeSpinnerOnSubmit("#editonholdSalesOrderSubmitBtn, #editSalesOrderSubmitBtn", "#editSalesOrderSubmitBtn", "Update");
                             break;
 
                         case ("No"):
                             editSalesOrder("update");
-                            $("#editSalesOrderSubmitBtn").attr("disabled", false).empty().text('Update');
+                            removeSpinnerOnSubmit("#editonholdSalesOrderSubmitBtn, #editSalesOrderSubmitBtn", "#editSalesOrderSubmitBtn", "Update");
                             break;
                     }
 
@@ -261,7 +244,7 @@ function salesOrderMainFunction() {
 
                 case ("Paid"):
                     console.log("triggered")
-                    $("#editSalesOrderSubmitBtn").attr("disabled", false).empty().text('Update');
+                    removeSpinnerOnSubmit("#editonholdSalesOrderSubmitBtn, #editSalesOrderSubmitBtn", "#editSalesOrderSubmitBtn", "Update");
                     break;
             }
 
@@ -283,6 +266,22 @@ function salesOrderMainFunction() {
         }
 
     })
+
+    function addSpinnerOnSubmit(button_disabled, button_spinner) {
+        $(button_disabled).attr("disabled", true);
+        $(button_spinner).empty().html(`
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        `);
+    }
+
+    function removeSpinnerOnSubmit(button_disabled, button_spinner, text) {
+        $(button_disabled).attr("disabled", false);
+        $(button_spinner).empty().text(text);
+    }
 
 
     //Customer Search Function for Add Modal
