@@ -145,48 +145,127 @@ function salesOrderMainFunction() {
 
     //Submit Sales Order on add
     $("#addSalesOrderSubmitBtn").click(function () {
-        addSalesOrder("add");
+        $(this).attr("disabled", true).empty().html(`
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        `);
+
+        setTimeout(function () {
+            if (parseFloat($("#salespayment_amountPaid").text()) <= 0) {
+                failedMessage("Failed", "Current payment amount is 0");
+                $("#addSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+            } else if (parseFloat($("#salespayment_totalCharge").text()) > parseFloat($("#salespayment_amountPaid").text())) {
+                failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
+                $("#addSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+            } else if ($("#salesorder-item-bucket").find(".salesorder-noResultText").length > 0) {
+                failedMessage("Failed", "No sales order added yet");
+                $("#addSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+            } else {
+                addSalesOrder("add");
+                $("#addSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+            }
+            
+        }, 1000);
     })
 
 
     $("#onholdSalesOrderSubmitBtn").click(function () {
-        addSalesOrder("onhold");
+        $(this).attr("disabled", true).empty().html(`
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        `);
+
+        setTimeout(function () {
+            if (parseFloat($("#update-salesorder_amountPaid").text()) <= 0) {
+                failedMessage("Failed", "Current payment amount is 0");
+                $("#onholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('On Hold');
+            } else if (parseFloat($("#update-salesorder_totalCharge").text()) > parseFloat($("#update-salesorder_amountPaid").text())) {
+                failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
+                $("#onholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('On Hold');
+            } else if ($("#salesorder-update-item-bucket").find(".salesorder-update-noResultText").length > 0) {
+                failedMessage("Failed", "No sales order added yet");
+                $("#onholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('On Hold');
+            } else {
+                addSalesOrder("onhold");
+                $("#onholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('On Hold');
+            }
+        }, 1000);
     })
 
 
     $("#editonholdSalesOrderSubmitBtn").click(function () {
-        if (parseFloat($("#update-salesorder_amountPaid").text()) <= 0) {
-            failedMessage("Failed", "Current payment amount is 0");
-        } else if (parseFloat($("#update-salesorder_totalCharge").text()) > parseFloat($("#update-salesorder_amountPaid").text())) {
-            failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
-        } else if ($("#salesorder-update-item-bucket").find(".salesorder-update-noResultText").length > 0) {
-            failedMessage("Failed", "No sales order added yet");
-        } else {
-            addSalesPayment();
-        }
+
+        $(this).attr("disabled", true).empty().html(`
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        `);
+
+        setTimeout(function () {
+            if (parseFloat($("#update-salesorder_amountPaid").text()) <= 0) {
+                failedMessage("Failed", "Current payment amount is 0");
+                $("#editonholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+            } else if (parseFloat($("#update-salesorder_totalCharge").text()) > parseFloat($("#update-salesorder_amountPaid").text())) {
+                failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
+                $("#editonholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+            } else if ($("#salesorder-update-item-bucket").find(".salesorder-update-noResultText").length > 0) {
+                failedMessage("Failed", "No sales order added yet");
+                $("#editonholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+            } else {
+                addSalesPayment();
+                $("#editonholdSalesOrderSubmitBtn").attr("disabled", false).empty().text('Pay');
+            }
+
+
+        }, 1000);
+
+
+
     })
 
     //Submit Sales Order on update
     $("#editSalesOrderSubmitBtn").click(function () {
-        switch ($("#update-salesorder_payment_status").val()) {
-            case ("UnPaid"):
-                switch ($("#update-salesorder_isOnHold").val()) {
-                    case ("Yes"):
-                        editSalesOrder("onhold");
-                        break;
 
-                    case ("No"):
-                        editSalesOrder("update");
-                        break;
-                }
+        $(this).attr("disabled", true).empty().html(`
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        `);
 
-                break;
+        setTimeout(function () {
+            switch ($("#update-salesorder_payment_status").val()) {
+                case ("UnPaid"):
+                    switch ($("#update-salesorder_isOnHold").val()) {
+                        case ("Yes"):
+                            editSalesOrder("onhold");
+                            $("#editSalesOrderSubmitBtn").attr("disabled", false).empty().text('Update');
+                            break;
 
-            case ("Paid"):
-                console.log("triggered")
-                break;
-        }
+                        case ("No"):
+                            editSalesOrder("update");
+                            $("#editSalesOrderSubmitBtn").attr("disabled", false).empty().text('Update');
+                            break;
+                    }
 
+                    break;
+
+                case ("Paid"):
+                    console.log("triggered")
+                    $("#editSalesOrderSubmitBtn").attr("disabled", false).empty().text('Update');
+                    break;
+            }
+
+        }, 1000);
     })
 
     //Submit Sales Order on delete
@@ -463,20 +542,20 @@ function salesOrderMainFunction() {
                     var item_id = [];
                     var itemID;
                     //if (!isItemSoldOut) {
-                        $.each($(".update-item-row"), function (i, v) {
-                            item_id.push($(`.update-item-row:eq(${i})`).data("id"))
-                        });
-                        $.each(JSON.parse(results), function (i, value) {
-                            itemID = value.item_id;
-                            //if (value.qty_available > 0) {
-                            //   isItemSoldOut = false;
+                    $.each($(".update-item-row"), function (i, v) {
+                        item_id.push($(`.update-item-row:eq(${i})`).data("id"))
+                    });
+                    $.each(JSON.parse(results), function (i, value) {
+                        itemID = value.item_id;
+                        //if (value.qty_available > 0) {
+                        //   isItemSoldOut = false;
 
-                            if ($.inArray(value.item_id, item_id) > -1) {
-                                var itemQty = $('[data-id=' + value.item_id + ']').find(".itemQuantity").val();
-                                $('[data-id=' + value.item_id + ']').find(".itemQuantity").val((parseInt(itemQty) + 1));
-                                return false;
-                            } else {
-                                item_results += `
+                        if ($.inArray(value.item_id, item_id) > -1) {
+                            var itemQty = $('[data-id=' + value.item_id + ']').find(".itemQuantity").val();
+                            $('[data-id=' + value.item_id + ']').find(".itemQuantity").val((parseInt(itemQty) + 1));
+                            return false;
+                        } else {
+                            item_results += `
                                 <tr class="item-row" data-id="${value.item_id}">
                                     <td>
                                         <button class="btn btn-danger deleteItemBtn py-md-3 px-md-4 p-sm-3">
@@ -498,57 +577,57 @@ function salesOrderMainFunction() {
                                     <td class="total_price"></td>
                                 </tr>
                                 `;
-                            }
-                        });
-                        //} else {
-                        //    isItemSoldOut = true;
-                        //}
+                        }
+                    });
+                    //} else {
+                    //    isItemSoldOut = true;
+                    //}
 
-                        //if (isItemSoldOut == false) {
-                        if ($("#salesorder-item-bucket").find(".salesorder-noResultText").length > 0) {
-                            $("#salesorder-item-bucket").empty();
+                    //if (isItemSoldOut == false) {
+                    if ($("#salesorder-item-bucket").find(".salesorder-noResultText").length > 0) {
+                        $("#salesorder-item-bucket").empty();
+                    }
+
+                    if (item_results != "") {
+                        $("#salesorder-item-bucket").append(item_results);
+                    }
+
+                    itemBucketTotalPrice(itemID);
+                    itemBucketTotalDiscount();
+                    itemBucketTotalCost();
+                    salespaymentCalculation();
+
+                    $(".itemQuantity").change(function () {
+                        if ($(this).val() > parseInt($(this).attr("max"))) {
+                            $(this).val($(this).attr("max"));
                         }
 
-                        if (item_results != "") {
-                            $("#salesorder-item-bucket").append(item_results);
+                        if ($(this).val() < parseInt($(this).attr("min"))) {
+                            $(this).val($(this).attr("min"));
                         }
-
-                        itemBucketTotalPrice(itemID);
-                        itemBucketTotalDiscount();
+                        itemBucketTotalPrice($(this).closest("tr").data("id"));
+                        itemBucketTotalDiscount()
                         itemBucketTotalCost();
-                        salespaymentCalculation();
 
-                        $(".itemQuantity").change(function () {
-                            if ($(this).val() > parseInt($(this).attr("max"))) {
-                                $(this).val($(this).attr("max"));
-                            }
+                    })
 
-                            if ($(this).val() < parseInt($(this).attr("min"))) {
-                                $(this).val($(this).attr("min"));
-                            }
-                            itemBucketTotalPrice($(this).closest("tr").data("id"));
-                            itemBucketTotalDiscount()
-                            itemBucketTotalCost();
+                    $(".itemDiscount").change(function () {
+                        if ($(this).val() > parseInt($(this).attr("max"))) {
+                            $(this).val($(this).attr("max"));
+                        }
 
-                        })
+                        if ($(this).val() < parseInt($(this).attr("min"))) {
+                            $(this).val($(this).attr("min"));
+                        }
 
-                        $(".itemDiscount").change(function () {
-                            if ($(this).val() > parseInt($(this).attr("max"))) {
-                                $(this).val($(this).attr("max"));
-                            }
+                        itemBucketTotalPrice($(this).closest("tr").data("id"));
+                        itemBucketTotalDiscount()
+                        itemBucketTotalCost();
 
-                            if ($(this).val() < parseInt($(this).attr("min"))) {
-                                $(this).val($(this).attr("min"));
-                            }
-
-                            itemBucketTotalPrice($(this).closest("tr").data("id"));
-                            itemBucketTotalDiscount()
-                            itemBucketTotalCost();
-
-                        });
-                        //}
-                        itemBucketRemoveItem();
-                        $("#salespayment_totalCharge").empty().text($("#salesorder-total_cost").text());
+                    });
+                    //}
+                    itemBucketRemoveItem();
+                    $("#salespayment_totalCharge").empty().text($("#salesorder-total_cost").text());
 
                     // } else {
                     //     $("#salesorder-item-search").empty().removeClass("border");
@@ -583,7 +662,7 @@ function salesOrderMainFunction() {
             totalCost += parseFloat(totalPrice);
         })
         $("#salesorder-total_cost, #salespayment_totalCharge").empty().html(totalCost.toFixed(2));
-        if(parseFloat($("#salespayment_amountPaid").text()) > parseFloat($("#salespayment_totalCharge").text())){
+        if (parseFloat($("#salespayment_amountPaid").text()) > parseFloat($("#salespayment_totalCharge").text())) {
             $("#salespayment_exchange").empty().text((parseFloat($("#salespayment_amountPaid").text()) - parseFloat($("#salespayment_totalCharge").text())).toFixed(2));
         }
     }
@@ -915,21 +994,21 @@ function salesOrderMainFunction() {
                     var itemID;
                     var item_id = [];
                     //if (!isItemSoldOut) {
-                        $.each($(".update-item-row"), function (i, v) {
-                            item_id.push($(`.update-item-row:eq(${i})`).data("id"))
-                        });
-                        $.each(JSON.parse(results), function (i, value) {
-                            itemID = value.item_id;
-                            //if (value.qty_available > 0) {
-                            //isItemSoldOut = false;
+                    $.each($(".update-item-row"), function (i, v) {
+                        item_id.push($(`.update-item-row:eq(${i})`).data("id"))
+                    });
+                    $.each(JSON.parse(results), function (i, value) {
+                        itemID = value.item_id;
+                        //if (value.qty_available > 0) {
+                        //isItemSoldOut = false;
 
-                            if ($.inArray(value.item_id, item_id) > -1) {
-                                var itemQty = $('[data-id=' + value.item_id + ']').find(".update-itemQuantity").val();
-                                $('[data-id=' + value.item_id + ']').find(".update-itemQuantity").val((parseInt(itemQty) + 1));
+                        if ($.inArray(value.item_id, item_id) > -1) {
+                            var itemQty = $('[data-id=' + value.item_id + ']').find(".update-itemQuantity").val();
+                            $('[data-id=' + value.item_id + ']').find(".update-itemQuantity").val((parseInt(itemQty) + 1));
 
-                            } else {
+                        } else {
 
-                                item_results += `
+                            item_results += `
                                     <tr class="update-item-row" data-id="${value.item_id}">
                                         <td>
                                             <button class="btn btn-danger update-deleteItemBtn py-md-3 px-md-4 p-sm-3">
@@ -951,68 +1030,68 @@ function salesOrderMainFunction() {
                                         <td class="update-total_price"></td>
                                     </tr>
                                     `;
-                            }
-
-                            //} else {
-                            //    isItemSoldOut = true;
-                            //}
-                        })
-                        //if (isItemSoldOut == false) {
-                        if ($("#salesorder-update-item-bucket").find(".salesorder-update-noResultText").length > 0) {
-                            $("#salesorder-update-item-bucket").empty();
-                        }
-                        if (item_results != "") {
-                            $("#salesorder-update-item-bucket").append(item_results);
                         }
 
-                        updateitemBucketTotalPrice(itemID);
+                        //} else {
+                        //    isItemSoldOut = true;
+                        //}
+                    })
+                    //if (isItemSoldOut == false) {
+                    if ($("#salesorder-update-item-bucket").find(".salesorder-update-noResultText").length > 0) {
+                        $("#salesorder-update-item-bucket").empty();
+                    }
+                    if (item_results != "") {
+                        $("#salesorder-update-item-bucket").append(item_results);
+                    }
+
+                    updateitemBucketTotalPrice(itemID);
+                    updateitemBucketTotalDiscount();
+                    updateitemBucketTotalCost();
+                    $("#salesorder-update-amount_apply").change(function () {
+                        var amount = (parseFloat($(this).val())).toFixed(2);
+                        $(this).val(amount);
+                        console.log("in updateitem select", (parseFloat($(this).val())).toFixed(2))
+                        $("#update-salesorder_amountPaid").empty().text();
+
+                        var amountPaid = parseFloat($("#update-salesorder_amountPaid").text());
+                        var totalCharge = parseFloat($("#update-salesorder_totalCharge").text())
+                        if (amountPaid > totalCharge) {
+                            $("#update-salesorder_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
+                        } else {
+                            $("#update-salesorder_exchange").empty().text("0.00");
+                        }
+                    })
+
+                    $(".update-itemQuantity").change(function () {
+                        if ($(this).val() > parseInt($(this).attr("max"))) {
+                            $(this).val($(this).attr("max"));
+                        }
+
+                        if ($(this).val() < parseInt($(this).attr("min"))) {
+                            $(this).val($(this).attr("min"));
+                        }
+                        updateitemBucketTotalPrice($(this).closest("tr").data("id"));
                         updateitemBucketTotalDiscount();
                         updateitemBucketTotalCost();
-                        $("#salesorder-update-amount_apply").change(function () {
-                            var amount = (parseFloat($(this).val())).toFixed(2);
-                            $(this).val(amount);
-                            console.log("in updateitem select",(parseFloat($(this).val())).toFixed(2))
-                            $("#update-salesorder_amountPaid").empty().text();
-                
-                            var amountPaid = parseFloat($("#update-salesorder_amountPaid").text());
-                            var totalCharge = parseFloat($("#update-salesorder_totalCharge").text())
-                            if (amountPaid > totalCharge) {
-                                $("#update-salesorder_exchange").empty().text((amountPaid - totalCharge).toFixed(2));
-                            } else {
-                                $("#update-salesorder_exchange").empty().text("0.00");
-                            }
-                        })
 
-                        $(".update-itemQuantity").change(function () {
-                            if ($(this).val() > parseInt($(this).attr("max"))) {
-                                $(this).val($(this).attr("max"));
-                            }
+                    });
 
-                            if ($(this).val() < parseInt($(this).attr("min"))) {
-                                $(this).val($(this).attr("min"));
-                            }
-                            updateitemBucketTotalPrice($(this).closest("tr").data("id"));
-                            updateitemBucketTotalDiscount();
-                            updateitemBucketTotalCost();
+                    $(".update-itemDiscount").change(function () {
+                        if ($(this).val() > parseInt($(this).attr("max"))) {
+                            $(this).val($(this).attr("max"));
+                        }
 
-                        });
+                        if ($(this).val() < parseInt($(this).attr("min"))) {
+                            $(this).val($(this).attr("min"));
+                        }
 
-                        $(".update-itemDiscount").change(function () {
-                            if ($(this).val() > parseInt($(this).attr("max"))) {
-                                $(this).val($(this).attr("max"));
-                            }
+                        updateitemBucketTotalPrice($(this).closest("tr").data("id"));
+                        updateitemBucketTotalDiscount();
+                        updateitemBucketTotalCost();
 
-                            if ($(this).val() < parseInt($(this).attr("min"))) {
-                                $(this).val($(this).attr("min"));
-                            }
-
-                            updateitemBucketTotalPrice($(this).closest("tr").data("id"));
-                            updateitemBucketTotalDiscount();
-                            updateitemBucketTotalCost();
-
-                        });
-                        //}
-                        updateitemBucketRemoveItem();
+                    });
+                    //}
+                    updateitemBucketRemoveItem();
                     // } else {
                     //     $("#salesorder-update-item-search").empty().removeClass("border");
                     //     $("#salesorder-update-search-item").val("");
@@ -1043,7 +1122,7 @@ function salesOrderMainFunction() {
         $("#salesorder-update-total_cost").empty().html(totalCost.toFixed(2));
         $("#update-salesorder_totalCharge").empty().text(totalCost.toFixed(2));
 
-        if(parseFloat($("#update-salespayment_amountPaid").text()) > parseFloat($("#update-salespayment_totalCharge").text())){
+        if (parseFloat($("#update-salespayment_amountPaid").text()) > parseFloat($("#update-salespayment_totalCharge").text())) {
             $("#update-salespayment_exchange").empty().text((parseFloat($("#update-salespayment_amountPaid").text()) - parseFloat($("#update-salespayment_totalCharge").text())).toFixed(2));
         }
 
@@ -1199,7 +1278,7 @@ function salesOrderMainFunction() {
 
         if ($("#salesorder-item-bucket").find(".salesorder-noResultText").length > 0) {
             failedMessage("Failed", "Item bucket is empty");
-            $(".btnDismiss").click(function(){
+            $(".btnDismiss").click(function () {
                 $("#salesorder-search-item").focus();
             })
         } else {
@@ -1349,7 +1428,7 @@ function salesOrderMainFunction() {
             case ("onhold"):
                 if ($("#salesorder-update-item-bucket").find(".salesorder-update-noResultText").length > 0) {
                     failedMessage("Failed", "Item bucket is empty");
-                    $(".btnDismiss").click(function(){
+                    $(".btnDismiss").click(function () {
                         $("#salesorder-search-item").focus();
                     })
                 } else {
@@ -1437,7 +1516,7 @@ function salesOrderMainFunction() {
                 } else {
 
                     salesperson = $("#salesorder-update-salesperson").val();
-                    sale_subtotal = (parseFloat( $("#salesorder-update-total_discount").text()) + parseFloat($("#salesorder-update-total_cost").text())).toFixed(2);
+                    sale_subtotal = (parseFloat($("#salesorder-update-total_discount").text()) + parseFloat($("#salesorder-update-total_cost").text())).toFixed(2);
                     sale_discount_header = $("#salesorder-update-total_discount").text();
                     sale_total_amount = $("#salesorder-update-total_cost").text();
                     customer_name = $("#salesorder-update-search-customer_name").val();
@@ -1566,8 +1645,8 @@ function salesOrderMainFunction() {
                 var total_amount = 0;
                 var total_discount = 0;
                 console.log(data);
-                $.each(data[2], function(i, item){
-                    
+                $.each(data[2], function (i, item) {
+
                     $("#salepaymentdetail-sale_payment_date").empty().text(item.sale_payment_date);
                     $("#salepaymentdetail-sale_payment_time").empty().text(item.sale_payment_time);
                     $("#salepaymentdetail-payment_method").empty().text(item.payment_method);
@@ -1794,10 +1873,10 @@ function salesOrderMainFunction() {
                                                 itemID: value.item_id
                                             },
                                             async: false,
-                                            success: function(results){
+                                            success: function (results) {
                                                 max_quantity = parseInt(results);
                                             },
-                                            error: function(e){
+                                            error: function (e) {
                                                 console.log(e);
                                             }
                                         })
@@ -1886,7 +1965,7 @@ function salesOrderMainFunction() {
                                         $(this).val(amount);
                                         console.log("in on click edit button", $(this).val())
                                         $("#update-salesorder_amountPaid").empty().html($(this).val());
-                            
+
                                         var amountPaid = parseFloat($("#update-salesorder_amountPaid").text());
                                         var totalCharge = parseFloat($("#update-salesorder_totalCharge").text())
                                         if (amountPaid > totalCharge) {
@@ -1998,10 +2077,10 @@ function salesOrderMainFunction() {
 
                 renderTable("salesorder");
                 $.each(results, function (i, salesorder) {
-                    var splited_time = (salesorder.creation_time).split(':') 
+                    var splited_time = (salesorder.creation_time).split(':')
                     var time_hour = parseInt(splited_time[0]) > 12 ? parseInt(splited_time[0]) - 12 : parseInt(splited_time[0])
-                    var time_minutes =  splited_time[1]
-                    var time_stamp =  parseInt(splited_time[0]) > 12 ? "pm" : "am"
+                    var time_minutes = splited_time[1]
+                    var time_stamp = parseInt(splited_time[0]) > 12 ? "pm" : "am"
                     var time = time_hour.toString() + ":" + time_minutes + " " + time_stamp;
                     $("#salesorderContent").append(`
                         <tr class="salesorder-row" data-salesorder-id="${salesorder.sale_id}">
