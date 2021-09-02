@@ -172,19 +172,8 @@ function salesOrderMainFunction() {
         addSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#onholdSalesOrderSubmitBtn");
 
         setTimeout(function () {
-            if (parseFloat($("#update-salesorder_amountPaid").text()) <= 0) {
-                failedMessage("Failed", "Current payment amount is 0");
-                removeSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#onholdSalesOrderSubmitBtn", "On Hold");
-            } else if (parseFloat($("#update-salesorder_totalCharge").text()) > parseFloat($("#update-salesorder_amountPaid").text())) {
-                failedMessage("Failed", "Amount paid is not enough to fulfill current charge");
-                removeSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#onholdSalesOrderSubmitBtn", "On Hold");
-            } else if ($("#salesorder-update-item-bucket").find(".salesorder-update-noResultText").length > 0) {
-                failedMessage("Failed", "No sales order added yet");
-                removeSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#onholdSalesOrderSubmitBtn", "On Hold");
-            } else {
-                addSalesOrder("onhold");
-                removeSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#onholdSalesOrderSubmitBtn", "On Hold");
-            }
+            addSalesOrder("onhold");
+            removeSpinnerOnSubmit("#addSalesOrderSubmitBtn, #onholdSalesOrderSubmitBtn", "#onholdSalesOrderSubmitBtn", "On Hold");
         }, 1000);
     })
 
