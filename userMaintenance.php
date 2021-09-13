@@ -8,6 +8,11 @@ $stmt->execute();
 $result = $stmt->get_result();
 $current_session = mysqli_fetch_assoc($result)['current_session_id'];
 
+$stmt = $mysqli->prepare("SELECT para_description FROM parameter where para_code = 'homepage'");
+$stmt->execute();
+$result = $stmt->get_result();
+$homepage_url = mysqli_fetch_assoc($result)['para_description'];
+
 $stmt->close();
 mysqli_close($mysqli);
 
@@ -75,7 +80,7 @@ else
 
                     </div>
                     <div class="col-4 text-center my-auto">
-                        <a href="https://nightcatdigitalsolutions.com/avenger/menu.php">
+                        <a href="<?= $homepage_url ?>">
                             <img class="img-fluid rounded logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
                         </a>
                     </div>
