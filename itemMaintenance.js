@@ -275,7 +275,7 @@ $(document).ready(function () {
             //dataType: "json",
             success: function (results) {
 
-                if (results == "0 results") {
+                if (results.replace(/\"/g, "") == "0 results" || results.replace(/\"/g, "") == "No result") {
 
                     renderTable("item");
                     tableSetting("item");

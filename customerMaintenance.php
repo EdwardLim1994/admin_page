@@ -8,6 +8,10 @@ $stmt->execute();
 $result = $stmt->get_result();
 $current_session = mysqli_fetch_assoc($result)['current_session_id'];
 
+$stmt = $mysqli->prepare("SELECT para_description FROM parameter where para_code = 'homepage'");
+$stmt->execute();
+$result = $stmt->get_result();
+$homepage_url = mysqli_fetch_assoc($result)['para_description'];
 
 $stmt->close();
 mysqli_close($mysqli);
@@ -70,19 +74,19 @@ else
         <div class="blue">
             <div class="container-fluid">
                 <div class="row py-2">
-                    <div class="col-4 my-auto ">
+                    <div class="col-md-4 my-auto ">
 
                     </div>
-                    <div class="col-4 text-center my-auto">
-                        <a href="https://nightcatdigitalsolutions.com/avenger/menu.php">
-                            <img class="img-fluid rounded logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
+                    <div class="col-md-4 col-12 text-center my-auto">
+                        <a href="<?= $homepage_url ?>">
+                            <img class="img-fluid rounded logo hoverable" src="./assets/shopfront.jpeg" alt="Nightcat Shop">
                         </a>
                     </div>
-                    <div class="col-4 text-right my-auto">
-                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="col-md-4 text-center text-md-right my-auto">
+                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle w-75 w-md-25" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <h5 class="h5-responsive">Hi, <?= $currentUser ?></h5>
                         </button>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu w-75 w-md-25">
                             <a class="dropdown-item" href="./account.php">Account</a>
                             <!-- <div class="dropdown-divider"></div> -->
                             <form action="./backend/login/logout.php" method="post">
@@ -166,7 +170,7 @@ else
                     </div>
                     <div class="col-12 col-lg-6">
                         <div class="d-flex justify-content-end py-4 rowResults">
-                            
+
                             <h6 class="my-auto">Total rows in database: <span class="font-weight-bold" id="rowTotal"></span></h6>
                         </div>
                     </div>
@@ -182,7 +186,7 @@ else
 
                     </div>
                 </div>
-                 <div class="row">
+                <div class="row">
                     <div class="tab-content w-100" id="myTabContent">
                         <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
                             <div id="general-table" class='table-responsive'>
@@ -215,7 +219,7 @@ else
             <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
                 <div class="modal-content">
 
-                <form action="./backend/customer/customer.php" enctype="multipart/form-data" method="POST">
+                    <form action="./backend/customer/customer.php" enctype="multipart/form-data" method="POST">
                         <!--Header-->
                         <input hidden="true" type="text" name="postType" value="add">
 
@@ -548,7 +552,7 @@ else
                         <!--Header-->
 
                         <div class="px-0 mx-0  bg-white sticky-top">
-                       
+
                             <div class="modal-header">
                                 <p class="heading lead">Edit Customer</p>
 
@@ -556,7 +560,7 @@ else
                                     <span aria-hidden="true" class="white-text">&times;</span>
                                 </button>
                             </div>
-                            
+
                             <!--Footer-->
                             <div class="modal-footer justify-content-center ">
                                 <button type="submit" id="editItemSubmitButton" class="btn btn-info">Edit Customer</button>
@@ -694,7 +698,7 @@ else
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="edit-additionalinfo" role="tabpanel" aria-labelledby="edit-additionalinfo-tab">
-                                <div class="form-group">
+                                    <div class="form-group">
                                         <div class="row">
                                             <div class="col-12">
                                                 <label for="edit-info1">Info 1</label>
@@ -868,7 +872,7 @@ else
         <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-notify modal-warning" role="document">
                 <!--Content-->
-                <form action="./backend/customer/customer.php"  method="POST">
+                <form action="./backend/customer/customer.php" method="POST">
                     <!--Header-->
                     <input hidden="true" type="text" name="postType" value="delete">
                     <input hidden="true" type="number" name="customer_id" id="delete_id">

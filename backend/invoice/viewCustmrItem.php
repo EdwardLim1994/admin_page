@@ -108,7 +108,6 @@ switch ($postType) {
 
 		if (isset($_POST["searchCustomerName"]) || isset($_POST['searchCustomerID'])) {
 
-
 			if ($_POST["searchCustomerName"] != "" && $_POST["searchCustomerID"] == "") {
 				$stmt = $mysqli->prepare("SELECT COUNT(customer_id) FROM customers WHERE customer_account REGEXP ? ");
 				$stmt->bind_param("s", $_POST["searchCustomerName"]);
@@ -164,7 +163,6 @@ switch ($postType) {
 		$stmt = $mysqli->prepare("SELECT item_id, item_no, description, selling_price1, qty_available, unit_cost FROM items WHERE item_id = ?;");
 		$stmt->bind_param("s", $_POST["itemID"]);
 		$stmt->execute();
-		$stmt->execute();
 		$result = $stmt->get_result();
 		// Check number of rows in the result set
 		if ($result->num_rows > 0) {
@@ -176,6 +174,17 @@ switch ($postType) {
 		} else {
 			echo "No result";
 		}
+		$stmt->close();
+		break;
+
+		
+	case ("searchRowItemGetQuantity"):
+		$stmt = $mysqli->prepare("SELECT qty_available FROM items WHERE item_id = ?;");
+		$stmt->bind_param("s", $_POST["itemID"]);
+		$stmt->execute();
+		$row = $stmt->get_result()->fetch_row();
+		$rowTotal = $row[0];
+		echo json_encode($rowTotal);
 		$stmt->close();
 		break;
 

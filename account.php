@@ -8,6 +8,11 @@ $stmt->execute();
 $result = $stmt->get_result();
 $current_session = mysqli_fetch_assoc($result)['current_session_id'];
 
+$stmt = $mysqli->prepare("SELECT para_description FROM parameter where para_code = 'homepage'");
+$stmt->execute();
+$result = $stmt->get_result();
+$homepage_url = mysqli_fetch_assoc($result)['para_description'];
+
 $stmt->close();
 mysqli_close($mysqli);
 
@@ -63,20 +68,19 @@ else
         <div class="blue">
             <div class="container-fluid">
                 <div class="row py-2">
-                    <div class="col-4 my-auto ">
+                    <div class="col-md-4 my-auto ">
 
                     </div>
-                    <div class="col-4 text-center my-auto">
-                        <a href="https://www.nightcatdigitalsolutions.com">
-                            <img class="img-fluid rounded logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
+                    <div class="col-md-4 col-12 text-center my-auto">
+                        <a href="<?= $homepage_url ?>">
+                            <img class="img-fluid rounded logo hoverable" src="./assets/shopfront.jpeg" alt="Nightcat Shop">
                         </a>
                     </div>
-                    <div class="col-4 text-right my-auto">
-                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="col-md-4 text-center text-md-right my-auto">
+                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle w-75 w-md-25" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <h5 class="h5-responsive">Hi, <?= $currentUser ?></h5>
                         </button>
-                        <div class="dropdown-menu">
-
+                        <div class="dropdown-menu w-75 w-md-25">
                             <!-- <div class="dropdown-divider"></div> -->
                             <form action="./backend/login/logout.php" method="post">
                                 <button type="submit" class="dropdown-item">Logout</button>

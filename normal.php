@@ -3,7 +3,7 @@ require_once('./backend/login/dbConfig.php');
 session_start();
 
 //Get current session id from database
-$stmt = $mysqli -> prepare("SELECT current_session_id FROM users where username = '". $_SESSION['username'] ."'");
+$stmt = $mysqli->prepare("SELECT current_session_id FROM users where username = '" . $_SESSION['username'] . "'");
 $stmt->execute();
 $result = $stmt->get_result();
 $current_session = mysqli_fetch_assoc($result)['current_session_id'];
@@ -15,7 +15,7 @@ if (isset($_SESSION["loggedin"]))
     //Compare current session id between session and database
     if ($_SESSION['role'] != "administrator" && $_SESSION['currentId'] == $current_session)
         $currentUser = $_SESSION["username"];
-    else{
+    else {
         session_destroy();
         header("location: ./index.php?error=Your account is logged in by another browser");
     }
@@ -56,24 +56,25 @@ else
 
     <script src="./dist/js/script.prod.js"></script>
 </head>
+
 <body>
-<header>
+    <header>
         <div class="blue">
             <div class="container-fluid">
                 <div class="row py-2">
-                    <div class="col-4 my-auto ">
+                    <div class="col-md-4 my-auto ">
 
                     </div>
-                    <div class="col-4 text-center my-auto">
-                        <a href="https://www.nightcatdigitalsolutions.com">
-                            <img class="img-fluid rounded logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
+                    <div class="col-md-4 col-12 text-center my-auto">
+                        <a href="<?= $homepage_url ?>">
+                            <img class="img-fluid rounded logo hoverable" src="./assets/shopfront.jpeg" alt="Nightcat Shop">
                         </a>
                     </div>
-                    <div class="col-4 text-right my-auto">
-                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="col-md-4 text-center text-md-right my-auto">
+                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle w-75 w-md-25" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <h5 class="h5-responsive">Hi, <?= $currentUser ?></h5>
                         </button>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu w-75 w-md-25">
                             <a class="dropdown-item" href="./account.php">Account</a>
                             <!-- <div class="dropdown-divider"></div> -->
                             <form action="./backend/login/logout.php" method="post">
@@ -86,9 +87,9 @@ else
         </div>
     </header>
     <main>
-    <div class="container">
-        <h2>Normal page only for stuff and normal user</h2>
-    </div>
+        <div class="container">
+            <h2>Normal page only for stuff and normal user</h2>
+        </div>
     </main>
     <footer class="page-footer font-small blue font-small">
         <div class="col-md-12 text-center">
@@ -118,4 +119,5 @@ else
         </div>
     </footer>
 </body>
+
 </html>

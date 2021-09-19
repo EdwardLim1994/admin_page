@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Sale Order Form</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo">
+
+        <label><b>sale header detail: - no array in this field</b></label>
+        <input type="text" placeholder="sale_salesperson" id="sale_salesperson">
+        <input type="number" placeholder="sale_subtotal" id="sale_subtotal">
+        <input type="number" placeholder="sale_discount_header" id="sale_discount_header">
+        <input type="number" placeholder="sale_total_amount" id="sale_total_amount">
+        <br><br><br><br>
+
+        <label><b>first item</b></label>
+        <input type="number" placeholder="item_id[]" class="item_id" name="item_id[]">
+        <input type="text" placeholder="item_no[]" class="item_no" name="item_no[]">
+        <input type="text" placeholder="description[]" class="description" name="description[]">
+        <input type="text" placeholder="uom[]" class="uom" name="uom[]">
+        <input type="number" placeholder="qty[]" class="qty" name="qty[]">
+        <input type="number" placeholder="price[]" class="price" name="price[]">
+        <input type="number" placeholder="discount[]" class="discount" name="discount[]">
+        <input type="number" placeholder="amount[]" class="amount" name="amount[]">
+
+        <br><br><br>
+
+        <label><b>second item</b></label>
+        <input type="number" placeholder="item_id[]" class="item_id" name="item_id[]">
+        <input type="text" placeholder="item_no[]" class="item_no" name="item_no[]">
+        <input type="text" placeholder="description[]" class="description" name="description[]">
+        <input type="text" placeholder="uom[]" class="uom" name="uom[]">
+        <input type="number" placeholder="qty[]" class="qty" name="qty[]">
+        <input type="number" placeholder="price[]" class="price" name="price[]">
+        <input type="number" placeholder="discount[]" class="discount" name="discount[]">
+        <input type="number" placeholder="amount[]" class="amount" name="amount[]">
+
+        <br><br><br>
+
+        <input type="button" value="Add Sale Order" id="addBtn"></input>
+        <input type="button" value="View Unpaid Sale Order" id="viewSaleHeaderUnpaid"></input>
+        <input type="button" value="View Paid Sale Order" id="viewSaleHeaderPaid"></input>
+        <br><br><br>
+
+        <label><b> UPDATE SECTION</label><br>
+        <input type="text" placeholder="sale_id" class="sale_id" id="sale_id">
+        <input type="button" value="View Detail Sale Order" id="viewDetail"></input>
+        <input type="text" placeholder="customer_account" id="customer_account" value="CASH Update">
+        <input type="text" placeholder="customer_name" id="customer_name" value="CASH Update">
+        <input type="button" value="Update Sale Order" id="updateBtn"></input>
+        <br><br><br>
+        
+        <label><b> DELETE SECTION</label><br>
+        <label>fill in sale id field before click delete</label>
+        <input type="button" value="Delete Sale Order" id="deleteBtn"></input>
+
+        <br><br><br>
+
+        <div id="output"></div>
+        <div id="viewData"></div>
+
+
+        <div class="search-box">
+            <input type="text" autocomplete="off" placeholder="Search ..." />
+            <div class="result"></div> 
+        </div>
+    </form>
+
+</body>
+
+<script type="text/javascript">
+    $('.search-box input[type="text"]').on("keyup input", function() {
+        /* Get input value on change */
+        var inputVal = $(this).val();
+        var resultDropdown = $(this).siblings(".result");
+
+        var fd = new FormData();
+        fd.append('search', inputVal);
+        fd.append('postType', 'searchRow');
+        //fd.append('postType', 'searchRowCustomer');
+        //fd.append('postType', 'searchRowItem');
+
+        if (inputVal.length) {
+            $.ajax({
+                url: 'saleOrder.php',
+                //url: 'viewCustmrItem.php',  
+                type: 'POST',
+                data: fd,
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function(data) {
+                    console.log(data);
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+
+        } else {
+            resultDropdown.empty();
+        }
+    });
+
+    // Set search input value on click of result item
+    $(document).on("click", ".result p", function() {
+        $(this).parents(".search-box").find('input[type="text"]').val($(this).text());
+        $(this).parent(".result").empty();
+    });
+
+    $('#viewSaleHeaderUnpaid').on('click', function() {
+
+    var fd = new FormData();
+    fd.append('postType', 'viewSaleHeaderUnpaid');
+
+    $.ajax({
+        url: 'saleOrder.php', 
+        type: 'POST',
+        data: fd,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(data) {
+            //for(var i=0; i<data.lenght; i++){
+            //$('#viewData').append('<img src="itemUpload/'+ data[0].item_picture+'" title="Title of image"><br>')
+            //}     
+            console.log(data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    });
+
+    $('#viewSaleHeaderPaid').on('click', function() {
+
+    var fd = new FormData();
+    fd.append('postType', 'viewSaleHeaderPaid');
+
+    $.ajax({
+        url: 'saleOrder.php',
+        type: 'POST',
+        data: fd,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(data) {
+            //for(var i=0; i<data.lenght; i++){
+            //$('#viewData').append('<img src="itemUpload/'+ data[0].item_picture+'" title="Title of image"><br>')
+            //}     
+            console.log(data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    });
+
+    $('#viewDetail').on('click', function() {
+
+    var fd = new FormData();
+    fd.append('postType', 'viewDetail');
+    fd.append('search', $('#sale_id').val());
+
+    $.ajax({
+        url: 'saleOrder.php',
+        type: 'POST',
+        data: fd,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(data) {
+
+            console.log(data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    });
+
+    $('#addBtn').on('click', function() {
+
+        var fd = new FormData();
+        fd.append('sale_salesperson', $('#sale_salesperson').val());
+        fd.append('sale_subtotal', $('#sale_subtotal').val());
+        fd.append('sale_discount_header', $('#sale_discount_header').val());
+        fd.append('sale_total_amount', $('#sale_total_amount').val());
+
+        a_item_id = document.getElementsByName("item_id[]");
+        for (let item_id of a_item_id) {
+            fd.append('item_id[]', item_id.value);
+        }
+        a_item_no = document.getElementsByName("item_no[]");
+        for (let item_no of a_item_no) {
+            fd.append('item_no[]', item_no.value);
+        }
+        a_description = document.getElementsByName("description[]");
+        for (let description of a_description) {
+            fd.append('description[]', description.value);
+        }
+        a_uom = document.getElementsByName("uom[]");
+        for (let uom of a_uom) {
+            fd.append('uom[]', uom.value);
+        }
+        a_qty = document.getElementsByName("qty[]");
+        for (let qty of a_qty) {
+            fd.append('qty[]', qty.value);
+        }
+        a_price = document.getElementsByName("price[]");
+        for (let price of a_price) {
+            fd.append('price[]', price.value);
+        }
+        a_discount = document.getElementsByName("discount[]");
+        for (let discount of a_discount) {
+            fd.append('discount[]', discount.value);
+        }
+        a_amount = document.getElementsByName("amount[]");
+        for (let amount of a_amount) {
+            fd.append('amount[]', amount.value);
+        }
+
+        fd.append('postType', 'add');
+
+        $.ajax({
+            url: 'saleOrder.php',
+            type: 'POST',
+            data: fd,
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function(data) {
+                //$('#output').html(data);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    });
+
+    $('#updateBtn').on('click', function() {
+
+    var fd = new FormData();
+    fd.append('sale_id', $('#sale_id').val());
+    fd.append('customer_account', $('#customer_account').val());
+    fd.append('customer_name', $('#customer_name').val());
+    fd.append('sale_salesperson', $('#sale_salesperson').val());
+    fd.append('sale_subtotal', $('#sale_subtotal').val());
+    fd.append('sale_discount_header', $('#sale_discount_header').val());
+    fd.append('sale_total_amount', $('#sale_total_amount').val());
+
+    a_item_id = document.getElementsByName("item_id[]");
+    for (let item_id of a_item_id) {
+        fd.append('item_id[]', item_id.value);
+    }
+    a_item_no = document.getElementsByName("item_no[]");
+    for (let item_no of a_item_no) {
+        fd.append('item_no[]', item_no.value);
+    }
+    a_description = document.getElementsByName("description[]");
+    for (let description of a_description) {
+        fd.append('description[]', description.value);
+    }
+    a_uom = document.getElementsByName("uom[]");
+    for (let uom of a_uom) {
+        fd.append('uom[]', uom.value);
+    }
+    a_qty = document.getElementsByName("qty[]");
+    for (let qty of a_qty) {
+        fd.append('qty[]', qty.value);
+    }
+    a_price = document.getElementsByName("price[]");
+    for (let price of a_price) {
+        fd.append('price[]', price.value);
+    }
+    a_discount = document.getElementsByName("discount[]");
+    for (let discount of a_discount) {
+        fd.append('discount[]', discount.value);
+    }
+    a_amount = document.getElementsByName("amount[]");
+    for (let amount of a_amount) {
+        fd.append('amount[]', amount.value);
+    }
+
+    fd.append('postType', 'update');
+
+    $.ajax({
+        url: 'saleOrder.php',
+        type: 'POST',
+        data: fd,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(data) {
+            //$('#output').html(data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+    });
+
+    $('#deleteBtn').on('click', function() {
+
+    var fd = new FormData();
+    fd.append('sale_id', $('#sale_id').val());
+    
+    fd.append('postType', 'deleteHeader');
+
+    $.ajax({
+        url: 'saleOrder.php',
+        type: 'POST',
+        data: fd,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(data) {
+            //$('#output').html(data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+    });
+
+</script>
+
+</html>
