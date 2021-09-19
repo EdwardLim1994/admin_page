@@ -2,3 +2,4 @@ user_maintanance.sql
 supervisord.log
 supervisord.pid
 .vscode/
+.database/
