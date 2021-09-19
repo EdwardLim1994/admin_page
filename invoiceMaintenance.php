@@ -62,9 +62,9 @@ else
     </script>
 
     <script src="./dist/js/script.prod.js"></script>
-    <script src="./dist/js/invoiceMaintenance.prod.js"></script> 
+    <script src="./dist/js/invoiceMaintenance.prod.js"></script>
     <script src="./dist/js/datatables.min.js"></script>
-<!-- 
+    <!-- 
     <script src="./invoiceMaintenance.js"></script> -->
 
 </head>
@@ -74,19 +74,19 @@ else
         <div class="blue">
             <div class="container-fluid">
                 <div class="py-2 row">
-                    <div class="my-auto col-4 ">
+                    <div class="col-md-4 my-auto ">
 
                     </div>
-                    <div class="my-auto text-center col-4">
+                    <div class="col-md-4 col-12 text-center my-auto">
                         <a href="<?= $homepage_url ?>">
-                            <img class="rounded img-fluid logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
+                            <img class="img-fluid rounded logo hoverable" src="./assets/shopfront.jpeg" alt="Nightcat Shop">
                         </a>
                     </div>
-                    <div class="my-auto text-right col-4">
-                        <button class="px-3 py-2 btn btn-primary px-sm-4 py-sm-3 dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="col-md-4 text-center text-md-right my-auto">
+                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle w-75 w-md-25" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <h5 class="h5-responsive">Hi, <?= $currentUser ?></h5>
                         </button>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu w-75 w-md-25">
                             <a class="dropdown-item" href="./account.php">Account</a>
                             <!-- <div class="dropdown-divider"></div> -->
                             <form action="./backend/login/logout.php" method="post">
@@ -175,7 +175,7 @@ else
                 <div class="modal-content">
                     <div class="p-0 m-0 bg-white sticky-top border-bottom">
                         <!--Header-->
-                        
+
                         <div class="modal-header">
                             <p class="heading lead">Add Invoice</p>
 
@@ -450,8 +450,8 @@ else
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
-        </div>
         </div>
         <!-- Central Modal Medium Info-->
 
@@ -460,37 +460,37 @@ else
             <div class="modal-dialog modal-notify modal-warning" role="document">
                 <!--Content-->
                 <!-- <form action="./backend/invoice/invoice.php" method="POST"> -->
+                <!--Header-->
+                <!-- <input hidden="true" type="text" name="postType" value="deleteHeader"> -->
+                <input hidden="true" type="text" name="invoice_id" id="delete_id">
+                <div class="modal-content">
                     <!--Header-->
-                    <!-- <input hidden="true" type="text" name="postType" value="deleteHeader"> -->
-                    <input hidden="true" type="text" name="invoice_id" id="delete_id">
-                    <div class="modal-content">
-                        <!--Header-->
-                        <div class="modal-header">
-                            <p class="heading">Delete Invoice</p>
+                    <div class="modal-header">
+                        <p class="heading">Delete Invoice</p>
 
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true" class="white-text">&times;</span>
-                            </button>
-                        </div>
-
-                        <!--Body-->
-                        <div class="modal-body">
-                            <p>Are you want to delete <span id="deleteInvoiceName"></span>?</p>
-                        </div>
-
-                        <!--Footer-->
-                        <div class="modal-footer justify-content-center">
-                            <button id="deleteInvoiceSubmitButton" class="btn btn-warning">Yes</button>
-                            <a type="button" class="btn btn-outline-warning waves-effect" data-dismiss="modal">Nevermind</a>
-                        </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
                     </div>
+
+                    <!--Body-->
+                    <div class="modal-body">
+                        <p>Are you want to delete <span id="deleteInvoiceName"></span>?</p>
+                    </div>
+
+                    <!--Footer-->
+                    <div class="modal-footer justify-content-center">
+                        <button id="deleteInvoiceSubmitButton" class="btn btn-warning">Yes</button>
+                        <a type="button" class="btn btn-outline-warning waves-effect" data-dismiss="modal">Nevermind</a>
+                    </div>
+                </div>
                 <!-- </form> -->
             </div>
         </div>
         <!-- Central Modal Warning Demo-->
 
         <!-- Central Modal Warning Demo-->
-        <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static"> 
+        <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-notify modal-warning" role="document">
                 <!--Content-->
                 <form action="./backend/invoice/printInvoice.php" method="POST">

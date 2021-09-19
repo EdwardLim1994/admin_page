@@ -62,10 +62,8 @@ else
     </script>
 
     <script src="./dist/js/script.prod.js"></script>
-    <!-- <script src="./dist/js/itemMaintenance.prod.js"></script> -->
+    <script src="./dist/js/itemMaintenance.prod.js"></script>
     <script src="./dist/js/datatables.min.js"></script>
-
-    <script src="./itemMaintenance.js"></script>
 
 
 </head>
@@ -75,19 +73,19 @@ else
         <div class="blue">
             <div class="container-fluid">
                 <div class="py-2 row">
-                    <div class="my-auto col-4 ">
+                    <div class="col-md-4 my-auto ">
 
                     </div>
-                    <div class="my-auto text-center col-4">
+                    <div class="col-md-4 col-12 text-center my-auto">
                         <a href="<?= $homepage_url ?>">
-                            <img class="rounded img-fluid logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
+                            <img class="img-fluid rounded logo hoverable" src="./assets/shopfront.jpeg" alt="Nightcat Shop">
                         </a>
                     </div>
-                    <div class="my-auto text-right col-4">
-                        <button class="px-3 py-2 btn btn-primary px-sm-4 py-sm-3 dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="col-md-4 text-center text-md-right my-auto">
+                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle w-75 w-md-25" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <h5 class="h5-responsive">Hi, <?= $currentUser ?></h5>
                         </button>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu w-75 w-md-25">
                             <a class="dropdown-item" href="./account.php">Account</a>
                             <!-- <div class="dropdown-divider"></div> -->
                             <form action="./backend/login/logout.php" method="post">
@@ -176,7 +174,7 @@ else
                     </div>
                     <div class="col-12 col-lg-6">
                         <div class="py-4 d-flex justify-content-end rowResults">
-                            
+
                             <h6 class="my-auto">Total rows in database: <span class="font-weight-bold" id="rowTotal"></span></h6>
                         </div>
                     </div>
@@ -192,7 +190,7 @@ else
 
                     </div>
                 </div>
-                 <div class="row">
+                <div class="row">
                     <div class="tab-content w-100" id="myTabContent">
                         <div class="tab-pane fade show active" id="item" role="tabpanel" aria-labelledby="item-tab">
                             <div id="item-table" class='table-responsive'>
@@ -237,7 +235,7 @@ else
             <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
                 <div class="modal-content">
 
-                <form action="./backend/item/item.php" enctype="multipart/form-data" method="POST">
+                    <form action="./backend/item/item.php" enctype="multipart/form-data" method="POST">
                         <!--Header-->
                         <input hidden="true" type="text" name="postType" value="add">
                         <div class="modal-header">
@@ -420,8 +418,8 @@ else
                                         <div class="row">
                                             <div class="col-12">
                                                 <p>Item Picture</p>
-                                                    <div class="custom-file">
-                                                    
+                                                <div class="custom-file">
+
                                                     <label class="custom-file-label" for="add-item-picture">Choose file</label>
                                                     <input type="file" class="custom-file-input" name="imgUpload" id="add-item-picture" placeholder="">
                                                 </div>
@@ -628,7 +626,7 @@ else
                                         <div class="row">
                                             <div class="col-12 col-md-4">
                                                 <label for="edit-item-type">Item Type</label>
-                                                <input type="text" class="form-control" name="item_type" id="edit-item-type"placeholder="">
+                                                <input type="text" class="form-control" name="item_type" id="edit-item-type" placeholder="">
                                             </div>
 
                                             <div class="col-12 col-md-4">
@@ -702,7 +700,7 @@ else
 
                                             <div class="col-12 col-md-6">
                                                 <label for="edit-vendor-company">Vendor Company</label>
-                                                <input type="text" class="form-control" name="vendor_company" id="edit-vendor-company"placeholder="">
+                                                <input type="text" class="form-control" name="vendor_company" id="edit-vendor-company" placeholder="">
                                             </div>
                                         </div>
                                     </div>
@@ -822,7 +820,7 @@ else
         <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-notify modal-warning" role="document">
                 <!--Content-->
-                <form action="./backend/item/item.php"  method="POST">
+                <form action="./backend/item/item.php" method="POST">
                     <!--Header-->
                     <input hidden="true" type="text" name="postType" value="delete">
                     <input hidden="true" type="number" name="item_id" id="delete_id">

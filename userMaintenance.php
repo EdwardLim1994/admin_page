@@ -72,23 +72,23 @@ else
 </head>
 
 <body>
-<header>
+    <header>
         <div class="blue">
             <div class="container-fluid">
                 <div class="row py-2">
-                    <div class="col-4 my-auto ">
+                    <div class="col-md-4 my-auto ">
 
                     </div>
-                    <div class="col-4 text-center my-auto">
+                    <div class="col-md-4 col-12 text-center my-auto">
                         <a href="<?= $homepage_url ?>">
-                            <img class="img-fluid rounded logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
+                            <img class="img-fluid rounded logo hoverable" src="./assets/shopfront.jpeg" alt="Nightcat Shop">
                         </a>
                     </div>
-                    <div class="col-4 text-right my-auto">
-                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="col-md-4 text-center text-md-right my-auto">
+                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle w-75 w-md-25" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <h5 class="h5-responsive">Hi, <?= $currentUser ?></h5>
                         </button>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu w-75 w-md-25">
                             <a class="dropdown-item" href="./account.php">Account</a>
                             <!-- <div class="dropdown-divider"></div> -->
                             <form action="./backend/login/logout.php" method="post">
@@ -281,125 +281,125 @@ else
             <div class="modal-dialog modal-notify modal-info" role="document">
                 <!--Content-->
                 <!-- <form action="./backend/login/userOperation.php" method="post" name="postType"> -->
-                    <div class="modal-content">
-                        <!--Header-->
-                        <div class="modal-header">
-                            <p class="heading lead">Edit User</p>
+                <div class="modal-content">
+                    <!--Header-->
+                    <div class="modal-header">
+                        <p class="heading lead">Edit User</p>
 
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true" class="white-text">&times;</span>
-                            </button>
-                        </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
 
-                        <!--Body-->
-                        <div class="modal-body">
-                            <div class="form-row">
-                                <div class="col-2 mb-3">
-                                    <p><strong>Note***</strong></p>
-                                </div>
-                                <div class="col-10">
-                                    <p>Either to fill in both password and confirm password for changing password, or let both password and confirm password blank for not changing password</p>
-                                </div>
+                    <!--Body-->
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="col-2 mb-3">
+                                <p><strong>Note***</strong></p>
                             </div>
-
-                            <div class="form-row">
-                                <div class="col-12 mb-3">
-                                    <label for="registerUsername" id="editUsernameLabel">
-                                        Your username
-                                    </label>
-                                    <input type="text" id="editUsername" name="username" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-12 mb-3">
-                                    <label for="reditEmail" id="reditEmailLabel" class="">
-                                        Your Email
-                                    </label>
-                                    <input type="email" id="editEmail" name="email" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-12 mb-3">
-                                    <label for="editContact" id="editContactLabel" class="">
-                                        Your Contact
-                                    </label>
-                                    <input type="text" id="editContact" name="contactno" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-12 mb-3">
-
-                                    <label for="editPassword">
-                                        <div class="row justify-content-between">
-                                            <div class="col-10">
-                                                Your password
-                                            </div>
-                                            <div class="col-2">
-                                                <a id="editPasswordVisible">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </label>
-                                    <input type="password" id="editPassword" name="password" class="form-control" autocomplete="on">
-                                    <div id="editPasswordValidate"></div>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="col-12 mb-3">
-                                    <label for="editPasswordConfirm" id="editPasswordConfirmLabel">
-                                        <div class="row justify-content-between">
-                                            <div class="col-10">
-                                                Confirm password
-                                            </div>
-                                            <div class="col-2">
-                                                <a id="editConfirmPasswordVisible">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </label>
-                                    <input type="password" id="editPasswordConfirm" class="form-control" autocomplete="on">
-                                    <div id="editPasswordConfirmValidate"></div>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="col-12 mb-3">
-
-                                    <label for="editLoginAttempt">Login Attempt</label>
-                                    <input type="number" id="editLoginAttempt" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-12 mb-3">
-                                    <label for="editStatus">Status</label>
-                                    <select class="custom-select" id="editStatus" name="role">
-                                        <option value="active">Active</option>
-                                        <option value="inactive">Inactive</option>
-                                        <option value="disabled">Disabled</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-12 mb-3">
-                                    <label for="editRole">User Role</label>
-                                    <select class="custom-select" id="editRole" name="role">
-                                        <option value="administrator">Administrator</option>
-                                        <option value="staff">Staff</option>
-                                        <!-- <option value="normal">Normal</option> -->
-                                    </select>
-                                </div>
+                            <div class="col-10">
+                                <p>Either to fill in both password and confirm password for changing password, or let both password and confirm password blank for not changing password</p>
                             </div>
                         </div>
 
-                        <!--Footer-->
-                        <div class="modal-footer justify-content-center">
-                            <a type="button" id="editeUserSubmitButton" class="btn btn-info">Edit User</a>
-                            <a type="button" class="btn btn-outline-info waves-effect nevermind" data-dismiss="modal">Nevermind</a>
+                        <div class="form-row">
+                            <div class="col-12 mb-3">
+                                <label for="registerUsername" id="editUsernameLabel">
+                                    Your username
+                                </label>
+                                <input type="text" id="editUsername" name="username" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-12 mb-3">
+                                <label for="reditEmail" id="reditEmailLabel" class="">
+                                    Your Email
+                                </label>
+                                <input type="email" id="editEmail" name="email" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-12 mb-3">
+                                <label for="editContact" id="editContactLabel" class="">
+                                    Your Contact
+                                </label>
+                                <input type="text" id="editContact" name="contactno" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-12 mb-3">
+
+                                <label for="editPassword">
+                                    <div class="row justify-content-between">
+                                        <div class="col-10">
+                                            Your password
+                                        </div>
+                                        <div class="col-2">
+                                            <a id="editPasswordVisible">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </label>
+                                <input type="password" id="editPassword" name="password" class="form-control" autocomplete="on">
+                                <div id="editPasswordValidate"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-12 mb-3">
+                                <label for="editPasswordConfirm" id="editPasswordConfirmLabel">
+                                    <div class="row justify-content-between">
+                                        <div class="col-10">
+                                            Confirm password
+                                        </div>
+                                        <div class="col-2">
+                                            <a id="editConfirmPasswordVisible">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </label>
+                                <input type="password" id="editPasswordConfirm" class="form-control" autocomplete="on">
+                                <div id="editPasswordConfirmValidate"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-12 mb-3">
+
+                                <label for="editLoginAttempt">Login Attempt</label>
+                                <input type="number" id="editLoginAttempt" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-12 mb-3">
+                                <label for="editStatus">Status</label>
+                                <select class="custom-select" id="editStatus" name="role">
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="disabled">Disabled</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-12 mb-3">
+                                <label for="editRole">User Role</label>
+                                <select class="custom-select" id="editRole" name="role">
+                                    <option value="administrator">Administrator</option>
+                                    <option value="staff">Staff</option>
+                                    <!-- <option value="normal">Normal</option> -->
+                                </select>
+                            </div>
                         </div>
                     </div>
+
+                    <!--Footer-->
+                    <div class="modal-footer justify-content-center">
+                        <a type="button" id="editeUserSubmitButton" class="btn btn-info">Edit User</a>
+                        <a type="button" class="btn btn-outline-info waves-effect nevermind" data-dismiss="modal">Nevermind</a>
+                    </div>
+                </div>
                 <!-- </form> -->
                 <!--/.Content-->
             </div>
@@ -411,27 +411,27 @@ else
             <div class="modal-dialog modal-notify modal-warning" role="document">
                 <!--Content-->
                 <!-- <form action="./backend/login/userOperation.php" method="post" name="postType"> -->
-                    <div class="modal-content">
-                        <!--Header-->
-                        <div class="modal-header">
-                            <p class="heading">Delete User</p>
+                <div class="modal-content">
+                    <!--Header-->
+                    <div class="modal-header">
+                        <p class="heading">Delete User</p>
 
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true" class="white-text">&times;</span>
-                            </button>
-                        </div>
-
-                        <!--Body-->
-                        <div class="modal-body">
-                            <p>Are you want to delete <span id="deleteUserName"></span>?</p>
-                        </div>
-
-                        <!--Footer-->
-                        <div class="modal-footer justify-content-center">
-                            <a type="button" id="deleteUserSubmitButton" class="btn btn-warning">Yes</a>
-                            <a type="button" class="btn btn-outline-warning waves-effect" data-dismiss="modal">Nevermind</a>
-                        </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
                     </div>
+
+                    <!--Body-->
+                    <div class="modal-body">
+                        <p>Are you want to delete <span id="deleteUserName"></span>?</p>
+                    </div>
+
+                    <!--Footer-->
+                    <div class="modal-footer justify-content-center">
+                        <a type="button" id="deleteUserSubmitButton" class="btn btn-warning">Yes</a>
+                        <a type="button" class="btn btn-outline-warning waves-effect" data-dismiss="modal">Nevermind</a>
+                    </div>
+                </div>
                 <!-- </form> -->
                 <!--/.Content-->
             </div>

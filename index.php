@@ -49,15 +49,15 @@ if (isset($_SESSION["loggedin"]))
         <div class="blue">
             <div class="container">
                 <div class="py-2 row">
-                    <div class="my-auto col-4">
+                    <div class="my-auto col-md-3">
 
                     </div>
-                    <div class="text-center col-4">
+                    <div class="text-center col-12 col-md-6">
                         <a href="https://www.nightcatdigitalsolutions.com">
-                            <img class="rounded img-fluid logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
+                            <img class="img-fluid rounded logo hoverable" src="./assets/shopfront.jpeg" alt="Nightcat Shop">
                         </a>
                     </div>
-                    <div class="my-auto text-right col-4">
+                    <div class="my-auto text-right col-md-3">
 
                     </div>
                 </div>

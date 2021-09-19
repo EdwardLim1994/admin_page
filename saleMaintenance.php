@@ -74,19 +74,19 @@ else
         <div class="blue">
             <div class="container-fluid">
                 <div class="py-2 row">
-                    <div class="my-auto col-4 ">
+                    <div class="col-md-4 my-auto ">
 
                     </div>
-                    <div class="my-auto text-center col-4">
+                    <div class="col-md-4 col-12 text-center my-auto">
                         <a href="<?= $homepage_url ?>">
-                            <img class="rounded img-fluid logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
+                            <img class="img-fluid rounded logo hoverable" src="./assets/shopfront.jpeg" alt="Nightcat Shop">
                         </a>
                     </div>
-                    <div class="my-auto text-right col-4">
-                        <button class="px-3 py-2 btn btn-primary px-sm-4 py-sm-3 dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="col-md-4 text-center text-md-right my-auto">
+                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle w-75 w-md-25" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <h5 class="h5-responsive">Hi, <?= $currentUser ?></h5>
                         </button>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu w-75 w-md-25">
                             <a class="dropdown-item" href="./account.php">Account</a>
                             <!-- <div class="dropdown-divider"></div> -->
                             <form action="./backend/login/logout.php" method="post">
@@ -127,7 +127,7 @@ else
                             </li>
                         </ul>
                     </div>
-                </div>  
+                </div>
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="salesorder" role="tabpanel" aria-labelledby="salesorder-tab">
                         <?php include "./salesOrderPage.php"; ?>
@@ -140,8 +140,7 @@ else
         </div>
 
 
-        <div class="modal fade" id="successToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true" data-backdrop="static">
+        <div class="modal fade" id="successToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-notify modal-success" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -156,16 +155,14 @@ else
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <a type="button" class="btn btn-outline-success btnSuccess waves-effect"
-                            data-dismiss="modal">OK</a>
+                        <a type="button" class="btn btn-outline-success btnSuccess waves-effect" data-dismiss="modal">OK</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Failed Alert -->
-        <div class="modal fade" id="failedToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="failedToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-notify modal-danger" role="document">
                 <div class="modal-content">
                     <div class="modal-header">

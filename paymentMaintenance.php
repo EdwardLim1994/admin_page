@@ -46,23 +46,18 @@ if (isset($_SESSION["loggedin"])) {
     <link rel="apple-touch-icon" href="./assets/favicon/apple-touch-icon.png">
     <link rel="shortcut icon" href="./assets/favicon/favicon.ico">
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
-        integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="./dist/css/style.min.css">
     <link rel="stylesheet" href="./dist/css/datatables.min.css">
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
-        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
     </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js">
     </script>
@@ -76,21 +71,19 @@ if (isset($_SESSION["loggedin"])) {
         <div class="blue">
             <div class="container-fluid">
                 <div class="py-2 row">
-                    <div class="my-auto col-4 ">
+                    <div class="col-md-4 my-auto ">
 
                     </div>
-                    <div class="my-auto text-center col-4">
+                    <div class="col-md-4 col-12 text-center my-auto">
                         <a href="<?= $homepage_url ?>">
-                            <img class="rounded img-fluid logo hoverable" src="./assets/titleImage.jpeg"
-                                alt="Title Image">
+                            <img class="img-fluid rounded logo hoverable" src="./assets/shopfront.jpeg" alt="Nightcat Shop">
                         </a>
                     </div>
-                    <div class="my-auto text-right col-4">
-                        <button class="px-3 py-2 btn btn-primary px-sm-4 py-sm-3 dropdown-toggle " type="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <h5 class="h5-responsive">Hi, <?=$currentUser?></h5>
+                    <div class="col-md-4 text-center text-md-right my-auto">
+                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle w-75 w-md-25" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <h5 class="h5-responsive">Hi, <?= $currentUser ?></h5>
                         </button>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu w-75 w-md-25">
                             <a class="dropdown-item" href="./account.php">Account</a>
                             <!-- <div class="dropdown-divider"></div> -->
                             <form action="./backend/login/logout.php" method="post">
@@ -120,8 +113,7 @@ if (isset($_SESSION["loggedin"])) {
                         <h1 class="h1-responsive">Payment Maintanance</h1>
                     </div>
                     <div class="text-right col-lg-2 col-md-4 col-sm-6">
-                        <button id="addModalBtn" class="btn btn-danger py-md-3 px-md-4 p-sm-3" data-toggle="modal"
-                            data-target="#addModal">
+                        <button id="addModalBtn" class="btn btn-danger py-md-3 px-md-4 p-sm-3" data-toggle="modal" data-target="#addModal">
                             <span class="textBreak">Add Payment</span>
                             <span class="iconBreak"><i class="fas fa-file-invoice"></i></span>
                         </button>
@@ -139,8 +131,7 @@ if (isset($_SESSION["loggedin"])) {
                     <div class="text-right col-6">
                         <div class="py-4 d-flex justify-content-end rowResults">
 
-                            <h5 class="my-auto">Total rows in database: <span class="font-weight-bold"
-                                    id="rowTotal"></span></h5>
+                            <h5 class="my-auto">Total rows in database: <span class="font-weight-bold" id="rowTotal"></span></h5>
                         </div>
                     </div>
                 </div>
@@ -148,17 +139,14 @@ if (isset($_SESSION["loggedin"])) {
                 <div class="row">
                     <div class="col-12 col-md-6">
                         <div class="pl-0 input-group md-form form-sm form-2">
-                            <input id="global_search_customer_input" class="py-1 my-0 form-control" type="text"
-                                placeholder="Search customer name" aria-label="Search" value="">
+                            <input id="global_search_customer_input" class="py-1 my-0 form-control" type="text" placeholder="Search customer name" aria-label="Search" value="">
                         </div>
-                        <div id="global_search_customer_result" class="m-0 border w-100 position-absolute"
-                            style="z-index:5;margin-top: -25px!important;"></div>
+                        <div id="global_search_customer_result" class="m-0 border w-100 position-absolute" style="z-index:5;margin-top: -25px!important;"></div>
                     </div>
                     <div class="flex-row py-3 col-12 col-md-6 d-flex justify-content-end align-items-center">
                         <div class="pageWrapper">
                             <h5>Page : </h5>
-                            <input type="number" id="currentPageNum" class="form-control pageNumInput" min="1"
-                                value="<?=isset($_SESSION['currPage']) ? $_SESSION['currPage'] : 1?>">
+                            <input type="number" id="currentPageNum" class="form-control pageNumInput" min="1" value="<?= isset($_SESSION['currPage']) ? $_SESSION['currPage'] : 1 ?>">
                             <h5> of <span id="pageTotal"></span></h5>
                         </div>
                     </div>
@@ -167,8 +155,7 @@ if (isset($_SESSION["loggedin"])) {
             </div>
         </div>
 
-        <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true" data-backdrop="static">
+        <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
                 <div class="modal-content">
                     <div class="p-0 m-0 bg-white sticky-top border-bottom">
@@ -193,13 +180,11 @@ if (isset($_SESSION["loggedin"])) {
                             <div class="row">
                                 <div class="col-6">
                                     <label for="edit-customer_name">Customer Name</label>
-                                    <input type="text" autocomplete="off" class="form-control" name="customer_account"
-                                        id="search-customer_name" placeholder="" required>
+                                    <input type="text" autocomplete="off" class="form-control" name="customer_account" id="search-customer_name" placeholder="" required>
                                 </div>
                                 <div class="col-6">
                                     <label for="edit-customer_account">Account Number</label>
-                                    <input type="text" autocomplete="off" class="form-control" name="customer_account"
-                                        id="search-customer_id" placeholder="" required>
+                                    <input type="text" autocomplete="off" class="form-control" name="customer_account" id="search-customer_id" placeholder="" required>
                                 </div>
                                 <!-- <div class="p-0 m-0 row"> -->
 
@@ -220,8 +205,7 @@ if (isset($_SESSION["loggedin"])) {
                             <div class="row">
                                 <div class="col-6">
                                     <label for="edit-customer_account">Total Payment</label>
-                                    <input type="number" class="form-control" min="0" step="0.01" value="0.00"
-                                        name="customer_account" id="total_payment" placeholder="">
+                                    <input type="number" class="form-control" min="0" step="0.01" value="0.00" name="customer_account" id="total_payment" placeholder="">
 
                                 </div>
 
@@ -229,8 +213,7 @@ if (isset($_SESSION["loggedin"])) {
                                     <label for="edit-customer_account">Payment Mode</label>
                                     <!-- <input type="text" class="form-control" name="customer_account"
                                             id="payment_mode" placeholder=""> -->
-                                    <select class="browser-default custom-select" name="customer_account"
-                                        id="payment_mode">
+                                    <select class="browser-default custom-select" name="customer_account" id="payment_mode">
                                         <option value="cash" selected="selected">Cash</option>
                                         <option value="cheque">Cheque</option>
                                         <option value="transfer">Transfer</option>
@@ -242,15 +225,13 @@ if (isset($_SESSION["loggedin"])) {
                             <div class="row">
                                 <div class="col-6">
                                     <label for="edit-customer_account">Date</label>
-                                    <input type="date" class="form-control" name="customer_account" id="payment_date"
-                                        placeholder="" required>
+                                    <input type="date" class="form-control" name="customer_account" id="payment_date" placeholder="" required>
 
                                 </div>
 
                                 <div class="col-6">
                                     <label for="edit-customer_account">Salesperson</label>
-                                    <input type="text" class="form-control" name="customer_account"
-                                        id="payment_salesperson" placeholder="">
+                                    <input type="text" class="form-control" name="customer_account" id="payment_salesperson" placeholder="">
 
                                 </div>
                             </div>
@@ -258,8 +239,7 @@ if (isset($_SESSION["loggedin"])) {
                             <div class="row">
                                 <div class="col-12">
                                     <label for="edit-customer_account">Remark:</label>
-                                    <input type="text" class="form-control" name="customer_account" id="payment_remark"
-                                        placeholder="">
+                                    <input type="text" class="form-control" name="customer_account" id="payment_remark" placeholder="">
                                 </div>
                             </div>
                         </div>
@@ -271,49 +251,39 @@ if (isset($_SESSION["loggedin"])) {
                             <div class="py-4 row">
                                 <div class="col-4">
                                     <label for="edit-customer_account">Un-Apply Amount</label>
-                                    <input type="number" readonly class="form-control" min="0" step="0.01" value="0.00"
-                                        name="customer_account" id="unapply_amount" placeholder="">
+                                    <input type="number" readonly class="form-control" min="0" step="0.01" value="0.00" name="customer_account" id="unapply_amount" placeholder="">
                                 </div>
                                 <div class="col-4">
                                     <label for="edit-customer_account">Outstanding</label>
-                                    <input type="number" readonly class="form-control" step="0.01" min="0" value="0.00"
-                                        name="total_outstanding" id="total_outstanding" placeholder="">
+                                    <input type="number" readonly class="form-control" step="0.01" min="0" value="0.00" name="total_outstanding" id="total_outstanding" placeholder="">
                                 </div>
                                 <div class="col-4">
                                     <label for="edit-customer_account">Total Paid</label>
-                                    <input type="number" readonly class="form-control" min="0" step="0.01" value="0.00"
-                                        name="customer_account" id="total_pay" placeholder="">
+                                    <input type="number" readonly class="form-control" min="0" step="0.01" value="0.00" name="customer_account" id="total_pay" placeholder="">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="row">
-                                        <div
-                                            class="col-12 col-md-6 d-flex justify-content-center justify-content-md-start border-bottom border-md-0">
+                                        <div class="col-12 col-md-6 d-flex justify-content-center justify-content-md-start border-bottom border-md-0">
                                             <form id="addModalInvoiceList">
                                                 <ul class="flex-row list-unstyled d-flex">
                                                     <li class="pl-1">
-                                                        <input type="radio" name="addModalInvoice"
-                                                            id="addModalAllInvoiceList" value="all-invoice">
+                                                        <input type="radio" name="addModalInvoice" id="addModalAllInvoiceList" value="all-invoice">
                                                         <label for="addModalAllInvoiceList">All</label>
                                                     </li>
                                                     <li class="pl-4">
-                                                        <input type="radio" name="addModalInvoice"
-                                                            id="addModalOutstandingInvoiceList"
-                                                            value="outstanding-invoice" checked>
-                                                        <label for="addModalOutstandingInvoiceList"
-                                                            value="outstanding-invoice">Outstanding</label>
+                                                        <input type="radio" name="addModalInvoice" id="addModalOutstandingInvoiceList" value="outstanding-invoice" checked>
+                                                        <label for="addModalOutstandingInvoiceList" value="outstanding-invoice">Outstanding</label>
                                                     </li>
                                                 </ul>
                                             </form>
                                             <input type="text" hidden id="addModelInvoiceViewMode">
                                         </div>
-                                        <div
-                                            class="flex-row py-3 col-12 col-md-6 d-flex justify-content-end align-items-center">
+                                        <div class="flex-row py-3 col-12 col-md-6 d-flex justify-content-end align-items-center">
                                             <div class="pageWrapper">
                                                 <h5>Page : </h5>
-                                                <input type="number" id="currentPageNumSelectedCustomerInvoiceList"
-                                                    class="form-control pageNumInput" min="1" value="1">
+                                                <input type="number" id="currentPageNumSelectedCustomerInvoiceList" class="form-control pageNumInput" min="1" value="1">
                                                 <h5> of <span id="pageTotalSelectedCustomerInvoiceList"></span></h5>
                                             </div>
                                         </div>
@@ -363,8 +333,7 @@ if (isset($_SESSION["loggedin"])) {
             </div>
         </div>
 
-        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true" data-backdrop="static">
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
                 <div class="modal-content">
                     <div class="p-0 m-0 bg-white sticky-top border-bottom">
@@ -391,14 +360,11 @@ if (isset($_SESSION["loggedin"])) {
                             <div class="row">
                                 <div class="col-6">
                                     <label for="edit-customer_name">Customer Name</label>
-                                    <input type="text" autocomplete="off" disabled class="form-control"
-                                        name="customer_account" id="update-search-customer_name" placeholder=""
-                                        required>
+                                    <input type="text" autocomplete="off" disabled class="form-control" name="customer_account" id="update-search-customer_name" placeholder="" required>
                                 </div>
                                 <div class="col-6">
                                     <label for="edit-customer_account">Account Number</label>
-                                    <input type="text" autocomplete="off" disabled class="form-control"
-                                        name="customer_account" id="update-search-customer_id" placeholder="" required>
+                                    <input type="text" autocomplete="off" disabled class="form-control" name="customer_account" id="update-search-customer_id" placeholder="" required>
                                 </div>
                                 <!-- <div class="p-0 m-0 row"> -->
 
@@ -420,8 +386,7 @@ if (isset($_SESSION["loggedin"])) {
                                     <label for="edit-customer_account">Payment Mode</label>
                                     <!-- <input type="text" class="form-control" name="customer_account"
                                             id="update-payment_mode" placeholder=""> -->
-                                    <select class="browser-default custom-select" name="customer_account"
-                                        id="update-payment_mode">
+                                    <select class="browser-default custom-select" name="customer_account" id="update-payment_mode">
                                         <option value="cash" selected="selected">Cash</option>
                                         <option value="cheque">Cheque</option>
                                         <option value="transfer">Transfer</option>
@@ -432,15 +397,13 @@ if (isset($_SESSION["loggedin"])) {
                             <div class="row">
                                 <div class="col-6">
                                     <label for="edit-customer_account">Date</label>
-                                    <input type="date" class="form-control" name="customer_account"
-                                        id="update-payment_date" placeholder="" required>
+                                    <input type="date" class="form-control" name="customer_account" id="update-payment_date" placeholder="" required>
 
                                 </div>
 
                                 <div class="col-6">
                                     <label for="edit-customer_account">Salesperson</label>
-                                    <input type="text" class="form-control" name="customer_account"
-                                        id="update-payment_salesperson" placeholder="">
+                                    <input type="text" class="form-control" name="customer_account" id="update-payment_salesperson" placeholder="">
 
                                 </div>
                             </div>
@@ -448,8 +411,7 @@ if (isset($_SESSION["loggedin"])) {
                             <div class="row">
                                 <div class="col-12">
                                     <label for="edit-customer_account">Remark:</label>
-                                    <input type="text" class="form-control" name="customer_account"
-                                        id="update-payment_remark" placeholder="">
+                                    <input type="text" class="form-control" name="customer_account" id="update-payment_remark" placeholder="">
                                 </div>
                             </div>
                         </div>
@@ -462,13 +424,11 @@ if (isset($_SESSION["loggedin"])) {
 
                                 <div class="col-6">
                                     <label for="edit-customer_account">Outstanding</label>
-                                    <input type="number" readonly class="form-control" step="0.01" min="0" value="0.00"
-                                        name="total_outstanding" id="update-total_outstanding" placeholder="">
+                                    <input type="number" readonly class="form-control" step="0.01" min="0" value="0.00" name="total_outstanding" id="update-total_outstanding" placeholder="">
                                 </div>
                                 <div class="col-6">
                                     <label for="edit-customer_account">Total Paid</label>
-                                    <input type="number" readonly class="form-control" min="0" step="0.01" value="0.00"
-                                        name="customer_account" id="update-total_pay" placeholder="">
+                                    <input type="number" readonly class="form-control" min="0" step="0.01" value="0.00" name="customer_account" id="update-total_pay" placeholder="">
                                 </div>
                             </div>
                             <div class="py-3 row">
@@ -548,8 +508,7 @@ if (isset($_SESSION["loggedin"])) {
         </div>
 
 
-        <div class="modal fade" id="invoiceDetailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true" data-backdrop="static">
+        <div class="modal fade" id="invoiceDetailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
                 <div class="modal-content">
                     <div class="p-0 m-0 bg-white sticky-top border-bottom">
@@ -660,8 +619,7 @@ if (isset($_SESSION["loggedin"])) {
 
 
         <!-- Central Modal Warning Demo-->
-        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true" data-backdrop="static">
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-notify modal-warning" role="document">
                 <!--Content-->
 
@@ -684,16 +642,14 @@ if (isset($_SESSION["loggedin"])) {
                     <!--Footer-->
                     <div class="modal-footer justify-content-center">
                         <button type="button" id="deletePaymentSubmitBtn" class="btn btn-warning">Yes</button>
-                        <a type="button" id="deletePaymentExitBtn" class="btn btn-outline-warning waves-effect"
-                            data-dismiss="modal">Nevermind</a>
+                        <a type="button" id="deletePaymentExitBtn" class="btn btn-outline-warning waves-effect" data-dismiss="modal">Nevermind</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Central Modal Warning Demo-->
-        <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true" data-backdrop="static">
+        <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-notify modal-warning" role="document">
                 <!--Content-->
                 <form action="./backend/payment/printPayment.php" method="POST">
@@ -719,8 +675,7 @@ if (isset($_SESSION["loggedin"])) {
                         <!--Footer-->
                         <div class="modal-footer justify-content-center">
                             <button type="submit" id="printPaymentSubmitButton" class="btn btn-warning">Yes</button>
-                            <a type="button" id="printPaymentExitBtn" class="btn btn-outline-warning waves-effect"
-                                data-dismiss="modal">Nevermind</a>
+                            <a type="button" id="printPaymentExitBtn" class="btn btn-outline-warning waves-effect" data-dismiss="modal">Nevermind</a>
                         </div>
                     </div>
                 </form>
@@ -729,8 +684,7 @@ if (isset($_SESSION["loggedin"])) {
         <!-- Central Modal Warning Demo-->
 
         <!-- Success Alert -->
-        <div class="modal fade" id="successToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true" data-backdrop="static">
+        <div class="modal fade" id="successToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-notify modal-success" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -745,16 +699,14 @@ if (isset($_SESSION["loggedin"])) {
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <a type="button" class="btn btn-outline-success btnSuccess waves-effect"
-                            data-dismiss="modal">OK</a>
+                        <a type="button" class="btn btn-outline-success btnSuccess waves-effect" data-dismiss="modal">OK</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Failed Alert -->
-        <div class="modal fade" id="failedToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="failedToModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-notify modal-danger" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -812,31 +764,31 @@ if (isset($_SESSION["loggedin"])) {
 </body>
 
 <script type="text/javascript">
-$(document).ready(function() {
-    <?php if (isset($_GET["success"])): ?>
+    $(document).ready(function() {
+        <?php if (isset($_GET["success"])) : ?>
 
-    successMessage("Success", "<?=$_GET['success']?>");
+            successMessage("Success", "<?= $_GET['success'] ?>");
 
-    function successMessage(headline, body) {
-        $("#successToModal").modal("show");
-        $("#successModalHeadline").empty().append(headline);
-        $("#successModalBody").empty().append(body);
+            function successMessage(headline, body) {
+                $("#successToModal").modal("show");
+                $("#successModalHeadline").empty().append(headline);
+                $("#successModalBody").empty().append(body);
 
-    }
+            }
 
-    <?php endif;?>
+        <?php endif; ?>
 
-    <?php if (isset($_GET["failed"])): ?>
+        <?php if (isset($_GET["failed"])) : ?>
 
-    failedMessage("Failed", "<?=$_GET['failed']?>");
+            failedMessage("Failed", "<?= $_GET['failed'] ?>");
 
-    function failedMessage(headline, body) {
-        $("#failedToModal").modal("show");
-        $("#failedModalHeadline").empty().append(headline);
-        $("#failedModalBody").empty().append(body);
-    }
-    <?php endif;?>
-});
+            function failedMessage(headline, body) {
+                $("#failedToModal").modal("show");
+                $("#failedModalHeadline").empty().append(headline);
+                $("#failedModalBody").empty().append(body);
+            }
+        <?php endif; ?>
+    });
 </script>
 
 </html>

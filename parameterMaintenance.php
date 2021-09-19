@@ -72,19 +72,19 @@ else
         <div class="blue">
             <div class="container-fluid">
                 <div class="row py-2">
-                    <div class="col-4 my-auto ">
+                    <div class="col-md-4 my-auto ">
 
                     </div>
-                    <div class="col-4 text-center my-auto">
+                    <div class="col-md-4 col-12 text-center my-auto">
                         <a href="<?= $homepage_url ?>">
-                            <img class="img-fluid rounded logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
+                            <img class="img-fluid rounded logo hoverable" src="./assets/shopfront.jpeg" alt="Nightcat Shop">
                         </a>
                     </div>
-                    <div class="col-4 text-right my-auto">
-                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="col-md-4 text-center text-md-right my-auto">
+                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle w-75 w-md-25" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <h5 class="h5-responsive">Hi, <?= $currentUser ?></h5>
                         </button>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu w-75 w-md-25">
                             <a class="dropdown-item" href="./account.php">Account</a>
                             <!-- <div class="dropdown-divider"></div> -->
                             <form action="./backend/login/logout.php" method="post">
@@ -171,8 +171,8 @@ else
                                         Image
                                     </label>
                                     <div class="custom-file">-->
-                                        <input type="file" hidden class="custom-file-input" id="addFilename" name="imgUpload" aria-describedby="inputGroupFileAddon01">
-                                        <!--<label class="custom-file-label" for="addFilename">Choose file</label>
+                            <input type="file" hidden class="custom-file-input" id="addFilename" name="imgUpload" aria-describedby="inputGroupFileAddon01">
+                            <!--<label class="custom-file-label" for="addFilename">Choose file</label>
                                     </div>
                                 </div>
                                 <div class="col-4 mb-3 border">
@@ -583,7 +583,9 @@ else
 
 
                             <p>Are you want to delete parameter with ID <strong><span id="deleteParameterIDHeader"></span></strong>?</p>
-                            <strong><p>This cannot be undone!!!</p></strong>
+                            <strong>
+                                <p>This cannot be undone!!!</p>
+                            </strong>
                             <input type="number" hidden="true" id="deleteParameter" name="parameter_id">
 
                             <!-- <div class="form-row mb-3">

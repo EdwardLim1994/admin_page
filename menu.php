@@ -67,19 +67,19 @@ else
         <div class="blue">
             <div class="container-fluid">
                 <div class="row py-2">
-                    <div class="col-4 my-auto ">
+                    <div class="col-md-4 my-auto ">
 
                     </div>
-                    <div class="col-4 text-center my-auto">
+                    <div class="col-md-4 col-12 text-center my-auto">
                         <a href="<?= $homepage_url ?>">
-                            <img class="img-fluid rounded logo hoverable" src="./assets/titleImage.jpeg" alt="Title Image">
+                            <img class="img-fluid rounded logo hoverable" src="./assets/shopfront.jpeg" alt="Nightcat Shop">
                         </a>
                     </div>
-                    <div class="col-4 text-right my-auto">
-                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="col-md-4 text-center text-md-right my-auto">
+                        <button class="btn btn-primary px-3 px-sm-4 py-2 py-sm-3 dropdown-toggle w-75 w-md-25" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <h5 class="h5-responsive">Hi, <?= $currentUser ?></h5>
                         </button>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu w-75 w-md-25">
                             <a class="dropdown-item" href="./account.php">Account</a>
                             <!-- <div class="dropdown-divider"></div> -->
                             <form action="./backend/login/logout.php" method="post">
@@ -95,19 +95,20 @@ else
     <main>
         <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
             <div class="col-md-6 col-sm-12 text-md-left text-center p-2">
-                <h5><?php if(isset($_GET['searchButton'])) echo "Search : " . $_GET['searchButton']; ?></h5>
+                <h5><?php if (isset($_GET['searchButton'])) echo "Search : " . $_GET['searchButton']; ?></h5>
             </div>
 
-            <div class="col-md-6 col-sm-12">    
+            <div class="col-md-6 col-sm-12">
                 <div class="input-group md-form form-sm form-2 pl-0">
-                    <input class="form-control my-0 py-1 blue-border" type="text" id="searchBtnInput" placeholder="<?php if(isset($_GET['searchButton'])) echo $_GET['searchButton']; else echo "Search Button"; ?>" aria-label="Search">
+                    <input class="form-control my-0 py-1 blue-border" type="text" id="searchBtnInput" placeholder="<?php if (isset($_GET['searchButton'])) echo $_GET['searchButton'];
+                                                                                                                    else echo "Search Button"; ?>" aria-label="Search">
                     <div class="input-group-append">
                         <button class="input-group-text blue lighten-2" id="searchBtnSubmit" type="button">
                             <i class="fas fa-search text-grey" aria-hidden="true"></i>
                         </button>
                     </div>
                     <div class="input-group-append">
-                        <a class="input-group-text blue lighten-2" <?php if(isset($_GET['searchButton'])) echo "href='./menu.php'"; ?>>
+                        <a class="input-group-text blue lighten-2" <?php if (isset($_GET['searchButton'])) echo "href='./menu.php'"; ?>>
                             <i class="fas fa-sync-alt text-grey"></i>
                         </a>
                     </div>
@@ -115,18 +116,18 @@ else
             </div>
         </nav>
         <div class="container-fluid py-5">
-        <h2 class="h2-responsive text-center py-3 mb-3"><strong>Welcome to Admin Portal</strong></h2>
+            <h2 class="h2-responsive text-center py-3 mb-3"><strong>Welcome to Admin Portal</strong></h2>
 
 
             <div class="row justify-content-around">
 
                 <?php
-                if(isset($_GET['searchButton'])){
-                    $stmt = $mysqli->prepare("SELECT para_description, para_description2 FROM parameter where para_code = 'menu_button' and para_description3 like '%" .$_SESSION['role']. "%' and para_description like '%". $_GET['searchButton'] ."%'");
+                if (isset($_GET['searchButton'])) {
+                    $stmt = $mysqli->prepare("SELECT para_description, para_description2 FROM parameter where para_code = 'menu_button' and para_description3 like '%" . $_SESSION['role'] . "%' and para_description like '%" . $_GET['searchButton'] . "%'");
                     $stmt->execute();
                     $result = $stmt->get_result();
-                }else{
-                    $stmt = $mysqli->prepare("SELECT para_description, para_description2 FROM parameter where para_code = 'menu_button' and para_description3 like '%" .$_SESSION['role']. "%'");
+                } else {
+                    $stmt = $mysqli->prepare("SELECT para_description, para_description2 FROM parameter where para_code = 'menu_button' and para_description3 like '%" . $_SESSION['role'] . "%'");
                     $stmt->execute();
                     $result = $stmt->get_result();
                 }
